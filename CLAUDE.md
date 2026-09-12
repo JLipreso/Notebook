@@ -26,10 +26,10 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 | **weird bug, "it worked before", encoding/date/build flakiness** | [documents/0000-00-00-000-Memory/001-Learnings.md](documents/0000-00-00-000-Memory/001-Learnings.md) — check it BEFORE debugging; append to it after |
 | **"what endpoint/URL/route", API surface** | [documents/0000-00-00-000-Memory/002-Endpoints-Reference.md](documents/0000-00-00-000-Memory/002-Endpoints-Reference.md) (auto-generated — run `/refresh-docs`, never hand-edit) |
 | **env var, secret, "where do I set X"** | [documents/0000-00-00-000-Memory/003-Env-Vars-Reference.md](documents/0000-00-00-000-Memory/003-Env-Vars-Reference.md) (auto-generated — run `/refresh-docs`, never hand-edit) |
-| **what the product is, business rules, who the client is** | [documents/2026-09-12-001-Project-Details/](documents/2026-09-12-001-Project-Details/) — the brief's home, **currently an empty stub**. While it is empty, **ask the Lead Developer instead of inventing an answer**; when it fills in, replace §1's TBD with a one-paragraph identity plus a pointer here |
+| **what the product is, business rules, who the client is** | [documents/2026-09-12-001-Project-Details/concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md) — the finalized concept (every claim traces to a D-ID). Raw brief: [about.md](documents/2026-09-12-001-Project-Details/about.md) (**never edit it** — Lead Developer's own words). Deep rationale: [2026-09-13-003-Concept-Validation/](documents/2026-09-13-003-Concept-Validation/) |
 | **backend conventions, controllers, routes, envelope, auth** | §5 below (Laravel 12) + the Rosterlink-EMR reference project named there. Do NOT improvise a different shape |
 | **frontend conventions, apps, shared packages, aliases** | §3–4 below. The Exploria monorepo (`D:\Software-Dev-Projects\Jazer\Monorepo-Exploria-Restart`) is the working example of this exact layout |
-| **money math, pricing, commission, tax** | **No money model exists yet.** Do not improvise one — money rules are a Lead-Developer decision; get it locked into `decisions.md`, then implement it in ONE canonical module and add a row here pointing at that file |
+| **money math, pricing, commission, tax** | Rules are locked (tiers/prices in [concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md); D-008, D-022, D-023 in `decisions.md`) but **no code exists yet**. When implementing: ONE canonical entitlements module, then update this row to point at that file. Never improvise beyond the locked rules |
 | **deploy, GitHub Actions, VPS, subdomain, SSL, red pipeline** | §9 below (**not yet wired**). Org-wide runbooks: `D:\Software-Dev-Projects\Foxcity-4-Project-Notes\Claude-AI-Guide\VPS-Management\`. For failures fire `/diagnose-deploy` |
 | **"is the site up", "what's deployed"** | `/whats-live` skill — it will report "nothing deployed yet" until §9 is filled in |
 | **branching, "where do I open the PR", release** | §8 below — **PRs target `staging`, never `main`** |
@@ -42,11 +42,11 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 **Notebook** — a client project built by **W Labs**. Lead Developer: Jason Lipreso.
 
-- **Product: TBD.** The client brief has not landed yet — its reserved home is [documents/2026-09-12-001-Project-Details/](documents/2026-09-12-001-Project-Details/), currently a stub. One paragraph goes here once it does: what the product does, who uses it, and the business model in 2–3 sentences.
-- **Business rules: TBD.** Anything money-, tenancy-, or entitlement-shaped is a locked decision, not an implementation detail — see the routing row above.
-- **Current status:** knowledge scaffold + Laravel 12 backend skeleton (conventions only, no domain code — [documents/2026-09-12-002-Backend-Scaffold/](documents/2026-09-12-002-Backend-Scaffold/)); frontend workspace not yet created. Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
+- **Product:** a Philippine-market, mobile-first app that replaces the stack of 8–12 paper notebooks a student buys every school year with digital notebooks they own forever (faithful paper-template pages, typed Tiptap-JSON blocks, offline-first via on-device SQLite), plus a lightweight classroom layer (teacher-authored lessons, quizzes, scores) on top. Serves preschool through college. Full spec: [concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md); raw brief: [about.md](documents/2026-09-12-001-Project-Details/about.md).
+- **Business model:** B2C subscriptions (Student ₱69/₱129 · Teacher ₱89/₱169 monthly, Admin-editable), teacher-led growth (a paying teacher's students get course access — D-022), permanent limited free tier after the 14-day trial (D-023), GCash QR + manual verification first, PayMongo/Maya later. Entitlement details are locked decisions (D-007…D-023 in [decisions.md](.claude/memory/decisions.md)), not implementation choices.
+- **Current status:** concept locked, zero domain code — Laravel 12 conventions skeleton only ([2026-09-12-002](documents/2026-09-12-002-Backend-Scaffold/)); frontend workspace not yet created. Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
 
-**Do not fill this section in from guesses.** An inaccurate §1 is worse than a TBD, because the routing table sends every session through it.
+**Keep this section decision-backed.** Every claim above traces to `about.md` or a D-ID; extend it the same way, never from guesses.
 
 ---
 

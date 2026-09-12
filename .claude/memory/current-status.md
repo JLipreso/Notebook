@@ -1,13 +1,17 @@
 # Current Status
 
-_Last updated: 2026-09-12 (backend scaffold, task 2026-09-12-002)_
+_Last updated: 2026-09-13 (concept validation, task 2026-09-13-003)_
 
 ## Where we are
+
+- **The product brief LANDED (2026-09-13).** [documents/2026-09-12-001-Project-Details/about.md](../../documents/2026-09-12-001-Project-Details/about.md) — Notebook: digitalization of students' paper notebooks + lightweight classroom layer (courses/lessons/quizzes), PH market, tiered ₱ pricing, GCash payments, Firebase auth, offline SQLite on mobile/tablet. **Do not edit about.md directly** (Lead Developer instruction) — companion analysis lives in the validation task folder.
+- **Concept validated (task [2026-09-13-003](../../documents/2026-09-13-003-Concept-Validation/README.md)).** MIIT/Elea LMS fully scanned ([findings](../../documents/2026-09-13-003-Concept-Validation/findings/miit-scan.md)) — proven domain model to port, 12 anti-patterns to avoid. Verdict: sound concept, three structural caveats. Proposed milestone cut + stack recommendation in the README.
+- **CONCEPT FULLY LOCKED (D-007…D-023) — every product question answered 2026-09-13.** The one-page source of truth is [documents/2026-09-12-001-Project-Details/concept-final.md](../../documents/2026-09-12-001-Project-Details/concept-final.md); CLAUDE.md §1 + routing rows updated to match. Spine: notebook-first MVP (M1 notebook core → M2 classroom + minimal teacher portal → M3 payments/admin); typed Tiptap-JSON pages on paper-faithful templates (ink block reserved); UUIDv7 PKs everywhere; one `users` table + role; Firebase→Sanctum auth; notebooks RW offline + courses RO cache (Capacitor + SQLite); MySQL 8 prod; Pusher realtime; course-room chat only; scores not grades; lesson PDF/print; no geolocation; teacher-led growth; permanent limited free tier. **Only Q-004 (deploy environment) remains open.**
 
 - The agentic knowledge scaffold is in place — [CLAUDE.md](../../CLAUDE.md) with the Context-First routing table, this `.claude/` session state, the learnings ledger, the reference generator, and four skills.
 - **Backend scaffolded (2026-09-12).** Laravel 12.69.2 + Sanctum installed in `backend/` with the full §5 conventions layer: `ApiController` envelope, custom `Cors` middleware (framework `HandleCors` removed), `SecurityHeaders`, JSON-only errors on `api/*`, IP-keyed rate limiters (`public`/`public-write`/`auth`), `DB::prohibitDestructiveCommands` in prod, Sanctum migration folded into the `0001_01_01_NNNNNN` counter. Dev DB is sqlite; the production engine is an **open decision**. `/api/health` + auth-gated `/api/user` verified live. Details: [documents/2026-09-12-002-Backend-Scaffold/](../../documents/2026-09-12-002-Backend-Scaffold/README.md). **No domain code** — no auth flow, no models beyond `User` (blocked on Q-001/Q-003).
 - **No frontend.** `apps/` is empty; there is no pnpm workspace, no CI, no deployment.
-- ⚠ **The product brief has not landed.** [CLAUDE.md §1](../../CLAUDE.md) is deliberately **TBD**. Until the client brief arrives, do not invent product behavior, data model, or money rules — ask the Lead Developer and record the answers as decisions.
+- ~~⚠ CLAUDE.md §1 TBD~~ **DONE 2026-09-13** — §1 rewritten decision-backed; product + money routing rows updated. The pre-product banner stays until code exists.
 - Remote: `https://github.com/JLipreso/Notebook.git`. `main`, `staging` and `Workstation-PC` all at `67a2c2e` (the bootstrap commit).
 - **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
 
@@ -15,7 +19,8 @@ _Last updated: 2026-09-12 (backend scaffold, task 2026-09-12-002)_
 
 ### Immediate
 1. ~~**Land the bootstrap.** Create `staging` off the initial commit so the §8 three-tier flow is real.~~ **DONE 2026-09-12** — `67a2c2e` pushed to `main`, `staging` branched from it; both tracked locally. ⚠ Still open: GitHub's default branch is `main`, so new PRs default to the wrong base. Switch the repo's default branch to `staging` (Settings → General → Default branch, or `gh repo edit --default-branch staging`) — until then, always pass `--base staging` explicitly.
-2. **Get the client brief** and write it into [documents/2026-09-12-001-Project-Details/](../../documents/2026-09-12-001-Project-Details/) — the folder exists but `about.md` is an empty stub. Then replace CLAUDE.md §1's TBD with a one-paragraph identity + a pointer to it. (The routing row already points there.)
+2. ~~**Get the client brief + close the concept questions**~~ **DONE 2026-09-13** — brief written, Q-005…Q-016 all answered (D-007…D-023), `concept-final.md` written, CLAUDE.md §1 + routing rows updated.
+3. **Plan Milestone 1 (notebook core) data model** — next task folder: notebooks/pages/attachments/sharing schema (UUIDv7 per D-013, offline-sync columns per D-016), `users` + profiles (D-014), PSGC address tables, Firebase→Sanctum auth endpoints (D-015). Plan first (`plan/phase-N-*.md`), then implement.
 
 ### Once the brief is in
 3. **Scaffold the pnpm workspace** — root `package.json`, `pnpm-workspace.yaml`, the first app under `apps/`, the shared `packages/` (types / services / utility). Update CLAUDE.md §2's table in the same commit.
