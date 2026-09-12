@@ -28,6 +28,7 @@ Format: date · ID · decision · where it came from. IDs get quoted in route ba
 | 2026-09-13 | D-021 | **Chat = course-room chat first** (one room per course, teacher always present; MIIT pattern on Pusher). Private/group DMs deferred until a moderation plan (reporting, blocking) exists (closes Q-016) | Lead Developer (AskUserQuestion, concept-validation session) |
 | 2026-09-13 | D-022 | **Growth loop is teacher-led** (closes Q-013a): a paying teacher's students get course access regardless of the student's own tier; students pay for notebook-side premium (more notebooks, storage, fonts, AI) | Lead Developer (AskUserQuestion, concept-validation session) |
 | 2026-09-13 | D-023 | **Free is a permanent limited tier after the 14-day trial** (closes Q-013b): e.g. 2 active notebooks + read-only archives + limited course features. User data is NEVER deleted or fully locked away | Lead Developer (AskUserQuestion, concept-validation session) |
+| 2026-09-13 | D-024 | **M1 Foundation plan LOCKED**: the MVP database schema ([database-schema.md](../../documents/2026-09-13-004-M1-Foundation/plan/database-schema.md) — 35 tables, sync contract, conventions) and the project structure ([project-structure.md](../../documents/2026-09-13-004-M1-Foundation/plan/project-structure.md) — including the two additional workspace packages `@notebook/ui` and `@notebook/sync`). Migrations and scaffold implement these docs as written; changes need a new decision | Lead Developer ("locked!", M1-foundation session) |
 
 ## Open — waiting on the Lead Developer
 
