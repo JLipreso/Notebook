@@ -12,8 +12,8 @@ A W Labs client project. Monorepo: Laravel 12 API in `backend/`, Vue 3 + Vite ap
 |---|---|
 | Know where the project is right now | [.claude/memory/current-status.md](.claude/memory/current-status.md) |
 | Know why something is the way it is | [.claude/memory/decisions.md](.claude/memory/decisions.md) |
-| Avoid re-debugging a known gotcha | [document/0000-00-00-000-Memory/001-Learnings.md](document/0000-00-00-000-Memory/001-Learnings.md) |
-| Find an endpoint or an env var | [002-Endpoints-Reference.md](document/0000-00-00-000-Memory/002-Endpoints-Reference.md) · [003-Env-Vars-Reference.md](document/0000-00-00-000-Memory/003-Env-Vars-Reference.md) (both auto-generated) |
+| Avoid re-debugging a known gotcha | [documents/0000-00-00-000-Memory/001-Learnings.md](documents/0000-00-00-000-Memory/001-Learnings.md) |
+| Find an endpoint or an env var | [002-Endpoints-Reference.md](documents/0000-00-00-000-Memory/002-Endpoints-Reference.md) · [003-Env-Vars-Reference.md](documents/0000-00-00-000-Memory/003-Env-Vars-Reference.md) (both auto-generated) |
 | Understand the AI setup | [.claude/README.md](.claude/README.md) |
 
 In a Claude Code session, just say **"help"**.

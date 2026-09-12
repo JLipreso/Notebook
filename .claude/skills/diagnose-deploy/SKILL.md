@@ -37,4 +37,4 @@ Everything before the failing step succeeded — don't redo it, and don't rebuil
 - **NEVER "Re-run failed jobs" after editing the workflow file** — re-runs use the workflow from the original run. Push, or use `workflow_dispatch`.
 - Never weaken the backend rsync exclude list — the site directory doubles as the SSH user's home, so `--delete` without excludes wipes `authorized_keys` and locks you out.
 - Diagnose over SSH with an `scp`'d script, never complex inline PowerShell → ssh commands (quoting corrupts results silently).
-- Before closing the incident: log any NEW failure mode in `document/0000-00-00-000-Memory/001-Learnings.md`, and if it's org-general, in the matching Foxcity guide too.
+- Before closing the incident: log any NEW failure mode in `documents/0000-00-00-000-Memory/001-Learnings.md`, and if it's org-general, in the matching Foxcity guide too.

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Regenerates the evergreen reference docs:
- *   document/0000-00-00-000-Memory/002-Endpoints-Reference.md
- *   document/0000-00-00-000-Memory/003-Env-Vars-Reference.md
+ *   documents/0000-00-00-000-Memory/002-Endpoints-Reference.md
+ *   documents/0000-00-00-000-Memory/003-Env-Vars-Reference.md
  *
  * Run from anywhere:  node scripts/refresh-docs.mjs
  * (also exposed as the /refresh-docs skill)
@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const MEMORY = path.join(ROOT, 'document', '0000-00-00-000-Memory');
+const MEMORY = path.join(ROOT, 'documents', '0000-00-00-000-Memory');
 const STAMP = new Date().toISOString().slice(0, 10);
 
 const abs = (...p) => path.join(ROOT, ...p);
@@ -137,7 +137,7 @@ function writeEndpoints() {
       body += `| ${r.method} | \`${r.uri}\` | ${r.action} |\n`;
     }
     body +=
-      '\n> `RESOURCE` rows are `Route::apiResource` (index/store/show/update/destroy). Request/response payloads are not in scope here — see the owning task folder under `document/`.\n';
+      '\n> `RESOURCE` rows are `Route::apiResource` (index/store/show/update/destroy). Request/response payloads are not in scope here — see the owning task folder under `documents/`.\n';
     console.log(`wrote 002-Endpoints-Reference.md (${routes.length} routes, via static parse)`);
   } else {
     body = notYet(

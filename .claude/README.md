@@ -25,7 +25,7 @@ Personal preferences (editor habits, tone, machine-local paths) do NOT belong he
 2. **End of every session:** write a worklog entry (`worklog/YYYY-MM-DD-NNN-topic.md`) — what was done, files touched, what's next, any blockers. Update `memory/current-status.md` to match.
 3. **Decisions:** when the Lead Developer (Jason Lipreso) answers an open question or locks a choice, record it in [memory/decisions.md](memory/decisions.md) with the date and an ID. Locked decisions are final — do not re-litigate them in code review or in a later session.
 4. Worklog entries are append-only history — never rewrite an old one; add an addendum to the same day's file instead. `current-status.md` is a living document — always overwrite it to reflect reality.
-5. Keep entries short and factual. Link to `document/` plans instead of duplicating them.
+5. Keep entries short and factual. Link to `documents/` plans instead of duplicating them.
 6. **Never put credentials or secrets in this folder.**
 
 ## settings.json
@@ -40,7 +40,7 @@ Personal preferences (editor habits, tone, machine-local paths) do NOT belong he
 
 **Why:** the session rituals above mean the agent writes here constantly. Prompting on every status update trains people to skip the ritual, and a skipped ritual is how the next session ends up flying blind.
 
-**Scope is deliberately session state only.** Nothing outside `.claude/` is granted — source code, `document/`, and `scripts/` keep whatever prompting posture the developer runs. Widening this is a decision, not a convenience: record it in [memory/decisions.md](memory/decisions.md) if it ever changes.
+**Scope is deliberately session state only.** Nothing outside `.claude/` is granted — source code, `documents/`, and `scripts/` keep whatever prompting posture the developer runs. Widening this is a decision, not a convenience: record it in [memory/decisions.md](memory/decisions.md) if it ever changes.
 
 This file is checked in, so the grant follows the repo to every machine. Personal additions go in `settings.local.json` (gitignored) — never edit this file for a machine-local preference.
 

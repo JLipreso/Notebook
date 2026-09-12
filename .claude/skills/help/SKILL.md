@@ -18,11 +18,11 @@ The repo is self-documenting. [CLAUDE.md](../../../CLAUDE.md) carries a **Contex
 - **Where the project is right now**: `.claude/memory/current-status.md` — read at the start of every session.
 - **Why things are the way they are**: `.claude/memory/decisions.md` (D-001…, locked, never re-litigate). It also lists the **open questions Q-001…** that block real work.
 - **What happened in past sessions**: `.claude/worklog/`.
-- **Gotchas that cost real time**: `document/0000-00-00-000-Memory/001-Learnings.md` — check BEFORE debugging, append after.
-- **Every API endpoint**: `document/0000-00-00-000-Memory/002-Endpoints-Reference.md` (auto-generated).
-- **Every env var**: `document/0000-00-00-000-Memory/003-Env-Vars-Reference.md` (auto-generated).
+- **Gotchas that cost real time**: `documents/0000-00-00-000-Memory/001-Learnings.md` — check BEFORE debugging, append after.
+- **Every API endpoint**: `documents/0000-00-00-000-Memory/002-Endpoints-Reference.md` (auto-generated).
+- **Every env var**: `documents/0000-00-00-000-Memory/003-Env-Vars-Reference.md` (auto-generated).
 - **How the code is meant to be structured**: CLAUDE.md §2 (repo shape), §3 (data flow), §4 (frontend rules), §5 (Laravel conventions).
-- **How work is documented**: CLAUDE.md §7 — `document/<YYYY-MM-DD>-<NNN>-<Kebab-Title>/`.
+- **How work is documented**: CLAUDE.md §7 — `documents/<YYYY-MM-DD>-<NNN>-<Kebab-Title>/`.
 - **The working example of this whole layout**: the Exploria monorepo at `D:\Software-Dev-Projects\Jazer\Monorepo-Exploria-Restart`.
 
 ## Available skills

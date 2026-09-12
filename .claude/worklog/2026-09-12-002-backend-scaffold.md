@@ -16,7 +16,7 @@
   - `HasApiTokens` added to `User`.
 - `.env.example` — `APP_NAME=Notebook`, sqlite default with a note that the prod DB engine is an open decision, `SANCTUM_STATEFUL_DOMAINS=` blank, `CORS_ALLOWED_ORIGINS` documented. Local `.env` synced. Added `/database/*.sqlite` to `backend/.gitignore` (Laravel's default does not ignore it).
 - `/refresh-docs` regenerated 002/003 references (first run with real content — 3 routes, 1 env source).
-- Doc obligations: task folder `document/2026-09-12-002-Backend-Scaffold/README.md`; CLAUDE.md banner + §1 status + §2 table updated; current-status.md updated.
+- Doc obligations: task folder `documents/2026-09-12-002-Backend-Scaffold/README.md`; CLAUDE.md banner + §1 status + §2 table updated; current-status.md updated.
 
 ## Verified
 
