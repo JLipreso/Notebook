@@ -8,7 +8,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 **Discoverability:** in a Claude Code session, say **"help"** to get the repo knowledge map and skill catalog (`/help`, `/whats-live`, `/diagnose-deploy`, `/refresh-docs`).
 
-> **This repo is at day zero.** No application code exists yet — `apps/` and `backend/` are empty. Rows in the routing table below point only at things that actually exist; sections marked **TBD** are honest gaps, not oversights. Fill them in as the work lands, and delete this banner when §1 describes a real product.
+> **This repo is pre-product.** `backend/` holds a bare Laravel 12 conventions scaffold (2026-09-12-002) — no domain code; `apps/` and `packages/` are still empty. Rows in the routing table below point only at things that actually exist; sections marked **TBD** are honest gaps, not oversights. Fill them in as the work lands, and delete this banner when §1 describes a real product.
 
 ---
 
@@ -44,7 +44,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 - **Product: TBD.** The client brief has not landed yet — its reserved home is [document/2026-09-12-001-Project-Details/](document/2026-09-12-001-Project-Details/), currently a stub. One paragraph goes here once it does: what the product does, who uses it, and the business model in 2–3 sentences.
 - **Business rules: TBD.** Anything money-, tenancy-, or entitlement-shaped is a locked decision, not an implementation detail — see the routing row above.
-- **Current status:** day zero — repository bootstrapped with the agentic knowledge scaffold, no application code. Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
+- **Current status:** knowledge scaffold + Laravel 12 backend skeleton (conventions only, no domain code — [document/2026-09-12-002-Backend-Scaffold/](document/2026-09-12-002-Backend-Scaffold/)); frontend workspace not yet created. Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
 
 **Do not fill this section in from guesses.** An inaccurate §1 is worse than a TBD, because the routing table sends every session through it.
 
@@ -52,7 +52,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 ## 2. Repo shape
 
-Target shape (locked as D-001, mirroring the Exploria monorepo). Nothing below exists yet except the directories:
+Target shape (locked as D-001, mirroring the Exploria monorepo). The backend skeleton exists; the pnpm workspace does not yet:
 
 pnpm workspace (`pnpm-workspace.yaml` → `apps/*`, `packages/*`). Node ≥18, pnpm ≥8. Always `pnpm install` from the root.
 
@@ -60,7 +60,7 @@ pnpm workspace (`pnpm-workspace.yaml` → `apps/*`, `packages/*`). Node ≥18, p
 |---|---|---|
 | [apps/](apps/) | Vue 3.5 + Vite 6 + TS 5.7 + Pinia + Vue Router 4 + Tailwind 3.4 + Reka UI. One folder per deployable front end, each its own workspace package with its own dev port and production subdomain | empty |
 | `packages/` | Shared, platform-agnostic TypeScript: `types/` (the API contract), `services/` (one per domain + an axios singleton + the single mock↔API switch point), `utility/` (canonical business math). **Zero Vue, ships raw TS** | not created |
-| [backend/](backend/) | Laravel 12 + PHP 8.2. **Not a pnpm workspace member** — a sibling directory reached by `cd backend`. See §5 | empty |
+| [backend/](backend/) | Laravel 12 + PHP 8.2. **Not a pnpm workspace member** — a sibling directory reached by `cd backend`. See §5 | scaffolded — Laravel 12.69 + §5 conventions, no domain code ([2026-09-12-002](document/2026-09-12-002-Backend-Scaffold/README.md)) |
 | [document/](document/) | All project documentation. See §7 | seeded |
 | [scripts/](scripts/) | Repo tooling. Today: `refresh-docs.mjs` (§6) | seeded |
 | [.claude/](.claude/README.md) | Shared session state and skills — checked in, replicates to every machine | seeded |

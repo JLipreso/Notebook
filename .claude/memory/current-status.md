@@ -1,11 +1,12 @@
 # Current Status
 
-_Last updated: 2026-09-12 (repository bootstrap)_
+_Last updated: 2026-09-12 (backend scaffold, task 2026-09-12-002)_
 
 ## Where we are
 
-- **Day zero.** The repo exists with the agentic knowledge scaffold in place — [CLAUDE.md](../../CLAUDE.md) with the Context-First routing table, this `.claude/` session state, the learnings ledger, the reference generator, and four skills.
-- **No application code.** `apps/` and `backend/` are empty placeholders; there is no pnpm workspace, no Laravel install, no CI, no deployment.
+- The agentic knowledge scaffold is in place — [CLAUDE.md](../../CLAUDE.md) with the Context-First routing table, this `.claude/` session state, the learnings ledger, the reference generator, and four skills.
+- **Backend scaffolded (2026-09-12).** Laravel 12.69.2 + Sanctum installed in `backend/` with the full §5 conventions layer: `ApiController` envelope, custom `Cors` middleware (framework `HandleCors` removed), `SecurityHeaders`, JSON-only errors on `api/*`, IP-keyed rate limiters (`public`/`public-write`/`auth`), `DB::prohibitDestructiveCommands` in prod, Sanctum migration folded into the `0001_01_01_NNNNNN` counter. Dev DB is sqlite; the production engine is an **open decision**. `/api/health` + auth-gated `/api/user` verified live. Details: [document/2026-09-12-002-Backend-Scaffold/](../../document/2026-09-12-002-Backend-Scaffold/README.md). **No domain code** — no auth flow, no models beyond `User` (blocked on Q-001/Q-003).
+- **No frontend.** `apps/` is empty; there is no pnpm workspace, no CI, no deployment.
 - ⚠ **The product brief has not landed.** [CLAUDE.md §1](../../CLAUDE.md) is deliberately **TBD**. Until the client brief arrives, do not invent product behavior, data model, or money rules — ask the Lead Developer and record the answers as decisions.
 - Remote: `https://github.com/JLipreso/Notebook.git`. `main`, `staging` and `Workstation-PC` all at `67a2c2e` (the bootstrap commit).
 - **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
@@ -18,7 +19,7 @@ _Last updated: 2026-09-12 (repository bootstrap)_
 
 ### Once the brief is in
 3. **Scaffold the pnpm workspace** — root `package.json`, `pnpm-workspace.yaml`, the first app under `apps/`, the shared `packages/` (types / services / utility). Update CLAUDE.md §2's table in the same commit.
-4. **Install Laravel 12 into `backend/`** following CLAUDE.md §5. Add `backend/.env.example` and each `apps/*/.env.example`, then run `/refresh-docs` — that is the first run that produces real content.
+4. ~~**Install Laravel 12 into `backend/`** following CLAUDE.md §5.~~ **DONE 2026-09-12** (task 2026-09-12-002, done ahead of the brief at the Lead Developer's direction). `backend/.env.example` is committed and `/refresh-docs` now emits real content. Still per-app: each `apps/*/.env.example` when apps land.
 5. **Lock the domain rules** (tenancy, permissions, and anything money-shaped) into `decisions.md` *before* implementing them, and give each a canonical module + a routing row.
 
 ### Later
