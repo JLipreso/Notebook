@@ -7,12 +7,13 @@ _Last updated: 2026-09-12 (repository bootstrap)_
 - **Day zero.** The repo exists with the agentic knowledge scaffold in place — [CLAUDE.md](../../CLAUDE.md) with the Context-First routing table, this `.claude/` session state, the learnings ledger, the reference generator, and four skills.
 - **No application code.** `apps/` and `backend/` are empty placeholders; there is no pnpm workspace, no Laravel install, no CI, no deployment.
 - ⚠ **The product brief has not landed.** [CLAUDE.md §1](../../CLAUDE.md) is deliberately **TBD**. Until the client brief arrives, do not invent product behavior, data model, or money rules — ask the Lead Developer and record the answers as decisions.
-- Remote: `https://github.com/JLipreso/Notebook.git`. Branch `main` only; `staging` does not exist yet.
+- Remote: `https://github.com/JLipreso/Notebook.git`. `main`, `staging` and `Workstation-PC` all at `67a2c2e` (the bootstrap commit).
+- **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
 
 ## What's next (in order)
 
 ### Immediate
-1. **Land the bootstrap.** Create `staging` off the initial commit so the §8 three-tier flow is real, and set `staging` as the default PR base.
+1. ~~**Land the bootstrap.** Create `staging` off the initial commit so the §8 three-tier flow is real.~~ **DONE 2026-09-12** — `67a2c2e` pushed to `main`, `staging` branched from it; both tracked locally. ⚠ Still open: GitHub's default branch is `main`, so new PRs default to the wrong base. Switch the repo's default branch to `staging` (Settings → General → Default branch, or `gh repo edit --default-branch staging`) — until then, always pass `--base staging` explicitly.
 2. **Get the client brief** and write it into [document/2026-09-12-001-Project-Details/](../../document/2026-09-12-001-Project-Details/) — the folder exists but `about.md` is an empty stub. Then replace CLAUDE.md §1's TBD with a one-paragraph identity + a pointer to it. (The routing row already points there.)
 
 ### Once the brief is in

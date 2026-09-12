@@ -135,7 +135,8 @@ Conventions follow the Rosterlink-EMR reference project (`C:\Users\USER\Document
 
 ## 8. Git flow
 
-- **Three tiers:** per-machine work branches (`Workspace-PC`, `Workspace-Laptop`) → `staging` (integration) → `main` (production).
+- **Three tiers:** per-machine work branches → `staging` (integration) → `main` (production). Existing work branches: **`Workstation-PC`** (the Lead Developer's desktop — the default place changes get made). Add one per machine, named for the machine, branched from `staging`.
+- **Day-to-day: commit on your machine's work branch, not on `staging` or `main`.** `git checkout Workstation-PC` is the normal starting state for a session on this desktop.
 - **PRs ALWAYS target `staging`, never `main`.** This applies to Claude too: `gh pr create --base staging`. Only the Lead Developer promotes `staging` → `main` (via PR) — that merge IS the production release, and once deploy workflows exist it will fire them.
 - **This includes documentation-only PRs.** Knowledge changes ride the same flow as code; a doc PR merged straight to `main` would be an unreviewed production release the moment CI/CD lands.
 - After a `staging` → `main` promotion the two should be identical; if `staging` falls behind, fast-forward it (`git push origin origin/main:staging`).
