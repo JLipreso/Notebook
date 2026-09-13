@@ -8,7 +8,7 @@ Each ends with a `**Decision:**` line **only the Lead Developer fills in** (CLAU
 
 The teacher browser + mobile design passes were parked at M1 design close. The Phase-201 scaffold and every teacher-portal phase after it design-match against these canvases, so they must exist before Phase-201 starts. Proposed: run them in Claude Design on the Komposisyon palette (D-032) during M1's later phases — pass 1 = teacher mobile core (dashboard, course, lesson authoring, quiz builder, invitations, scores ≈ 12 screens), pass 2 = teacher browser. Boss visibility: same artifact/canvas logging convention as task 006.
 
-**Decision:**
+**Decision:** Run them NOW (Lead Developer, 2026-09-13) → **D-033**. Pass 4 = teacher mobile, pass 5 = teacher browser; briefs [claude-design-brief-4.md](../../2026-09-13-006-Brand-Colors/claude-design-brief-4.md) / [claude-design-brief-5.md](../../2026-09-13-006-Brand-Colors/claude-design-brief-5.md) in the design home (task 006 folder).
 
 ---
 
