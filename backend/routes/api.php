@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,3 +44,23 @@ Route::post('/auth/firebase', [AuthController::class, 'firebase'])->middleware('
 Route::get('/user', [AuthController::class, 'me'])->middleware('auth:sanctum');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/auth/device', [AuthController::class, 'device'])->middleware('auth:sanctum');
+
+// ================================================================
+// ADDRESS (2026-09-13-005 Phase 005)
+// ================================================================
+
+// Public PSGC reference data, cached a day server-side. {code} is a PSGC
+// natural key (CHAR(10)), never a UUID — guarded as 10 digits.
+Route::get('/address/regions', [AddressController::class, 'regions'])->middleware('throttle:public');
+Route::get('/address/regions/{code}/provinces', [AddressController::class, 'provinces'])->where('code', '[0-9]{10}')->middleware('throttle:public');
+Route::get('/address/regions/{code}/cities', [AddressController::class, 'citiesByRegion'])->where('code', '[0-9]{10}')->middleware('throttle:public');
+Route::get('/address/provinces/{code}/cities', [AddressController::class, 'citiesByProvince'])->where('code', '[0-9]{10}')->middleware('throttle:public');
+Route::get('/address/cities/{code}/barangays', [AddressController::class, 'barangays'])->where('code', '[0-9]{10}')->middleware('throttle:public');
+Route::get('/address/barangays/{code}/chain', [AddressController::class, 'chain'])->where('code', '[0-9]{10}')->middleware('throttle:public');
+
+// ================================================================
+// PROFILE (2026-09-13-005 Phase 005)
+// ================================================================
+
+Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth:sanctum');
+Route::put('/profile', [ProfileController::class, 'update'])->middleware('auth:sanctum');
