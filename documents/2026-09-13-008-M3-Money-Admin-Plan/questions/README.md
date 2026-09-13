@@ -1,6 +1,6 @@
 # M3 open questions
 
-Each ends with a `**Decision:**` line **only the Lead Developer fills in** (CLAUDE.md §7); answered ⇒ D-ID in `decisions.md`, final. **Status 2026-09-13: Q-M3-1/4/5 CLOSED (→ D-037/D-038/D-039). Q-M3-2 and Q-M3-3 remain OPEN with the boss/client** — longest latency, send them up now even though M3 implementation is months out.
+Each ends with a `**Decision:**` line **only the Lead Developer fills in** (CLAUDE.md §7); answered ⇒ D-ID in `decisions.md`, final. **ALL FIVE CLOSED 2026-09-13 → D-037…D-041** (the Lead Developer answered Q-M3-2/Q-M3-3 with business-model authority). M3 is fully question-unblocked; project-wide, only Q-004 (deploy environment) remains open.
 
 ---
 
@@ -21,7 +21,7 @@ Google Play's Payments policy requires **Play Billing for in-app purchases of di
 
 This is a **client revenue + risk decision** — needs the boss/client. The answer decides where Phase-306's UI lives and what Phase-310's compliance pass checks. (iOS later has the same issue, stricter.)
 
-**Decision:**
+**Decision:** (a) Web-purchase flow (Lead Developer with business-model authority, 2026-09-13) → **D-040**. The QR/payment screen lives ONLY in the browser app; Android/iOS apps show plan status + "subscribe on the website", never a payment method. Decided after clarifying that an in-app QR still counts as an alternative payment method under Play policy.
 
 ---
 
@@ -29,7 +29,7 @@ This is a **client revenue + risk decision** — needs the boss/client. The answ
 
 Phase-306/307 need from the client: (1) **whose GCash account/QR** receives payments (the client's business account — we never hold these credentials, the QR image/number is config, not code); (2) **one static QR + reference-number matching** (assumed — matches the brief's manual flow) or amount-specific QRs; (3) **who the verifying staff are** — how many admin accounts at launch, and whether `follow_up` contact with payers happens inside the app (notifications) or off-app (their GCash/phone). Pure client input; blocks nothing until detail-fill.
 
-**Decision:**
+**Decision:** (Lead Developer with business-model authority, 2026-09-13) → **D-041**: client's business GCash account (QR = deploy-time config); **one static QR + reference matching**; **one admin seeded at launch**; **follow-up off-app** via the payer's mobile number — the `follow_up` note in `payment_status_logs` stays mandatory as the audit record.
 
 ---
 

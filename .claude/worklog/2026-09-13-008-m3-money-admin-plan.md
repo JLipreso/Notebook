@@ -44,3 +44,9 @@ Prompted the Lead Developer through every open question that was theirs to decid
 - **D-039** Q-M3-5: USD deferred to PayMongo/Maya.
 
 Question files' `**Decision:**` lines filled; both intros updated. **Open project-wide: only Q-M3-2 + Q-M3-3 (boss/client) and Q-004 (deploy).**
+
+## Addendum 5 (same session) — Q-M3-2/Q-M3-3 closed: EVERY product question decided
+
+- The Lead Developer answered the last two with business-model authority. **Q-M3-2 took a correction first**: the initial answer assumed the Play fee "doesn't apply to QR payments" — clarified that an in-app GCash QR for the app's own subscription is still a prohibited alternative payment method under Play policy (where the payment executes doesn't matter). Re-asked with that understanding → **D-040: web-only purchase flow** (QR screen exclusively in the browser app; native apps show plan status + "subscribe on the website"). The QR ops flow itself is unchanged.
+- **D-041** (Q-M3-3): client's business GCash, one static QR + reference matching (amount-QRs rejected — fight dynamic pricing), one launch admin, follow-up off-app with the `payment_status_logs` note mandatory as audit record.
+- M3 plan README updated (rule 5, Phase-306/310 rows), CLAUDE.md M3 routing row updated. **Project-wide: D-001…D-041 all decided; Q-004 (deploy) is the sole open question.** Lesson echo (same as session 005's): a confidently-worded answer that contains a factual misconception gets corrected before it becomes a decision — the D-ID records the informed choice.
