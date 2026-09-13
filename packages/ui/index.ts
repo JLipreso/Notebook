@@ -3,7 +3,7 @@
 //   auth/   — shared form field, error bag and Google button (Phase 004)
 //   address/— AddressSelect.vue, the four-level PSGC chain (Phase 005)
 //   notebook/— the shelf: cards, grid, create dialog, archive (Phase 006)
-//   editor/ — Tiptap 2 wrapper + custom extensions + node whitelist (Phase 007)
+//   editor/ — Tiptap wrapper, toolbar and usePages autosave (Phase 007)
 //   paper/  — PaperPage.vue rendering notebook_types.page_template rulings (Phase 007)
 //   brand/  — tailwind-preset.cjs, consumed by every app's tailwind.config
 
@@ -25,3 +25,8 @@ export { default as NewNotebookDialog } from './notebook/NewNotebookDialog.vue'
 export { default as PaperPreview } from './notebook/PaperPreview.vue'
 export { default as ArchiveShelf } from './notebook/ArchiveShelf.vue'
 export { useNotebooks } from './notebook/useNotebooks'
+
+export { default as PaperPage } from './paper/PaperPage.vue'
+export { default as NotebookEditor } from './editor/NotebookEditor.vue'
+export { default as EditorToolbar } from './editor/EditorToolbar.vue'
+export { usePages, type SaveState } from './editor/usePages'

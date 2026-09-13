@@ -27,7 +27,7 @@ const dialogOpen = ref(false)
 onMounted(load)
 
 function open(notebook: Notebook): void {
-  router.push({ name: 'home', query: { notebook: notebook.id } })
+  router.push({ name: 'notebook', params: { id: notebook.id } })
 }
 
 async function onCreate(payload: {

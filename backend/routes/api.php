@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NotebookController;
+use App\Http\Controllers\Api\NotebookPageController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -80,3 +81,13 @@ Route::post('/notebooks/{id}/unarchive', [NotebookController::class, 'unarchive'
 Route::get('/notebooks/{id}', [NotebookController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
 Route::put('/notebooks/{id}', [NotebookController::class, 'update'])->whereUuid('id')->middleware('auth:sanctum');
 Route::delete('/notebooks/{id}', [NotebookController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// NOTEBOOK PAGES (2026-09-13-005 Phase 007)
+// ================================================================
+
+Route::get('/notebooks/{notebook}/pages', [NotebookPageController::class, 'index'])->whereUuid('notebook')->middleware('auth:sanctum');
+Route::post('/notebooks/{notebook}/pages', [NotebookPageController::class, 'store'])->whereUuid('notebook')->middleware('auth:sanctum');
+Route::get('/pages/{id}', [NotebookPageController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
+Route::put('/pages/{id}', [NotebookPageController::class, 'update'])->whereUuid('id')->middleware('auth:sanctum');
+Route::delete('/pages/{id}', [NotebookPageController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');

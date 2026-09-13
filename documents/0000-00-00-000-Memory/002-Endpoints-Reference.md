@@ -22,6 +22,11 @@
 | DELETE | `/api/notebooks/{id}` | Api\NotebookController@destroy | auth:sanctum |
 | POST | `/api/notebooks/{id}/archive` | Api\NotebookController@archive | auth:sanctum |
 | POST | `/api/notebooks/{id}/unarchive` | Api\NotebookController@unarchive | auth:sanctum |
+| GET | `/api/notebooks/{notebook}/pages` | Api\NotebookPageController@index | auth:sanctum |
+| POST | `/api/notebooks/{notebook}/pages` | Api\NotebookPageController@store | auth:sanctum |
+| GET | `/api/pages/{id}` | Api\NotebookPageController@show | auth:sanctum |
+| PUT | `/api/pages/{id}` | Api\NotebookPageController@update | auth:sanctum |
+| DELETE | `/api/pages/{id}` | Api\NotebookPageController@destroy | auth:sanctum |
 | GET | `/api/profile` | Api\ProfileController@show | auth:sanctum |
 | PUT | `/api/profile` | Api\ProfileController@update | auth:sanctum |
 | GET | `/api/user` | Api\AuthController@me | auth:sanctum |

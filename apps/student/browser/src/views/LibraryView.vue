@@ -39,9 +39,7 @@ const dialogOpen = ref(false)
 onMounted(load)
 
 function open(notebook: Notebook): void {
-  // The page editor is Phase 007; until then opening is a no-op we surface
-  // rather than a dead click.
-  router.push({ name: 'home', query: { notebook: notebook.id } })
+  router.push({ name: 'notebook', params: { id: notebook.id } })
 }
 
 async function onCreate(payload: {
