@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import SignInView from '@/views/SignInView.vue'
 import SignUpView from '@/views/SignUpView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: HomeView, meta: { requiresAuth: true } },
+    { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
     { path: '/sign-in', name: 'sign-in', component: SignInView, meta: { public: true } },
     { path: '/sign-up', name: 'sign-up', component: SignUpView, meta: { public: true } },
   ],

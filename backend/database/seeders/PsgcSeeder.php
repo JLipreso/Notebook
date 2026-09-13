@@ -21,8 +21,9 @@ use RuntimeException;
  * Columns are matched by the PSA's own header names (normalised, since case and
  * spacing drift between quarters): a 10-digit code, a name, a geographic level.
  *
- * Parentage comes from the CODE STRUCTURE (RR PP MM BBB), not row order, so a
- * re-export in a different sort order still seeds correctly. That same structure
+ * Parentage comes from the CODE STRUCTURE (RR PPP MM BBB — the province
+ * segment is THREE digits), not row order, so a
+ * re-export in a different order still seeds correctly. That same structure
  * is the fallback when the PSA leaves Geographic Level blank — which it does on
  * ~50 rows per quarter, including, in 2Q-2026, Negros Island Region itself.
  * =============================================================================
@@ -228,7 +229,7 @@ class PsgcSeeder extends Seeder
             return 'region';
         }
 
-        if (substr($code, 4) === '000000') {
+        if (substr($code, 5) === '00000') {
             return 'province';
         }
 
@@ -255,13 +256,19 @@ class PsgcSeeder extends Seeder
     }
 
     /**
-     * NULL for NCR cities, which have no province level.
+     * NULL for NCR cities, which genuinely have no province level.
+     *
+     * The province segment is THREE digits, not two: PSGC codes are
+     * RR PPP MM BBB, so Adams (0102801000) sits under 01028 = Ilocos Norte
+     * (0102800000). Slicing four digits instead of five silently nulls the
+     * province on ~1,350 of 1,660 cities — every dropdown outside NCR then
+     * looks like the NCR branch.
      *
      * @param  array<string, true>  $provinceCodes  every province code in the file
      */
     private function provincePrefix(string $code, array $provinceCodes): ?string
     {
-        $province = substr($code, 0, 4).'000000';
+        $province = substr($code, 0, 5).'00000';
 
         return isset($provinceCodes[$province]) ? $province : null;
     }

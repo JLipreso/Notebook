@@ -41,6 +41,8 @@ onMounted(async () => {
     </p>
     <div class="mt-2 h-1 w-24 rounded bg-margin" aria-hidden="true"></div>
 
+    <RouterLink to="/profile" class="text-sm text-ink underline">Profile &amp; address</RouterLink>
+
     <section class="mt-6 w-full text-left">
       <p v-if="loading" class="text-sm text-ink-faint">Loading notebooks…</p>
       <p v-else-if="error" class="text-sm text-margin">{{ error }}</p>
