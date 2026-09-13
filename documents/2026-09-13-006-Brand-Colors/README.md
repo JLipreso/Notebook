@@ -34,10 +34,14 @@ Client-facing color exploration and the locked selection (**D-032**). Requested 
 
 Screen design happens in **Claude Design** on this palette; briefs and exports live in this folder. Options B and C are archived above for the record — they are NOT fallbacks; a palette change now requires a new decision.
 
-**Current canonical design reference: [Notebook-Mobile-22-screens.html](Notebook-Mobile-22-screens.html)** (cumulative canvas — all M1 mobile screens). UI implementation matches against this file.
+**The M1 design surface is COMPLETE (browser + mobile, per D-029). Canonical references — UI implementation matches against these two files:**
+- **Mobile (portrait):** [Notebook-Mobile-22-screens.html](Notebook-Mobile-22-screens.html)
+- **Browser (desktop):** [Notebook-Browser-12-screens.html](Notebook-Browser-12-screens.html)
 
 | Pass | Brief | Deliverable | Status |
 |---|---|---|---|
 | 1 — M1 mobile core (12 screens) | [claude-design-brief-1.md](claude-design-brief-1.md) | [Notebook-Mobile-12-screens.html](Notebook-Mobile-12-screens.html) (superseded — history only) | **done** — [note](design-pass-1-complete.md) |
 | 2 — M1 mobile flows & states (+10) | [claude-design-brief-2.md](claude-design-brief-2.md) | [Notebook-Mobile-22-screens.html](Notebook-Mobile-22-screens.html) | **done** — [note](design-pass-2-complete.md) |
-| 3 — M1 browser (desktop web) | [claude-design-brief-3.md](claude-design-brief-3.md) | — | brief ready |
+| 3 — M1 browser, desktop web (12 screens) | [claude-design-brief-3.md](claude-design-brief-3.md) | [Notebook-Browser-12-screens.html](Notebook-Browser-12-screens.html) | **done** — [note](design-pass-3-complete.md) |
+
+Still pending on this thread: the **typeface fold-back** into `packages/ui/brand/tailwind-preset.cjs` (`fontFamily` tokens) once the final families are confirmed from the canvases. Tablet / teacher / admin passes are parked by decision (D-029, M2, M3).
