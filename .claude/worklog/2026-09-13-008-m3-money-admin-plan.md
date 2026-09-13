@@ -32,3 +32,15 @@ The brief's in-app GCash subscription flow collides with Google Play's Payments 
 - Pass 5 export verified the same way (`Notebook-Teacher-Browser-12-screens.html`, ~519 KB): palette/typography/persona correct, Margin Red ×13/12 screens, desktop chrome (1440, sidebar), all §6 rules PLUS the D-009 lesson PDF/print affordance (×15). Completion note: `design-pass-5-complete.md`. **Teacher design surface done** — remaining passes parked: tablet (D-029), admin (M3 pre-work).
 - **Junior progress:** PR #13 (M1 Phases 002–003, database + contract/services) MERGED — first implementation code is in `staging`. It bundled two phases against the one-PR-per-phase rule; accepted this once, noted in status for review discipline. **Tracker chips phase-001…003 flipped to done via write_db** (batch, atomic).
 - PR #14 (pass-4 log) also merged.
+
+## Addendum 4 (same session) — all Lead-Developer questions closed (D-034…D-039)
+
+Prompted the Lead Developer through every open question that was theirs to decide; all six answered (recommended options taken):
+- **D-034** Q-M2-2: no gating in M2 — enforcement once, in M3's entitlements module.
+- **D-035** Q-M2-3: M2 invitations in-app only — no email provider; sender revisited in M3.
+- **D-036** Q-M2-4: lesson PDF = client print stylesheet, a real Phase-205 deliverable.
+- **D-037** Q-M3-1: admin browser-only.
+- **D-038** Q-M3-4: past_due grace = 7 days (one scheduler constant).
+- **D-039** Q-M3-5: USD deferred to PayMongo/Maya.
+
+Question files' `**Decision:**` lines filled; both intros updated. **Open project-wide: only Q-M3-2 + Q-M3-3 (boss/client) and Q-004 (deploy).**

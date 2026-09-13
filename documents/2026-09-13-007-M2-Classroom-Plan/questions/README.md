@@ -1,6 +1,6 @@
-# M2 open questions
+# M2 open questions — ALL CLOSED (2026-09-13)
 
-Each ends with a `**Decision:**` line **only the Lead Developer fills in** (CLAUDE.md §7). Answered ⇒ gets a D-ID in `.claude/memory/decisions.md` and becomes final. All four must be closed **before the M2 detail-fill** (see the plan README's trigger) — none block M1.
+Each ends with a `**Decision:**` line the Lead Developer filled in (CLAUDE.md §7). **All four are answered → D-033…D-036 in `.claude/memory/decisions.md` — final.** The M2 detail-fill is no longer question-blocked; it waits only on its trigger (M1 Phases 007+009 merged).
 
 ---
 
@@ -16,7 +16,7 @@ The teacher browser + mobile design passes were parked at M1 design close. The P
 
 The entitlements module (tier→feature mapping, D-022/D-023 enforcement) is M3 scope. Until it exists, M2 builds have no paywall: any teacher can create unlimited courses, any student can join. Confirm this is acceptable for M2 testing/demo builds (recommended: yes — gate nothing in M2, and make the M3 entitlements module the single place enforcement appears; matches the CLAUDE.md money rule of one canonical module, no scattered checks to retrofit).
 
-**Decision:**
+**Decision:** Yes — no gating anywhere in M2 (Lead Developer, 2026-09-13) → **D-034**. Enforcement appears once, in M3's entitlements module (flips on in Phase-309).
 
 ---
 
@@ -24,7 +24,7 @@ The entitlements module (tier→feature mapping, D-022/D-023 enforcement) is M3 
 
 Phase-207 invitations are keyed by student email (brief). If the invited email has no account yet, an actual email must be sent (invite link + app download). That needs a sending provider and a from-domain — a client-facing cost/branding choice: SMTP on client hosting, a transactional service (Resend/Mailgun/SES), or **M2-fallback = in-app only** (invitations reach existing accounts via M1 notifications; unmatched emails sit `pending` until that student registers — zero external dependency, weaker growth loop). Needs the boss/client, since the from-address is their brand.
 
-**Decision:**
+**Decision:** In-app only for M2 (Lead Developer, 2026-09-13) → **D-035**. No external provider; unmatched emails sit `pending` until registration. A real sender is an M3 candidate (payment emails) — new decision there.
 
 ---
 
@@ -32,4 +32,4 @@ Phase-207 invitations are keyed by student email (brief). If the invited email h
 
 The schema calls PDF "a rendering pipeline, not a schema feature". Two viable shapes: (a) **client-side** — print stylesheet + browser print-to-PDF; zero backend deps, but layout fidelity varies by device/browser and mobile UX is clunky; (b) **server-side** — Laravel renders Tiptap JSON to PDF (dompdf, or Browsershot+headless-Chrome for fidelity); one canonical output everywhere, but a backend dependency and server load. Recommended: (a) for M2 with the print stylesheet built as a real deliverable, (b) as an M2.x upgrade if fidelity complaints arrive. Lead Developer's call — no client input needed.
 
-**Decision:**
+**Decision:** (a) client-side print stylesheet (Lead Developer, 2026-09-13) → **D-036**, built as a real deliverable in Phase-205 (rulings must survive print). Server-side stays a permitted later upgrade if fidelity complaints arrive.
