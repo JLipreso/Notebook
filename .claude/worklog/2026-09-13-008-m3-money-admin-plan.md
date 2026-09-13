@@ -16,3 +16,9 @@ The brief's in-app GCash subscription flow collides with Google Play's Payments 
 - Boss/client: Q-M3-2 + Q-M3-3 (longest latency — send now). Lead Developer: Q-M3-1/4/5.
 - Start the Q-004 deployment conversation during M2 so Phase-310 isn't blocked.
 - Roadmap docs are now complete; remaining Lead-Dev planning work = M2 question answers, teacher + admin design passes, detail-fills when triggers fire.
+
+## Addendum (same session) — Q-M2-1 answered: teacher design passes NOW (D-033)
+
+- Lead Developer answered Q-M2-1 with "run them now" → **D-033** in decisions.md; the question's `**Decision:**` line filled.
+- Wrote **briefs 4 (teacher mobile, 12 screens) + 5 (teacher browser, 12 screens)** into the design home ([2026-09-13-006-Brand-Colors/](../../documents/2026-09-13-006-Brand-Colors/README.md)), pass table extended. Both grounded in schema §6's actual rules: expired label, clone-course, availability windows, lesson-gated quizzes, deliberate answers-release, question-bank immutable copy, declined-invitations-with-reason, manual+auto grading, one chat room per course. Teacher persona: Gng. Liza Manalo, Math 7. Mobile = monitoring/quick-edit/grading-on-the-go; desktop = heavy authoring (lesson editor + grading table are the hero screens).
+- Rhythm as before: Lead Developer runs pass 4 in Claude Design, exports `Notebook-Teacher-Mobile-12-screens.html` here, then pass 5.
