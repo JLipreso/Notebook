@@ -1,6 +1,6 @@
 # M3 open questions
 
-Each ends with a `**Decision:**` line **only the Lead Developer fills in** (CLAUDE.md §7); answered ⇒ D-ID in `decisions.md`, final. Q-M3-2 and Q-M3-3 need the boss/client and have the longest latency — **send them up now**, even though M3 implementation is months out.
+Each ends with a `**Decision:**` line **only the Lead Developer fills in** (CLAUDE.md §7); answered ⇒ D-ID in `decisions.md`, final. **Status 2026-09-13: Q-M3-1/4/5 CLOSED (→ D-037/D-038/D-039). Q-M3-2 and Q-M3-3 remain OPEN with the boss/client** — longest latency, send them up now even though M3 implementation is months out.
 
 ---
 
@@ -8,7 +8,7 @@ Each ends with a `**Decision:**` line **only the Lead Developer fills in** (CLAU
 
 D-025 locked platforms for student and teacher; admin was never specified. Staff verifying payments work at a desk; a phone-form admin app is triple the surface for no stated need. **Recommended: `apps/admin/browser` only** — D-027's structure still applies (thin shell, domain components in `@notebook/ui`), and another form factor can be added later without rework if the client asks. Lead Developer's call.
 
-**Decision:**
+**Decision:** Browser-only (Lead Developer, 2026-09-13) → **D-037**. `apps/admin/browser` is the only admin form factor; more need a new decision.
 
 ---
 
@@ -37,7 +37,7 @@ Phase-306/307 need from the client: (1) **whose GCash account/QR** receives paym
 
 Schema §7: a submitted-but-unverified payment holds the subscriber in `past_due` (access kept) instead of dropping them to `free_floor`, protecting payers from manual-verification delays. How long may a payment sit unverified before access drops anyway — 3 days? 7? (Recommended: **7 days**, generous for a manual queue; it's one scheduler constant, changeable anytime.) Lead Developer's call, boss FYI.
 
-**Decision:**
+**Decision:** 7 days (Lead Developer, 2026-09-13) → **D-038**. One named scheduler constant in the entitlements module; the number is config, not a new decision.
 
 ---
 
@@ -45,4 +45,4 @@ Schema §7: a submitted-but-unverified payment holds the subscriber in `past_due
 
 The brief lists ₱ + USD, and `plan_prices` supports both — but GCash is PHP-only, so M3 has no way to *collect* USD. **Recommended: seed PHP prices only in M3**; USD rows land with the PayMongo/Maya integration (deferred list), where card/international payment makes USD real. Schema unchanged either way.
 
-**Decision:**
+**Decision:** Defer USD (Lead Developer, 2026-09-13) → **D-039**. M3 seeds PHP rows only; USD rows land with PayMongo/Maya.
