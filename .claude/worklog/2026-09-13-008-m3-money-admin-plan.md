@@ -26,3 +26,9 @@ The brief's in-app GCash subscription flow collides with Google Play's Payments 
 ## Addendum 2 (same session) — pass 4 delivered & verified
 
 - The Lead Developer ran pass 4; export landed as `Notebook-Teacher-Mobile-12-screens.html` (~472 KB). Verified programmatically against the brief before logging: all D-032 hexes, Fraunces+Figtree, Margin Red ≈ once per screen (12 hits / 12 screens), every schema-§6 rule visible (Expired, declined-with-reason, question bank, gated quizzes, answers-release, grading, roster, calendar, chat), persona correct, D-031 grep clean. Completion note: `design-pass-4-complete.md`; pass table updated; status item 14 updated. Pass 5 (teacher browser) is next, referencing the pass-4 canvas.
+
+## Addendum 3 (same session) — pass 5 delivered: M2 teacher design surface COMPLETE
+
+- Pass 5 export verified the same way (`Notebook-Teacher-Browser-12-screens.html`, ~519 KB): palette/typography/persona correct, Margin Red ×13/12 screens, desktop chrome (1440, sidebar), all §6 rules PLUS the D-009 lesson PDF/print affordance (×15). Completion note: `design-pass-5-complete.md`. **Teacher design surface done** — remaining passes parked: tablet (D-029), admin (M3 pre-work).
+- **Junior progress:** PR #13 (M1 Phases 002–003, database + contract/services) MERGED — first implementation code is in `staging`. It bundled two phases against the one-PR-per-phase rule; accepted this once, noted in status for review discipline. **Tracker chips phase-001…003 flipped to done via write_db** (batch, atomic).
+- PR #14 (pass-4 log) also merged.
