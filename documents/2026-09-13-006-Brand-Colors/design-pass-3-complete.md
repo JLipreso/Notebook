@@ -13,5 +13,5 @@ Every screen the junior developer builds in the [implementation plan](../2026-09
 
 ## Remaining on the design thread
 
-1. **Typeface fold-back (still pending since pass 1):** confirm the final display/UI families from the canvases → set `packages/ui/brand/tailwind-preset.cjs` `fontFamily` tokens + Google Fonts wiring in the apps.
+1. ~~Typeface fold-back~~ **DONE 2026-09-13:** canvases confirmed **Fraunces** (display) + **Figtree** (UI); preset `fontFamily` tokens set, fonts bundled via `@fontsource` in both apps (offline-safe), build verified.
 2. Parked by decision: tablet landscape (post-M1, D-029), teacher portal (M2), admin (M3) — each gets its own brief in this format when its milestone starts.
