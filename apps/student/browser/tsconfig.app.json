@@ -30,6 +30,7 @@
     "../../../packages/services/**/*.ts",
     "../../../packages/utility/**/*.ts",
     "../../../packages/ui/**/*.ts",
+    "../../../packages/ui/**/*.vue",
     "../../../packages/sync/**/*.ts"
   ],
   "exclude": ["../../../packages/**/node_modules"]
