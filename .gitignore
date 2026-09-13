@@ -49,3 +49,12 @@ pnpm-debug.log*
 
 # Testing
 coverage/
+
+# Credentials — NEVER commit (D-031, CLAUDE.md §7). The Firebase service-account
+# JSON lives OUTSIDE the repo; backend/.env points at it by absolute path.
+# These patterns are a safety net, not the mechanism.
+*service-account*.json
+*serviceaccount*.json
+*adminsdk*.json
+google-services.json
+GoogleService-Info.plist

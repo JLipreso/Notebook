@@ -54,6 +54,8 @@ Machine-local `.env` / `.env.prod` files are deliberately never parsed — this 
 | `AWS_USE_PATH_STYLE_ENDPOINT` |  |
 | `VITE_APP_NAME` |  |
 | `SANCTUM_STATEFUL_DOMAINS` | Deliberately blank — stateless bearer tokens only (CLAUDE.md §5). |
+| `FIREBASE_CREDENTIALS` | Absolute path to the Firebase service-account JSON, used to verify client ID tokens (Phase 004) |
+| `FIREBASE_PROJECT_ID` | Firebase project id — must match the service-account's project and VITE_FIREBASE_PROJECT_ID |
 
 ## Frontend — student/browser (⚠ these values ship to the browser — never put a secret in a `VITE_*` var)
 

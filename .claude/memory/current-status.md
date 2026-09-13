@@ -16,6 +16,19 @@ _Last updated: 2026-09-13 (M3 plan + teacher design passes opened (D-033); roadm
 - ~~⚠ CLAUDE.md §1 TBD~~ **DONE 2026-09-13** — §1 rewritten decision-backed; product + money routing rows updated. The pre-product banner stays until code exists.
 - Remote: `https://github.com/JLipreso/Notebook.git`. **Release zero (the M1 foundation) is on `main`** — PRs #3–#8 all merged 2026-09-13; `main` = `staging` = `Workstation-PC`.
 - **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
+- **`Workstation-Laptop` added 2026-09-13** — second machine branch, off `staging` at `bd6ddb8`. **M1 execution runs from here**; PRs to `staging` as usual.
+
+## ▶ M1 EXECUTION STARTED (2026-09-13)
+
+**Phase-001 complete on the laptop** — environment verified end to end, no PR (nothing changed), per the phase file. Toolchain: Node 24.14.1 · pnpm 10.28.0 · PHP 8.2.30 · Composer 2.9.7. `pnpm typecheck` (8 projects) + `pnpm build:all` green; `composer install` + `migrate` clean; `/api/health` 200; apps live on :5171 / :5174. Full detail: [worklog 006](../worklog/2026-09-13-006-phase-001-laptop-onboarding.md). Tracker `phases/phase-001` flipped to **in_progress**.
+
+**Next: Phase-002** (database — migrations, models, PSGC + notebook_types seeders), one PR to `staging`.
+
+Two carry-over items, neither blocking Phase-002:
+1. **Firebase credentials not yet handed over** — empty `VITE_FIREBASE_*` in both app `.env` files, no `FIREBASE_CREDENTIALS` in `backend/.env`. Mock mode covers Phases 001–003; **hard-blocks Phase-004**. Requested from the Lead Developer.
+2. **GitHub default branch still `main`** — until switched, every PR must pass `--base staging` explicitly.
+
+Doc nit found in Phase-001 §5: it claims `/api/health` returns the success envelope; it returns `{ok, app, env, time}` by design (platform probe, distinct from `/up`). The code is right, the phase doc is loose — do not "fix" the endpoint.
 
 ## What's next (in order)
 
