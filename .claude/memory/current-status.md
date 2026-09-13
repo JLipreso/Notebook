@@ -1,8 +1,8 @@
 # Current Status
 
-_Last updated: 2026-09-13 (M3 plan + teacher design passes opened (D-033); roadmap complete M1→M2→M3; M1 implementation is the junior's, on `Workstation-Laptop`)_
+_Last updated: 2026-09-13 (M1 Phases 001–006 built on `Workstation-Laptop`; **PAUSED** after Phase 006 at the Lead Developer's request — session 007 close)_
 
-> **👋 Junior developer starting here:** everything you need is in [documents/2026-09-13-005-Implementation-Plan/README.md](../../documents/2026-09-13-005-Implementation-Plan/README.md) — read its ground rules, then execute [Phase-001](../../documents/2026-09-13-005-Implementation-Plan/Phase-001.md). Branch off `staging`, one PR per phase back to `staging`, never `main`. Every product question is already decided (D-001…D-032) — if something seems undecided, check `decisions.md`, then ask the Lead Developer; never improvise.
+> **👋 Picking this up?** Phases 001–006 are DONE. Start at [Phase-007](../../documents/2026-09-13-005-Implementation-Plan/Phase-007.md) (paper templates & page editor — the largest phase), after reading the ▶ section below. Ground rules: [the plan README](../../documents/2026-09-13-005-Implementation-Plan/README.md). Branch off `staging`, one PR per phase back to `staging`, never `main`. Every product question is already decided (D-001…D-032) — if something seems undecided, check `decisions.md`, then ask the Lead Developer; never improvise.
 
 ## Where we are
 
@@ -18,17 +18,39 @@ _Last updated: 2026-09-13 (M3 plan + teacher design passes opened (D-033); roadm
 - **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
 - **`Workstation-Laptop` added 2026-09-13** — second machine branch, off `staging` at `bd6ddb8`. **M1 execution runs from here**; PRs to `staging` as usual.
 
-## ▶ M1 EXECUTION STARTED (2026-09-13)
+## ▶ M1 EXECUTION — PHASES 001–006 DONE, **PAUSED** (2026-09-13)
 
-**Phase-001 complete on the laptop** — environment verified end to end, no PR (nothing changed), per the phase file. Toolchain: Node 24.14.1 · pnpm 10.28.0 · PHP 8.2.30 · Composer 2.9.7. `pnpm typecheck` (8 projects) + `pnpm build:all` green; `composer install` + `migrate` clean; `/api/health` 200; apps live on :5171 / :5174. Full detail: [worklog 006](../worklog/2026-09-13-006-phase-001-laptop-onboarding.md). Tracker `phases/phase-001` flipped to **in_progress**.
+Built on `Workstation-Laptop`. Full detail: [worklog 007](../worklog/2026-09-13-007-m1-phases-002-006.md) (and [worklog 006](../worklog/2026-09-13-006-phase-001-laptop-onboarding.md) for the environment).
 
-**Next: Phase-002** (database — migrations, models, PSGC + notebook_types seeders), one PR to `staging`.
+| Phase | What landed | State |
+|---|---|---|
+| 001 onboarding | environment verified, no PR | done |
+| 002 database | 13 tables, 13 models, 2 seeders | merged (PR #13) |
+| 003 types & services | the contract + 9 services + mock fixtures | merged (PR #13) |
+| — PSGC data | real PSA 2Q-2026 data + a dependency-free converter | merged (PR #15) |
+| 004 auth | Firebase → Sanctum, both apps | merged (PR #15) |
+| 005 profile & address | the four-level PSGC chain | **PR #18 open** |
+| 006 notebook library | the shelf, now the post-signin home | **PR #18 open** |
 
-Two carry-over items, neither blocking Phase-002:
-1. **Firebase credentials not yet handed over** — empty `VITE_FIREBASE_*` in both app `.env` files, no `FIREBASE_CREDENTIALS` in `backend/.env`. Mock mode covers Phases 001–003; **hard-blocks Phase-004**. Requested from the Lead Developer.
-2. **GitHub default branch still `main`** — until switched, every PR must pass `--base staging` explicitly.
+**Totals:** 56 backend tests (177 assertions) · 22 API routes · `pnpm typecheck` + `pnpm build:all` green. Working tree clean, branch pushed.
 
-Doc nit found in Phase-001 §5: it claims `/api/health` returns the success envelope; it returns `{ok, app, env, time}` by design (platform probe, distinct from `/up`). The code is right, the phase doc is loose — do not "fix" the endpoint.
+### ⚠ Read before touching the address data
+
+**The province-prefix fix in Phase 005 changes what seeds.** Anyone who ran the seeder before commit `6c43ad9` has ~1,350 cities with a null province — every region looks like NCR. Fix: `php artisan migrate:fresh --seed`.
+
+### Open items
+
+1. **PR #18 awaits review** (Phases 005–006). #13 and #15 are merged.
+2. **Phase 004's live browser flow is unverified** — the Google popup and a real end-to-end sign-up need a browser with a human; no headless driver is installed. Steps in [Phase-004-complete.md](../../documents/2026-09-13-005-Implementation-Plan/completion/Phase-004-complete.md). Firebase Console also needs Email/Password + Google enabled.
+3. **Two interim pieces in Phase 006, for Phase 007 to replace:** the notebook card's `⋯` menu is a `prompt()`, and opening a notebook routes to `?notebook=<id>` with no destination. Both deliberate and commented.
+4. **GitHub default branch is still `main`** — every PR needs `--base staging` explicitly.
+5. A design question was raised and answered mid-phase: [questions/001-independent-cities.md](../../documents/2026-09-13-005-Implementation-Plan/questions/001-independent-cities.md) — the address chain treats the province as optional everywhere, because 17 Highly Urbanized Cities sit outside any province.
+
+### Next: Phase 007 — paper templates & page editor
+
+The plan's largest phase and the product's soul. `page_template` is now consumed in three places (the Phase-002 seeder, `@notebook/types`, and Phase-006's `PaperPreview` swatch); `PaperPage.vue` is the fourth and the real one — the swatch is **not** a starting point for it.
+
+**[001-Learnings.md](../../documents/0000-00-00-000-Memory/001-Learnings.md) went from empty to five entries this session.** Read it before debugging anything in the seeders, `.env` on Windows, the API envelope, or a shared-package build.
 
 ## What's next (in order)
 
