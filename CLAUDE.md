@@ -8,7 +8,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 **Discoverability:** in a Claude Code session, say **"help"** to get the repo knowledge map and skill catalog (`/help`, `/whats-live`, `/diagnose-deploy`, `/refresh-docs`).
 
-> **This repo is pre-product.** `backend/` holds a bare Laravel 12 conventions scaffold (2026-09-12-002) — no domain code; `apps/` and `packages/` are still empty. Rows in the routing table below point only at things that actually exist; sections marked **TBD** are honest gaps, not oversights. Fill them in as the work lands, and delete this banner when §1 describes a real product.
+> **This repo is pre-product.** `backend/` holds a bare Laravel 12 conventions scaffold (2026-09-12-002) — no domain code; the pnpm workspace is scaffolded (2026-09-13-004 Phase 3: student browser + mobile shells, five package skeletons) but carries no features yet. Rows in the routing table below point only at things that actually exist; sections marked **TBD** are honest gaps, not oversights. Fill them in as the work lands, and delete this banner when §1 describes a real product.
 
 ---
 
@@ -44,7 +44,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 - **Product:** a Philippine-market, mobile-first app that replaces the stack of 8–12 paper notebooks a student buys every school year with digital notebooks they own forever (faithful paper-template pages, typed Tiptap-JSON blocks, offline-first via on-device SQLite), plus a lightweight classroom layer (teacher-authored lessons, quizzes, scores) on top. Serves preschool through college. Full spec: [concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md); raw brief: [about.md](documents/2026-09-12-001-Project-Details/about.md).
 - **Business model:** B2C subscriptions (Student ₱69/₱129 · Teacher ₱89/₱169 monthly, Admin-editable), teacher-led growth (a paying teacher's students get course access — D-022), permanent limited free tier after the 14-day trial (D-023), GCash QR + manual verification first, PayMongo/Maya later. Entitlement details are locked decisions (D-007…D-023 in [decisions.md](.claude/memory/decisions.md)), not implementation choices.
-- **Current status:** concept locked, zero domain code — Laravel 12 conventions skeleton only ([2026-09-12-002](documents/2026-09-12-002-Backend-Scaffold/)); frontend workspace not yet created. Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
+- **Current status:** concept locked, zero domain code — Laravel 12 conventions skeleton ([2026-09-12-002](documents/2026-09-12-002-Backend-Scaffold/)) + the pnpm workspace scaffold (2026-09-13-004 Phase 3). Platforms are locked decisions: per-form-factor apps (D-027), one bundled store listing per role (D-028), Android-first with M1 = browser + mobile (D-026/D-029). Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
 
 **Keep this section decision-backed.** Every claim above traces to `about.md` or a D-ID; extend it the same way, never from guesses.
 
@@ -52,14 +52,14 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 ## 2. Repo shape
 
-Target shape (locked as D-001, mirroring the Exploria monorepo). The backend skeleton exists; the pnpm workspace does not yet:
+Locked shape: D-001 (Exploria-mirror stack) reshaped by D-027 (per-form-factor apps). Backend skeleton and workspace scaffold both exist:
 
-pnpm workspace (`pnpm-workspace.yaml` → `apps/*`, `packages/*`). Node ≥18, pnpm ≥8. Always `pnpm install` from the root.
+pnpm workspace (`pnpm-workspace.yaml` → `apps/*/*`, `packages/*` — role folders under `apps/` hold no `package.json`). Node ≥18, pnpm ≥8. Always `pnpm install` from the root.
 
 | Path | What goes here | Status |
 |---|---|---|
-| [apps/](apps/) | Vue 3.5 + Vite 6 + TS 5.7 + Pinia + Vue Router 4 + Tailwind 3.4 + Reka UI. One folder per deployable front end, each its own workspace package with its own dev port and production subdomain | empty |
-| `packages/` | Shared, platform-agnostic TypeScript: `types/` (the API contract), `services/` (one per domain + an axios singleton + the single mock↔API switch point), `utility/` (canonical business math). **Zero Vue, ships raw TS** | not created |
+| [apps/](apps/) | Vue 3.5 + Vite 6 + TS 5.7 + Pinia + Vue Router 4 + Tailwind 3.4 + Reka UI. Per role (`student/`, `teacher/`, `admin/`), one THIN app per form factor (D-027): `browser/` (desktop web), `mobile/` (locked portrait), `tablet/` (locked landscape — deferred, D-029), `desktop/` (Electron wrapping `browser/dist` — post-Android, D-026), `native/` (THE Capacitor project bundling form-factor builds → one store listing, D-028). Form-factor apps hold ONLY layout/composition — domain components live in `@notebook/ui` | student `browser/` + `mobile/` + `native/` scaffolded (2026-09-13-004 Phase 3); teacher M2, admin M3 |
+| `packages/` | Shared, platform-agnostic TypeScript: `types/` (the API contract), `services/` (one per domain + an axios singleton + the single mock↔API switch point), `utility/` (canonical business math), `ui/` (shared Vue components: editor, paper templates, the ONE brand Tailwind preset — the only package with Vue), `sync/` (offline engine: UUIDv7 ids, storage adapters, outbox) | five skeletons scaffolded (2026-09-13-004 Phase 3) |
 | [backend/](backend/) | Laravel 12 + PHP 8.2. **Not a pnpm workspace member** — a sibling directory reached by `cd backend`. See §5 | scaffolded — Laravel 12.69 + §5 conventions, no domain code ([2026-09-12-002](documents/2026-09-12-002-Backend-Scaffold/README.md)) |
 | [documents/](documents/) | All project documentation. See §7 | seeded |
 | [scripts/](scripts/) | Repo tooling. Today: `refresh-docs.mjs` (§6) | seeded |

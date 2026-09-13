@@ -1,0 +1,14 @@
+{
+  "name": "@notebook/types",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Notebook shared TypeScript types — THE API contract (D-005). Laravel adapts to these, never the reverse.",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.0"
+  }
+}

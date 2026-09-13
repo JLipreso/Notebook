@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-> **AUTO-GENERATED 2026-09-12** by `scripts/refresh-docs.mjs` from the committed `.env.example` files — do not edit by hand, rerun the script (or the `/refresh-docs` skill) instead.
+> **AUTO-GENERATED 2026-09-13** by `scripts/refresh-docs.mjs` from the committed `.env.example` files — do not edit by hand, rerun the script (or the `/refresh-docs` skill) instead.
 
 Machine-local `.env` / `.env.prod` files are deliberately never parsed — this doc must be identical on every machine. Production values live in GitHub secrets; see [CLAUDE.md](../../CLAUDE.md) §9.
 
@@ -54,3 +54,35 @@ Machine-local `.env` / `.env.prod` files are deliberately never parsed — this 
 | `AWS_USE_PATH_STYLE_ENDPOINT` |  |
 | `VITE_APP_NAME` |  |
 | `SANCTUM_STATEFUL_DOMAINS` | Deliberately blank — stateless bearer tokens only (CLAUDE.md §5). |
+
+## Frontend — student/browser (⚠ these values ship to the browser — never put a secret in a `VITE_*` var)
+
+`apps/student/browser/.env.example`
+
+| Variable | Note (from file comments) |
+|---|---|
+| `VITE_API_URL` | Laravel API base URL (dev backend: php artisan serve) |
+| `VITE_USE_MOCK` | Read ONLY by packages/services/datasource.ts. |
+| `VITE_DEMO_MODE` | Demo/test-user affordances (CLAUDE.md §4) — must be 'false' against production auth. |
+| `VITE_FIREBASE_API_KEY` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_FIREBASE_PROJECT_ID` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_FIREBASE_APP_ID` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_PUSHER_KEY` | Pusher Channels (D-007) |
+| `VITE_PUSHER_CLUSTER` | Pusher Channels (D-007) |
+
+## Frontend — student/mobile (⚠ these values ship to the browser — never put a secret in a `VITE_*` var)
+
+`apps/student/mobile/.env.example`
+
+| Variable | Note (from file comments) |
+|---|---|
+| `VITE_API_URL` | Laravel API base URL (dev backend: php artisan serve) |
+| `VITE_USE_MOCK` | Read ONLY by packages/services/datasource.ts. |
+| `VITE_DEMO_MODE` | Demo/test-user affordances (CLAUDE.md §4) — must be 'false' against production auth. |
+| `VITE_FIREBASE_API_KEY` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_FIREBASE_PROJECT_ID` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_FIREBASE_APP_ID` | Firebase web app config (public identifiers, safe to commit as placeholders) — D-015 |
+| `VITE_PUSHER_KEY` | Pusher Channels (D-007) |
+| `VITE_PUSHER_CLUSTER` | Pusher Channels (D-007) |

@@ -1,0 +1,10 @@
+# Role folders (apps/student, apps/teacher) hold no package.json — each
+# form-factor app inside them is its own workspace package (D-027).
+packages:
+  - "packages/*"
+  - "apps/*/*"
+
+# Allow native build scripts needed by the toolchain (esbuild ships a binary).
+onlyBuiltDependencies:
+  - esbuild
+  - vue-demi

@@ -1,6 +1,6 @@
 # Current Status
 
-_Last updated: 2026-09-13 (concept validation, task 2026-09-13-003)_
+_Last updated: 2026-09-13 (boss approval, platform decisions D-025…D-029, Phase 3 scaffold — session 005)_
 
 ## Where we are
 
@@ -10,7 +10,7 @@ _Last updated: 2026-09-13 (concept validation, task 2026-09-13-003)_
 
 - The agentic knowledge scaffold is in place — [CLAUDE.md](../../CLAUDE.md) with the Context-First routing table, this `.claude/` session state, the learnings ledger, the reference generator, and four skills.
 - **Backend scaffolded (2026-09-12).** Laravel 12.69.2 + Sanctum installed in `backend/` with the full §5 conventions layer: `ApiController` envelope, custom `Cors` middleware (framework `HandleCors` removed), `SecurityHeaders`, JSON-only errors on `api/*`, IP-keyed rate limiters (`public`/`public-write`/`auth`), `DB::prohibitDestructiveCommands` in prod, Sanctum migration folded into the `0001_01_01_NNNNNN` counter. Dev DB is sqlite; the production engine is an **open decision**. `/api/health` + auth-gated `/api/user` verified live. Details: [documents/2026-09-12-002-Backend-Scaffold/](../../documents/2026-09-12-002-Backend-Scaffold/README.md). **No domain code** — no auth flow, no models beyond `User` (blocked on Q-001/Q-003).
-- **No frontend.** `apps/` is empty; there is no pnpm workspace, no CI, no deployment.
+- **Frontend workspace scaffolded (2026-09-13, Phase 3).** `apps/student/{browser,mobile,native}` + five `packages/*` skeletons per D-027; typecheck + build green. No features, no CI, no deployment yet.
 - ~~⚠ CLAUDE.md §1 TBD~~ **DONE 2026-09-13** — §1 rewritten decision-backed; product + money routing rows updated. The pre-product banner stays until code exists.
 - Remote: `https://github.com/JLipreso/Notebook.git`. `main`, `staging` and `Workstation-PC` all at `67a2c2e` (the bootstrap commit).
 - **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
@@ -24,11 +24,11 @@ _Last updated: 2026-09-13 (concept validation, task 2026-09-13-003)_
 4. **Boss APPROVED the two documents (2026-09-13)** — no content changes, but platform inputs followed and reshaped the frontend plan. All recorded and re-baked into the plan + both artifacts (same URLs):
    - **D-025** platform matrix (teacher matches student: browser/Electron/Android/iOS) · **D-026** Android-first sequencing (Electron after Android feature-complete, iOS last) · **D-027** per-form-factor apps (`browser/`, `desktop/` = Electron wrapping `browser/dist`, `mobile/` locked portrait, `tablet/` locked landscape + the anti-fork guardrail: domain components live in `@notebook/ui`, apps are layout shells) · **D-028** one Capacitor `native/` project per role bundling form-factor builds → ONE store listing · **D-029** M1 = browser + mobile, tablet deferred past the M1 core.
    - **A first Phase-3 scaffold run was HALTED mid-flight by the Lead Developer** (it predated D-027): `apps/student` was built single-app-style then **deleted**. Still on disk, uncommitted: root `package.json` + `pnpm-workspace.yaml` and the five `packages/*` skeletons — all still valid under D-027 EXCEPT root scripts reference `@notebook/student` (now `@notebook/student-browser` etc.) and the workspace glob needs `apps/*/*`. Empty `apps/teacher/mobile/tablet/` dirs exist from the Lead Dev's sketch (wrong nesting — intended shape is sibling folders).
-5. **Next: re-run Phase 3 per the D-027 structure** (root fixes + `apps/student/browser` + `apps/student/mobile` + `native/` placement + five packages + CLAUDE.md §2 table in the same commit) — **only when the Lead Developer says go**; planning-first mode is in effect. Then Phase 4 (M1 migrations). Open at Phase 3/4 start: O-1 (PSGC snapshot), O-3 (trial start), **O-4 (Capacitor appId — needed before `cap add android`)**.
-   - Uncommitted right now: this status file, decisions.md (D-025…D-029), plan docs (project-structure.md, README O-items), concept-final.md, `plan/completion/phase-2-complete.md`, `Artifact.md`, the worklog, the workspace root + packages skeletons — recommend committing the planning batch before scaffolding resumes.
+5. ~~Re-run Phase 3 per the D-027 structure~~ **PHASE 3 DONE (2026-09-13, Lead Developer's go).** Planning batch committed (`6555d93`), then the workspace scaffolded per D-027: root (`apps/*/*` globs), `apps/student/{browser,mobile,native}` (+`.gitkeep`d `desktop/`/`tablet/`), five `packages/*` skeletons, CLAUDE.md §2 + `/refresh-docs` in the same commit. **Verified green: `pnpm typecheck` (7 projects) + `pnpm build:all` (both apps).** Details: [phase-3-complete.md](../../documents/2026-09-13-004-M1-Foundation/plan/completion/phase-3-complete.md). `cap add android` NOT run — blocked on **O-4 (appId)**.
+6. **Next: Phase 4 — M1 migrations + models** per [database-schema.md](../../documents/2026-09-13-004-M1-Foundation/plan/database-schema.md) (M1-tagged tables only, fake-timestamp counter, PSGC + notebook_types seeders, matching `@notebook/types` domain files authored WITH the migrations, `/refresh-docs` in the same commit). Get **O-1** (PSGC snapshot) and **O-3** (trial start) at Phase 4 start; **O-4** (Capacitor appId) before any `cap add android`. Then PR `Workstation-PC` → `staging`.
 
 ### Once the brief is in
-3. **Scaffold the pnpm workspace** — root `package.json`, `pnpm-workspace.yaml`, the first app under `apps/`, the shared `packages/` (types / services / utility). Update CLAUDE.md §2's table in the same commit.
+3. ~~**Scaffold the pnpm workspace**~~ **DONE 2026-09-13** (Phase 3, see Immediate #5 above).
 4. ~~**Install Laravel 12 into `backend/`** following CLAUDE.md §5.~~ **DONE 2026-09-12** (task 2026-09-12-002, done ahead of the brief at the Lead Developer's direction). `backend/.env.example` is committed and `/refresh-docs` now emits real content. Still per-app: each `apps/*/.env.example` when apps land.
 5. **Lock the domain rules** (tenancy, permissions, and anything money-shaped) into `decisions.md` *before* implementing them, and give each a canonical module + a routing row.
 
