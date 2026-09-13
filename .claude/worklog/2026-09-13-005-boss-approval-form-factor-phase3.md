@@ -23,3 +23,10 @@ D-025…D-029 (see decisions.md). Open: Q-004, O-1, O-3, O-4.
 - **"Approved, start" ≠ start coding when the approval carries new inputs.** The boss's platform notes looked like confirmations but contained a structural change (Electron, and later the form-factor split). Should have planned the inputs through before scaffolding; cost one thrown-away scaffold + a re-run. Process note: treat any approval-with-comments as a planning trigger first.
 - Tailwind `content` globs reaching into `packages/ui/**` also match its `node_modules` — list source dirs explicitly (`{brand,editor,paper}/**`) or builds slow down (warning seen, fixed).
 - Google Play: one binary per listing (multi-APK deprecated) — separate phone/tablet apps under one listing are impossible; hence D-028's bundled bootstrap. Worth remembering for any future per-form-factor product.
+
+## Addendum (same session) — task 2026-09-13-005: M1 implementation plan
+
+- Boss requested a phase-by-phase implementation plan executable by a junior developer on their own workstation. Before writing it, closed EVERY open implementation question with the Lead Developer: O-1 (PSGC = latest snapshot at implementation), O-3 (trial at registration), O-4 (appId `com.notebook.student`, `com.notebook.teacher` reserved) → **D-030**.
+- **D-031 (Lead Developer instruction): no contractor branding anywhere** — outsourced project, source ships to the client. Scrubbed CLAUDE.md, README.md, root package.json, concept-validation README, both client artifacts (republished, same URLs), and `capacitor.config.ts` (appId updated to D-030 value).
+- Wrote [documents/2026-09-13-005-Implementation-Plan/](../../documents/2026-09-13-005-Implementation-Plan/README.md): README (ground rules, phase index, decision digest) + Phase-001…Phase-012, each with goal/prereqs/decision refs/steps/acceptance checklist, one PR per phase to staging. Routing-table row added to CLAUDE.md.
+- Grep proof: `grep -ri "w labs"` clean across repo and artifacts.

@@ -1,10 +1,10 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 
 // appId is the permanent store identity (Play Store package name — effectively
-// unchangeable after the first upload). Placeholder pending O-4 confirmation;
-// do NOT run `cap add android` until the Lead Developer confirms it.
+// unchangeable after the first upload). Locked as D-030: com.notebook.student
+// here; com.notebook.teacher is reserved for the teacher app.
 const config: CapacitorConfig = {
-  appId: 'com.wlabs.notebook',
+  appId: 'com.notebook.student',
   appName: 'Notebook',
   webDir: 'www',
 }

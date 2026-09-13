@@ -33,6 +33,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 | **deploy, GitHub Actions, VPS, subdomain, SSL, red pipeline** | §9 below (**not yet wired**). Org-wide runbooks: `D:\Software-Dev-Projects\Foxcity-4-Project-Notes\Claude-AI-Guide\VPS-Management\`. For failures fire `/diagnose-deploy` |
 | **"is the site up", "what's deployed"** | `/whats-live` skill — it will report "nothing deployed yet" until §9 is filled in |
 | **branching, "where do I open the PR", release** | §8 below — **PRs target `staging`, never `main`** |
+| **"what do I implement next", M1 build order, junior-developer onboarding to the build** | [documents/2026-09-13-005-Implementation-Plan/README.md](documents/2026-09-13-005-Implementation-Plan/README.md) — the phase-by-phase M1 plan (Phase-001…012); execute in order, one PR per phase |
 | **starting a new piece of work, where do docs go** | §7 below — `documents/<YYYY-MM-DD>-<NNN>-<Kebab-Title>/` |
 | **how this repo's AI setup works, adding a skill** | [.claude/README.md](.claude/README.md) + the org guide `D:\Software-Dev-Projects\Foxcity-4-Project-Notes\Claude-AI-Guide\Project-Scaffold\agentic-repository.md` |
 
@@ -40,7 +41,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 ## 1. What this project is
 
-**Notebook** — a client project built by **W Labs**. Lead Developer: Jason Lipreso.
+**Notebook** — an outsourced client project; the source code ships to the client with the product, so keep the repo free of contractor branding (D-031). Lead Developer: Jason Lipreso.
 
 - **Product:** a Philippine-market, mobile-first app that replaces the stack of 8–12 paper notebooks a student buys every school year with digital notebooks they own forever (faithful paper-template pages, typed Tiptap-JSON blocks, offline-first via on-device SQLite), plus a lightweight classroom layer (teacher-authored lessons, quizzes, scores) on top. Serves preschool through college. Full spec: [concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md); raw brief: [about.md](documents/2026-09-12-001-Project-Details/about.md).
 - **Business model:** B2C subscriptions (Student ₱69/₱129 · Teacher ₱89/₱169 monthly, Admin-editable), teacher-led growth (a paying teacher's students get course access — D-022), permanent limited free tier after the 14-day trial (D-023), GCash QR + manual verification first, PayMongo/Maya later. Entitlement details are locked decisions (D-007…D-023 in [decisions.md](.claude/memory/decisions.md)), not implementation choices.

@@ -29,6 +29,6 @@ The boss ER diagram needs the whole product picture, and two locked decisions re
 - **O-1 · PSGC data source file**: the PSA publishes the PSGC as a quarterly XLSX. Phase 4 needs the chosen snapshot committed as a seeder asset (`backend/database/seeders/data/psgc-YYYYQN.csv`). Any preference on snapshot quarter, or take the latest at implementation time?
 - **O-2 · Dev ports** are proposed in `project-structure.md` (5171/5172/5173) — confirm or adjust to match Exploria habits.
 - **O-3 · Trial start**: does the 14-day trial start at registration, or at first paid-feature use? Schema supports either (`subscriptions.trial_ends_at`); the onboarding flow needs the answer. Default assumption: at registration.
-- **O-4 · Capacitor `appId`**: the permanent store identity (Play Store package name — effectively unchangeable after first upload). Proposed placeholder: `com.wlabs.notebook`. Confirm before `cap add android`.
+- ~~**O-4 · Capacitor `appId`**~~ **CLOSED 2026-09-13 → D-030**: `com.notebook.student` for the student app; `com.notebook.teacher` reserved for the teacher app.
 - ~~**O-5 · Android packaging under D-027**~~ **CLOSED 2026-09-13 → D-028**: one Capacitor app per role (`apps/<role>/native/`) bundling the form-factor builds behind a startup bootstrap — one Play listing. Details in [project-structure.md](project-structure.md) §2a.
 - ~~**O-6 · M1 form-factor order**~~ **CLOSED 2026-09-13 → D-029**: M1 = browser + mobile; tablet deferred past the M1 core (teacher mirrors this in M2).

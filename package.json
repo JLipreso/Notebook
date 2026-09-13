@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "packageManager": "pnpm@10.28.0",
-  "description": "Notebook — digital notebooks + lightweight classroom layer for Philippine students (W Labs)",
+  "description": "Notebook — digital notebooks + lightweight classroom layer for Philippine students",
   "scripts": {
     "dev:backend": "cd backend && php artisan serve",
     "dev:student:browser": "pnpm --filter @notebook/student-browser dev",
