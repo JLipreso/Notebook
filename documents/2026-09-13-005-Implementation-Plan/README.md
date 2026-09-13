@@ -8,7 +8,7 @@ Detailed, self-sufficient implementation plan for **Milestone 1 (Notebook core)*
 
 1. Do the phases **in order** — each lists its prerequisites and each ends with a working, verified state. Don't start a phase until the previous one's acceptance checklist is fully green.
 2. One phase = one PR to `staging` (never `main` — CLAUDE.md §8). Branch: your own machine branch (Phase-001 sets it up).
-3. When a phase ships, write `completion/Phase-NNN-complete.md` in this folder (what shipped, deviations, gotchas) and update [.claude/memory/current-status.md](../../.claude/memory/current-status.md).
+3. When a phase ships, write `completion/Phase-NNN-complete.md` in this folder (what shipped, deviations, gotchas), update [.claude/memory/current-status.md](../../.claude/memory/current-status.md), **and flip the phase's status on the live progress tracker** the boss watches: https://claude.ai/code/artifact/74514cdd-95cb-44b5-8170-b7277b5fa991 — open it and click the phase's status chip (needs edit access to the artifact; ask the Lead Developer once), or ask your Claude session to update it. Mark a phase **In progress** when you start it, **Done** when its PR merges.
 4. Every phase ends with the same two gates: `pnpm typecheck` and `pnpm build:all` green from the repo root, plus that phase's own checks.
 5. Session ritual (CLAUDE.md §10): read `current-status.md` at session start; append a `.claude/worklog/` entry at session end. Hit a non-obvious gotcha? Log it in [001-Learnings.md](../../documents/0000-00-00-000-Memory/001-Learnings.md) before closing the incident.
 
