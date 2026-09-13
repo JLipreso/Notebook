@@ -30,3 +30,9 @@ D-025…D-029 (see decisions.md). Open: Q-004, O-1, O-3, O-4.
 - **D-031 (Lead Developer instruction): no contractor branding anywhere** — outsourced project, source ships to the client. Scrubbed CLAUDE.md, README.md, root package.json, concept-validation README, both client artifacts (republished, same URLs), and `capacitor.config.ts` (appId updated to D-030 value).
 - Wrote [documents/2026-09-13-005-Implementation-Plan/](../../documents/2026-09-13-005-Implementation-Plan/README.md): README (ground rules, phase index, decision digest) + Phase-001…Phase-012, each with goal/prereqs/decision refs/steps/acceptance checklist, one PR per phase to staging. Routing-table row added to CLAUDE.md.
 - Grep proof: `grep -ri "w labs"` clean across repo and artifacts.
+
+## Addendum 2 (same session) — task 2026-09-13-006: brand colors
+
+- Pitched three color directions as an artifact (same 3 mobile screens, identical content, only color varies): A "Komposisyon" (ink navy/cream/margin red), B "Silid-Aralan" (chalkboard/manila/gold), C "Kislap" (teal/coral). Boss + client chose **Option A** → **D-032**.
+- Task folder documents/2026-09-13-006-Brand-Colors/ records all three options + the artifact link; CLAUDE.md routing row added ("brand colors/palette/theme"); `packages/ui/brand/tailwind-preset.cjs` synced to the exact chosen hexes (token names unchanged; `pnpm build:all` green).
+- Next: Claude Design screen pass on this palette (Lead Developer drives).

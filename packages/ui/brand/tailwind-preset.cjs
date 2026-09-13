@@ -1,34 +1,36 @@
 // The ONE shared Tailwind preset (CLAUDE.md §4: brand tokens live here, not per app).
-// Placeholder palette named after the product's paper metaphor — swap values when
-// the brand identity lands; the token NAMES are what views are allowed to use.
+// Palette LOCKED as D-032 — Option A "Komposisyon", chosen by boss + client 2026-09-13
+// (documents/2026-09-13-006-Brand-Colors/). Token NAMES are the API views consume;
+// changing brand = changing this file only, never a view.
 module.exports = {
   theme: {
     extend: {
       colors: {
-        // notebook paper
+        // notebook paper — the app ground
         paper: {
-          DEFAULT: '#fdfcf7',
-          shade: '#f5f2e9',
+          DEFAULT: '#fbf8f0', // Cream Paper
+          shade: '#f2ecdd',
         },
-        // writing ink — primary actions, headings
+        // writing ink — brand navy for chrome/headings, text/soft/faint for copy
         ink: {
-          DEFAULT: '#1e3a5f',
-          soft: '#3d5a80',
-          faint: '#98a8bd',
+          DEFAULT: '#1e3a5f', // Ink Navy (brand)
+          text: '#22344c',    // Ink Text (body copy on paper)
+          soft: '#7a89a0',
+          faint: '#a9b6c8',
         },
-        // the red margin line — accents, destructive, badges
+        // the red margin line — THE single accent (FAB, highlights, destructive)
         margin: {
-          DEFAULT: '#d9534f',
-          soft: '#f2b8b5',
+          DEFAULT: '#c9463d', // Margin Red
+          soft: '#e0928c',
         },
-        // ruled lines
+        // ruled lines on paper templates
         rule: {
-          blue: '#a8c6e8',
-          red: '#e8a8a8',
+          blue: '#b9cfe8',
+          red: '#e0928c',
         },
       },
       fontFamily: {
-        // real families chosen with the brand; keep the token names
+        // real families chosen in the Claude Design pass; keep the token names
         display: ['ui-serif', 'Georgia', 'serif'],
         body: ['ui-sans-serif', 'system-ui', 'sans-serif'],
       },
