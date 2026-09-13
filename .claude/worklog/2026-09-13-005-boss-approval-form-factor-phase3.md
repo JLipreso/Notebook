@@ -36,3 +36,12 @@ D-025…D-029 (see decisions.md). Open: Q-004, O-1, O-3, O-4.
 - Pitched three color directions as an artifact (same 3 mobile screens, identical content, only color varies): A "Komposisyon" (ink navy/cream/margin red), B "Silid-Aralan" (chalkboard/manila/gold), C "Kislap" (teal/coral). Boss + client chose **Option A** → **D-032**.
 - Task folder documents/2026-09-13-006-Brand-Colors/ records all three options + the artifact link; CLAUDE.md routing row added ("brand colors/palette/theme"); `packages/ui/brand/tailwind-preset.cjs` synced to the exact chosen hexes (token names unchanged; `pnpm build:all` green).
 - Next: Claude Design screen pass on this palette (Lead Developer drives).
+
+## Addendum 3 (session close) — design surface, tracker, release zero, HANDOVER
+
+- **Design passes 1–3 completed in Claude Design** (Lead Developer drove; briefs + completion notes in the 006 task folder). Canonical references: `Notebook-Mobile-22-screens.html` + `Notebook-Browser-12-screens.html`. Typefaces (Fraunces + Figtree) folded back into the brand preset, bundled offline-safe via `@fontsource`. Design thread CLOSED.
+- **M1 Build Tracker artifact published** (live db-backed phase statuses, boss-facing) and wired into the plan's completion ritual; master artifact index at `documents/claude-artifact-list.md` with a CLAUDE.md routing row.
+- **PRs #3–#8 all merged.** #6/#8 were `staging` → `main` promotions — **release zero (the M1 foundation) is on `main`**; `main` = `staging` = `Workstation-PC`, tree clean.
+- **Q&A at close:** encrypted-secrets-in-repo tooling assessed (Laravel `env:encrypt`, SOPS, git-crypt) — deliberately NOT adopted: the source ships to the client (D-031), so out-of-repo secrets stay the rule. Teacher app folders confirmed intentionally absent (teacher = M2, D-025; glob `apps/*/*` picks them up when they land).
+- **Recommendation given to the boss (pending his decision): junior implements M1 first**; M2/M3 get milestone-level plans now and file-level detail when M1 nears completion (already the 005 README's stated intent). If accepted → a `M2-M3-Milestone-Plan` task folder is the follow-up.
+- **REPO HANDED OVER to the junior developer.** Their entry point: clone, branch off `staging`, start [Phase-001](../../documents/2026-09-13-005-Implementation-Plan/Phase-001.md). Lead Dev to-dos outstanding: tracker access (boss view / junior edit), Firebase credentials before Phase-004.
