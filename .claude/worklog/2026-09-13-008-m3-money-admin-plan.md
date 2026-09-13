@@ -50,3 +50,9 @@ Question files' `**Decision:**` lines filled; both intros updated. **Open projec
 - The Lead Developer answered the last two with business-model authority. **Q-M3-2 took a correction first**: the initial answer assumed the Play fee "doesn't apply to QR payments" — clarified that an in-app GCash QR for the app's own subscription is still a prohibited alternative payment method under Play policy (where the payment executes doesn't matter). Re-asked with that understanding → **D-040: web-only purchase flow** (QR screen exclusively in the browser app; native apps show plan status + "subscribe on the website"). The QR ops flow itself is unchanged.
 - **D-041** (Q-M3-3): client's business GCash, one static QR + reference matching (amount-QRs rejected — fight dynamic pricing), one launch admin, follow-up off-app with the `payment_status_logs` note mandatory as audit record.
 - M3 plan README updated (rule 5, Phase-306/310 rows), CLAUDE.md M3 routing row updated. **Project-wide: D-001…D-041 all decided; Q-004 (deploy) is the sole open question.** Lesson echo (same as session 005's): a confidently-worded answer that contains a factual misconception gets corrected before it becomes a decision — the D-ID records the informed choice.
+
+## Session close (paused — Lead Developer to a meeting)
+
+- PRs #16, #17, #19 all merged — planning batch fully in `staging`. Planning backlog is EMPTY.
+- **Junior's PR #18 (M1 Phase-005, profile & PSGC) is OPEN awaiting the Lead Developer's review**; tracker shows phase-005 in_progress (001–004 done).
+- Next triggers, in whoever's court: PR #18 review (Lead Dev) · Q-004 with the client · M2 detail-fill fires when M1 Phases 007+009 merge · optional `staging`→`main` promotion · default-branch chore.
