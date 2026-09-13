@@ -12,7 +12,7 @@ The **Milestone 3 (payments + entitlements + admin)** plan — the last piece of
    - **The money rule (CLAUDE.md money row):** ONE canonical entitlements module; no other code computes access. When Phase-304 lands, **update the CLAUDE.md money routing row to point at that file** — the row itself says so.
    - **Exact brief strings:** the payment status ladder (`unverified` → `in_progress` → `follow_up` → `received` / `fail_payment`) and launch prices (student 6900/12900 · teacher 8900/16900 minor units) are locked (D-008, schema §7). Never improvise beyond them.
 4. **The schema is already designed** — tables 26–35 in [database-schema.md §7](../2026-09-13-004-M1-Foundation/plan/database-schema.md): plans/prices as INSERT-only history, features as data rows ("add a feature to a tier anytime = a row, zero code"), subscriptions with the `free_floor` status (D-023: never a hard lock), payments with the verification trail. Deviations go through `decisions.md`.
-5. Open questions live in [questions/](questions/README.md) — `**Decision:**` lines for the Lead Developer (some need the boss/client). **Q-M3-2 (Google Play payments policy) is the one that can reshape a phase — close it FIRST.**
+5. ~~Open questions~~ **All five M3 questions CLOSED (2026-09-13 → D-037…D-041)** — see [questions/](questions/README.md). The plan-shaping one, Q-M3-2, resolved to **D-040: web-only purchase flow** — the GCash QR screen lives exclusively in the browser app; native apps show plan status + "subscribe on the website".
 6. **After M3 the MVP ships** — which makes **Q-004 (deploy environment)** blocking by M3's end. Deployment work (CLAUDE.md §9) should be wired *during* M3, not after it.
 
 ## Phase index (milestone level)
@@ -24,11 +24,11 @@ The **Milestone 3 (payments + entitlements + admin)** plan — the last piece of
 | Phase-303 | Contract & services extension | billing/admin domains in `@notebook/types`, services + mock fixtures per the datasource pattern | 302 · M1 Phase-003 |
 | Phase-304 | **The entitlements module** | the ONE canonical module: plan→feature resolution, teacher-led access (D-022: student's course access checks the *course teacher's* subscription), free floor (D-023), trial state; backend + a mirrored read-only helper in `@notebook/utility` | 303 · M2 Phase-204 |
 | Phase-305 | Subscription lifecycle | trial (14d from registration, D-030) → `active`/`free_floor`/`past_due` transitions via the Laravel scheduler, lifecycle notifications (M1 Phase-010 plumbing) | 304 |
-| Phase-306 | Payment submission (student + teacher apps) | GCash QR display, reference-number + optional-message form, own payment status view (per Q-M3-2's answer this may live web-only) | 305 |
+| Phase-306 | Payment submission (browser app ONLY — D-040) | GCash QR display (client's static QR, config not code — D-041), reference-number + optional-message form, own payment status view; native apps get a plan-status screen pointing to the website, never a payment method | 305 |
 | Phase-307 | Admin: payment verification | "New Payments" queue (`unverified`/`in_progress`/`follow_up`), status ladder with `payment_status_logs` follow-up notes, `received` ⇒ entitlements activates the subscription + notifies payer, "History" view | 301, 306 |
 | Phase-308 | Admin: management pages | dashboard counts, student/teacher management, plan/price/feature editing (price edit = INSERT new `plan_prices` row — history preserved) | 301, 303 |
 | Phase-309 | Enforcement rollout | flip gating ON in student/teacher apps (Q-M2-2 ends here): notebook/storage/font/sharing limits from the entitlements module, upgrade prompts, free-floor UX (read-only archives, never data loss) | 304–306 |
-| Phase-310 | Packaging & release prep | native rebuilds with payment/paywall flows **as Q-M3-2 dictates**, store-listing compliance pass, deployment wiring (Q-004 must be closed) | 301–309 |
+| Phase-310 | Packaging & release prep | native rebuilds (plan-status screen, NO payment UI — D-040), store-listing compliance pass verifying the Play payments policy is satisfied, deployment wiring (Q-004 must be closed) | 301–309 |
 | Phase-311 | MVP acceptance & handoff | full acceptance against the brief's money claims, docs reality-check (CLAUDE.md §1/§2/§9 all get rewritten — the pre-product banner dies here) | all |
 
 307/308 are independent of each other; 309 must not start before 307 proves a real payment can activate a real subscription.
