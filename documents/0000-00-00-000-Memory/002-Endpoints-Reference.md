@@ -4,6 +4,9 @@
 
 | Method | URI | Action | Middleware |
 |---|---|---|---|
+| POST | `/api/auth/device` | Api\AuthController@device | auth:sanctum |
+| POST | `/api/auth/firebase` | Api\AuthController@firebase | throttle:auth |
+| POST | `/api/auth/logout` | Api\AuthController@logout | auth:sanctum |
 | GET | `/api/health` | Closure |  |
-| GET | `/api/user` | Closure | auth:sanctum |
+| GET | `/api/user` | Api\AuthController@me | auth:sanctum |
 | GET | `/up` | Closure |  |

@@ -5,6 +5,10 @@
 export { http, setBearerToken, getBearerToken, setUnauthorizedHandler } from './http'
 export { useMock, datasource } from './datasource'
 
+// The ONE Firebase seam (D-015) — apps never import `firebase` directly.
+export * as firebaseAuth from './firebase'
+export { isFirebaseConfigured } from './firebase'
+
 export * as authService from './auth.service'
 export * as addressService from './address.service'
 export * as profileService from './profile.service'

@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Validation\ValidationException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,4 +37,33 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn ($request, $e) => $request->is('api/*') || $request->expectsJson()
         );
+
+        // Framework-thrown responses must use the SAME frozen envelope as
+        // ApiController (CLAUDE.md §3, D-005) — the shared TS ApiResponse<T>
+        // declares `success` and `errors` on EVERY response, so Laravel's
+        // default {message, errors} shape would leave success === undefined
+        // on the client. (2026-09-13-005 Phase 004)
+        $exceptions->render(function (ValidationException $e, $request) {
+            if (! $request->is('api/*')) {
+                return null;
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'errors' => $e->errors(),
+            ], 422);
+        });
+
+        $exceptions->render(function (AuthenticationException $e, $request) {
+            if (! $request->is('api/*')) {
+                return null;
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated.',
+                'errors' => null,
+            ], 401);
+        });
     })->create();

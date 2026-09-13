@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@notebook/types": "workspace:*",
-    "axios": "^1.7.9"
+    "axios": "^1.7.9",
+    "firebase": "^12.19.0"
   },
   "devDependencies": {
     "typescript": "~5.7.0"

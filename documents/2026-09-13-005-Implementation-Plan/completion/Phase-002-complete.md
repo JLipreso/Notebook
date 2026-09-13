@@ -40,15 +40,20 @@ Tables 1–13 of [database-schema.md](../../2026-09-13-004-M1-Foundation/plan/da
 
 5. **`AppNotification`, not `Notification`** — collides with `Illuminate\Notifications\Notification`. Same collision the TS contract dodges (Phase 003 names it `AppNotification` too). `$table` is set explicitly to `notifications`.
 
-## ⚠ Open — PSGC data file is NOT committed
+## PSGC data — RESOLVED 2026-09-13
 
-`PsgcSeeder` is written, tested, and idempotent, but **the PSA source file does not exist yet**. Phase-002 §3 step 1 is a manual download (psa.gov.ph → PSGC quarterly XLSX → save as CSV). That cannot be faked: seeding invented address data would put fictional barangays into a government-reference table.
+The PSA source file arrived after this phase's first commit and is now converted, committed and seeded: `backend/database/seeders/data/psgc-2026Q2.csv` (2.0 MB, from *PSGC 2Q 2026 Publication Datafile*, D-030).
 
-Current behaviour with no file: prints `PSGC: no database/seeders/data/psgc-*.csv found — SKIPPING.` and seeds nothing. Everything else seeds normally. See [database/seeders/data/README.md](../../../backend/database/seeders/data/README.md) for the acquisition steps.
+**Seeded: 18 regions · 80 provinces · 1,660 cities/municipalities · 42,010 barangays** — the phase file's "~42k" acceptance item is met. Idempotent across a second run; zero orphans at every tier; both the province path and the NCR no-province path resolve end to end.
 
-**Phase-002's acceptance checklist item "Barangay count plausible (~42k)" is therefore NOT met.** The parser was verified against a hand-built 10-row fixture shaped like the real PSA export (deleted before commit) — it produced 2 regions, 1 province, 3 cities, 4 barangays, resolved the full chain, and correctly left NCR's Manila with `province_code = NULL`. Re-running the seeder twice left counts unchanged.
+A dependency-free converter ships with it: `node scripts/psgc-xlsx-to-csv.mjs <file.xlsx>`. An xlsx is a zip of XML and Node has zlib, so the next developer re-runs it on the next quarterly release with no install. It locates the `PSGC` sheet **by name**, because the PSA reorders and hides sheets between quarters.
 
-**Blocks Phase 005** (the address dropdown chain has nothing to serve). Does not block Phases 003 or 004.
+**Two source-data traps, both real, both now handled:**
+
+1. **Negros Island Region has a BLANK `Geographic Level` cell** while its three provinces carry theirs — so the region was skipped, its provinces were not, and the FK failed with `FOREIGN KEY constraint failed`. Fixed by falling back to the documented code structure (`RR PP MM BBB`) whenever the level cell is blank. 50 rows in this quarter's file have blank levels, spanning every tier.
+2. **Excel drops leading zeros** — `0100000000` exports as `100000000`. The seeder pads back to 10 digits.
+
+**Phase 005 is no longer blocked.**
 
 ## Verified
 

@@ -10,28 +10,21 @@ use RuntimeException;
  * PSGC address reference data (D-030: latest PSA snapshot)
  * — 2026-09-13-005 Phase 002.
  *
- * ========================= SOURCE FILE IS NOT COMMITTED YET ==================
- * This seeder expects ONE CSV at:
+ * ============================== SOURCE FILE ==================================
+ * Reads ONE CSV from database/seeders/data/psgc-<YYYYQN>.csv (newest wins).
+ * Currently committed: psgc-2026Q2.csv, from the PSA's 2Q 2026 publication.
  *
- *     database/seeders/data/psgc-<YYYYQN>.csv      e.g. psgc-2026Q2.csv
+ * To refresh on a new PSA release:
+ *   node scripts/psgc-xlsx-to-csv.mjs <PSGC-<N>Q-<YYYY>-Publication-Datafile.xlsx>
+ * then delete the previous quarter's CSV. See that folder's README.
  *
- * To produce it (Phase-002 §3):
- *   1. Download the latest quarterly PSGC publication (XLSX) from
- *      psa.gov.ph -> Philippine Standard Geographic Code.
- *   2. Save the main sheet as CSV with the quarter in the filename.
- *   3. Commit it — public government reference data, not a credential.
+ * Columns are matched by the PSA's own header names (normalised, since case and
+ * spacing drift between quarters): a 10-digit code, a name, a geographic level.
  *
- * The PSA sheet's own column headers are used (they are stable across
- * quarters but not identical in case/spacing, so matching is normalised):
- *   - a 10-digit code column   ("10-digit PSGC")
- *   - a name column            ("Name")
- *   - a level column           ("Geographic Level": Reg / Prov / City / Mun /
- *                               SubMun / Bgy)
- *
- * Region/province/city parentage is derived from the CODE STRUCTURE, not from
- * row order: PSGC codes nest as RR PP MM BBB, so a barangay's city prefix is
- * its own first 7 digits, a city's province prefix its first 5, and so on.
- * That makes the parse order-independent and safe to re-run.
+ * Parentage comes from the CODE STRUCTURE (RR PP MM BBB), not row order, so a
+ * re-export in a different sort order still seeds correctly. That same structure
+ * is the fallback when the PSA leaves Geographic Level blank — which it does on
+ * ~50 rows per quarter, including, in 2Q-2026, Negros Island Region itself.
  * =============================================================================
  *
  * Idempotent: upserts on the natural `code` PK. Inserts are chunked because the
@@ -74,6 +67,10 @@ class PsgcSeeder extends Seeder
                 continue;
             }
 
+            // Codes are CHAR(10) STRINGS, never numbers: a bare integer bound
+            // into a CHAR column makes sqlite compare int-to-text, the FK finds
+            // no parent row, and the insert dies with "FOREIGN KEY constraint
+            // failed" even though the parent is right there.
             $buckets[$bucket][] = match ($bucket) {
                 'region' => ['code' => $code, 'name' => $name],
                 'province' => ['code' => $code, 'region_code' => $this->regionPrefix($code), 'name' => $name],
@@ -204,13 +201,42 @@ class PsgcSeeder extends Seeder
 
     private function classify(string $code, string $level): ?string
     {
-        return match (strtolower(preg_replace('/[^a-z]/i', '', $level))) {
+        $bucket = match (strtolower(preg_replace('/[^a-z]/i', '', $level))) {
             'reg', 'region' => 'region',
             'prov', 'province' => 'province',
             'city', 'mun', 'municipality', 'submun', 'submunicipality' => 'city',
             'bgy', 'brgy', 'barangay' => 'barangay',
             default => null,
         };
+
+        // The PSA leaves Geographic Level BLANK on a handful of rows every
+        // quarter — in 2Q-2026 that included Negros Island Region itself, whose
+        // provinces DO carry a level, so skipping the blank row orphaned three
+        // provinces and failed the FK. Fall back to the documented code
+        // structure (RR PP MM BBB): the first zero-run tells you the tier.
+        return $bucket ?? $this->classifyByCode($code);
+    }
+
+    /** Infer the tier from the PSGC code structure when the level cell is blank. */
+    private function classifyByCode(string $code): ?string
+    {
+        if (strlen($code) !== 10) {
+            return null;
+        }
+
+        if (substr($code, 2) === '00000000') {
+            return 'region';
+        }
+
+        if (substr($code, 4) === '000000') {
+            return 'province';
+        }
+
+        if (substr($code, 7) === '000') {
+            return 'city';
+        }
+
+        return 'barangay';
     }
 
     private function cityClass(string $level): string

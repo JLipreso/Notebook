@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,10 +31,14 @@ Route::get('/health', fn () => response()->json([
     'time' => now()->toIso8601String(),
 ]));
 
-// Sanctum smoke test — the caller behind a bearer token. Replace with a real
-// AuthController when the auth design is decided (Q-003).
-Route::get('/user', fn (Request $request) => response()->json([
-    'success' => true,
-    'message' => 'Success',
-    'data' => $request->user(),
-]))->middleware('auth:sanctum');
+// ================================================================
+// AUTH (2026-09-13-005 Phase 004)
+// ================================================================
+
+// Public: exchange a verified Firebase ID token for a Sanctum bearer (D-015).
+Route::post('/auth/firebase', [AuthController::class, 'firebase'])->middleware('throttle:auth');
+
+// The caller behind the bearer.
+Route::get('/user', [AuthController::class, 'me'])->middleware('auth:sanctum');
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/auth/device', [AuthController::class, 'device'])->middleware('auth:sanctum');

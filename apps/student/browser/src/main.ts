@@ -11,4 +11,10 @@ import '@fontsource/figtree/600.css'
 import '@fontsource/figtree/700.css'
 import './style.css'
 
-createApp(App).use(createPinia()).use(router).mount('#app')
+// Pinia MUST be installed before the router: the route guard calls
+// useAuthStore() on the very first navigation (Phase 004).
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(router)
+app.mount('#app')
