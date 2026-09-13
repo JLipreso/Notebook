@@ -36,6 +36,8 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 | **"is the site up", "what's deployed"** | `/whats-live` skill — it will report "nothing deployed yet" until §9 is filled in |
 | **branching, "where do I open the PR", release** | §8 below — **PRs target `staging`, never `main`** |
 | **"what do I implement next", M1 build order, junior-developer onboarding to the build** | [documents/2026-09-13-005-Implementation-Plan/README.md](documents/2026-09-13-005-Implementation-Plan/README.md) — the phase-by-phase M1 plan (Phase-001…012); execute in order, one PR per phase |
+| **M2, classroom layer, teacher portal, quizzes, "what comes after M1"** | [documents/2026-09-13-007-M2-Classroom-Plan/README.md](documents/2026-09-13-007-M2-Classroom-Plan/README.md) — milestone-level plan (Phase-201…212). **Do NOT implement from it yet** — file-level detail lands when M1 Phases 007+009 merge; open questions Q-M2-1…4 first |
+| **M3, payments, entitlements, subscriptions, admin panel, GCash workflow** | [documents/2026-09-13-008-M3-Money-Admin-Plan/README.md](documents/2026-09-13-008-M3-Money-Admin-Plan/README.md) — milestone-level plan (Phase-301…311). **Do NOT implement from it yet** — detail-fill after M2 Phase-204; Q-M3-2 (Play payments policy) closes FIRST |
 | **starting a new piece of work, where do docs go** | §7 below — `documents/<YYYY-MM-DD>-<NNN>-<Kebab-Title>/` |
 | **how this repo's AI setup works, adding a skill** | [.claude/README.md](.claude/README.md) + the org guide `D:\Software-Dev-Projects\Foxcity-4-Project-Notes\Claude-AI-Guide\Project-Scaffold\agentic-repository.md` |
 
