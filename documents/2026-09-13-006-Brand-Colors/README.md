@@ -30,6 +30,12 @@ Client-facing color exploration and the locked selection (**D-032**). Requested 
 - **Code:** [packages/ui/brand/tailwind-preset.cjs](../../packages/ui/brand/tailwind-preset.cjs) — the ONE shared Tailwind preset (CLAUDE.md §4). Views consume token NAMES (`bg-paper`, `text-ink`, `bg-margin`, `rule-blue`); changing brand = changing this file only.
 - **Decision:** D-032 in [.claude/memory/decisions.md](../../.claude/memory/decisions.md) — final, do not re-litigate per option debates.
 
-## Next step
+## Design passes
 
-Full screen-design pass in **Claude Design** using this palette (type, spacing, imagery, component states get their own round there). Options B and C are archived here for the record — they are NOT fallbacks; a palette change now requires a new decision.
+Screen design happens in **Claude Design** on this palette; briefs and exports live in this folder. Options B and C are archived above for the record — they are NOT fallbacks; a palette change now requires a new decision.
+
+| Pass | Brief | Deliverable | Status |
+|---|---|---|---|
+| 1 — M1 mobile core (12 screens) | [claude-design-brief.md](claude-design-brief.md) | [Notebook-Mobile-12-screens.html](Notebook-Mobile-12-screens.html) | **done** — [completion note](design-pass-1-complete.md) |
+| 2 — M1 mobile flows & states | [claude-design-brief-2.md](claude-design-brief-2.md) | — | brief ready |
+| 3 — M1 browser (desktop web) | — | — | after pass 2 |
