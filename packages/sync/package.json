@@ -1,0 +1,18 @@
+{
+  "name": "@notebook/sync",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Notebook offline engine — UUIDv7 ids, storage adapters, outbox/pull/push (D-013/D-016/D-017)",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@notebook/types": "workspace:*",
+    "uuid": "^11.0.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.0"
+  }
+}

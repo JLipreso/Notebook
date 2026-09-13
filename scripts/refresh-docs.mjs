@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Regenerates the evergreen reference docs:
- *   document/0000-00-00-000-Memory/002-Endpoints-Reference.md
- *   document/0000-00-00-000-Memory/003-Env-Vars-Reference.md
+ *   documents/0000-00-00-000-Memory/002-Endpoints-Reference.md
+ *   documents/0000-00-00-000-Memory/003-Env-Vars-Reference.md
  *
  * Run from anywhere:  node scripts/refresh-docs.mjs
  * (also exposed as the /refresh-docs skill)
@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const MEMORY = path.join(ROOT, 'document', '0000-00-00-000-Memory');
+const MEMORY = path.join(ROOT, 'documents', '0000-00-00-000-Memory');
 const STAMP = new Date().toISOString().slice(0, 10);
 
 const abs = (...p) => path.join(ROOT, ...p);
@@ -137,7 +137,7 @@ function writeEndpoints() {
       body += `| ${r.method} | \`${r.uri}\` | ${r.action} |\n`;
     }
     body +=
-      '\n> `RESOURCE` rows are `Route::apiResource` (index/store/show/update/destroy). Request/response payloads are not in scope here — see the owning task folder under `document/`.\n';
+      '\n> `RESOURCE` rows are `Route::apiResource` (index/store/show/update/destroy). Request/response payloads are not in scope here — see the owning task folder under `documents/`.\n';
     console.log(`wrote 002-Endpoints-Reference.md (${routes.length} routes, via static parse)`);
   } else {
     body = notYet(
@@ -159,11 +159,25 @@ function envSources() {
     sources.push(['backend/.env.example', 'Backend — development defaults']);
   }
   if (existsSync(abs('apps'))) {
-    for (const app of readdirSync(abs('apps'), { withFileTypes: true })) {
-      if (!app.isDirectory()) continue;
-      const rel = `apps/${app.name}/.env.example`;
-      if (existsSync(abs('apps', app.name, '.env.example'))) {
-        sources.push([rel, `Frontend — ${app.name} (⚠ these values ship to the browser — never put a secret in a \`VITE_*\` var)`]);
+    // D-027 layout: apps/<role>/<form-factor>/.env.example (role folders hold no
+    // app themselves); a flat apps/<name>/.env.example is still honored.
+    for (const role of readdirSync(abs('apps'), { withFileTypes: true })) {
+      if (!role.isDirectory()) continue;
+      if (existsSync(abs('apps', role.name, '.env.example'))) {
+        sources.push([
+          `apps/${role.name}/.env.example`,
+          `Frontend — ${role.name} (⚠ these values ship to the browser — never put a secret in a \`VITE_*\` var)`,
+        ]);
+        continue;
+      }
+      for (const form of readdirSync(abs('apps', role.name), { withFileTypes: true })) {
+        if (!form.isDirectory()) continue;
+        if (existsSync(abs('apps', role.name, form.name, '.env.example'))) {
+          sources.push([
+            `apps/${role.name}/${form.name}/.env.example`,
+            `Frontend — ${role.name}/${form.name} (⚠ these values ship to the browser — never put a secret in a \`VITE_*\` var)`,
+          ]);
+        }
       }
     }
   }

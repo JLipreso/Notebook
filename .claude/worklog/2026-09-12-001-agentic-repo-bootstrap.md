@@ -26,11 +26,11 @@ Four things are explicitly **not** decided and block real work — Q-001…Q-004
 |---|---|
 | 1 — Context-First routing | [CLAUDE.md](../../CLAUDE.md): 15-row routing table, repo shape, data-flow golden rule, frontend/backend conventions, doc conventions, git flow, deployment placeholder, the six keep-alive conventions |
 | 2 — Shared session state | `.claude/` — README, `settings.json` (`Edit(.claude/**)` baseline, validated), `memory/current-status.md`, `memory/decisions.md`, this worklog |
-| 3 — Auto-generated references | [scripts/refresh-docs.mjs](../../scripts/refresh-docs.mjs) + `document/0000-00-00-000-Memory/002-Endpoints-Reference.md` and `003-Env-Vars-Reference.md` |
-| 4 — Learnings ledger | `document/0000-00-00-000-Memory/001-Learnings.md` — 11 same-stack entries carried from Exploria, quarantined in their own section and marked as not-yet-hit-here |
+| 3 — Auto-generated references | [scripts/refresh-docs.mjs](../../scripts/refresh-docs.mjs) + `documents/0000-00-00-000-Memory/002-Endpoints-Reference.md` and `003-Env-Vars-Reference.md` |
+| 4 — Learnings ledger | `documents/0000-00-00-000-Memory/001-Learnings.md` — 11 same-stack entries carried from Exploria, quarantined in their own section and marked as not-yet-hit-here |
 | 5 — Skills | `.claude/skills/{help,whats-live,diagnose-deploy,refresh-docs}/SKILL.md` |
 
-Also: `README.md` (public entry point → CLAUDE.md), `.gitignore`, `.gitattributes`, `.gitkeep` in `apps/` and `backend/`, `document/0000-00-00-000-Memory/000-README.md`.
+Also: `README.md` (public entry point → CLAUDE.md), `.gitignore`, `.gitattributes`, `.gitkeep` in `apps/` and `backend/`, `documents/0000-00-00-000-Memory/000-README.md`.
 
 ## Notable choices
 
@@ -49,7 +49,7 @@ Also: `README.md` (public entry point → CLAUDE.md), `.gitignore`, `.gitattribu
 ## Next
 
 1. Commit this bootstrap and create `staging` off it; set `staging` as the default PR base on GitHub.
-2. Get the client brief → `document/2026-09-12-001-Project-Details/about.md` (created by the Lead Developer mid-session; currently contains only `ty`). The routing table and §1 already point at it — filling it in is what unblocks Q-001.
+2. Get the client brief → `documents/2026-09-12-001-Project-Details/about.md` (created by the Lead Developer mid-session; currently contains only `ty`). The routing table and §1 already point at it — filling it in is what unblocks Q-001.
 3. Then the workspace scaffold and the Laravel install (see [../memory/current-status.md](../memory/current-status.md)).
 
 ## Addendum — permission grant (same session)

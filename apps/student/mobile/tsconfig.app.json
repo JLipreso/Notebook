@@ -1,0 +1,36 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@notebook/types": ["../../../packages/types/index.ts"],
+      "@notebook/types/*": ["../../../packages/types/*"],
+      "@notebook/services": ["../../../packages/services/index.ts"],
+      "@notebook/services/*": ["../../../packages/services/*"],
+      "@notebook/utility": ["../../../packages/utility/index.ts"],
+      "@notebook/utility/*": ["../../../packages/utility/*"],
+      "@notebook/ui": ["../../../packages/ui/index.ts"],
+      "@notebook/ui/*": ["../../../packages/ui/*"],
+      "@notebook/sync": ["../../../packages/sync/index.ts"],
+      "@notebook/sync/*": ["../../../packages/sync/*"]
+    },
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "../../../packages/types/**/*.ts",
+    "../../../packages/services/**/*.ts",
+    "../../../packages/utility/**/*.ts",
+    "../../../packages/ui/**/*.ts",
+    "../../../packages/sync/**/*.ts"
+  ],
+  "exclude": ["../../../packages/**/node_modules"]
+}
