@@ -15,6 +15,7 @@ _Finalized 2026-09-13 from the Lead Developer's brief ([about.md](about.md) — 
 - **Lessons print** (D-009): every lesson downloads as PDF and prints directly — for students without devices.
 - **Classroom communication = course-room chat** (D-021, on paid Pusher per D-007); DMs/groups deferred behind a moderation plan.
 - **No geolocation** in MVP (D-020); the PSGC Region→Province→City/Municipality→Barangay tables provide address data.
+- **Platform reach** (D-025/D-026/D-027): student AND teacher run in the laptop/desktop browser, as an Electron desktop app (wrapping the browser build), and on Android/iOS via Capacitor — with **dedicated designs per form factor**: phone UI locked portrait, tablet UI locked landscape. Domain components and logic stay in one set of shared packages; the form-factor apps are thin layout shells. Release order is Android-first: web + Android ship with each milestone; the Electron shell follows once Android is feature-complete; iOS executes only after all features are complete on Android.
 
 ## Users & model (locked)
 

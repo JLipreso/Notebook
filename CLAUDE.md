@@ -8,7 +8,7 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 **Discoverability:** in a Claude Code session, say **"help"** to get the repo knowledge map and skill catalog (`/help`, `/whats-live`, `/diagnose-deploy`, `/refresh-docs`).
 
-> **This repo is pre-product.** `backend/` holds a bare Laravel 12 conventions scaffold (2026-09-12-002) — no domain code; `apps/` and `packages/` are still empty. Rows in the routing table below point only at things that actually exist; sections marked **TBD** are honest gaps, not oversights. Fill them in as the work lands, and delete this banner when §1 describes a real product.
+> **This repo is pre-product.** `backend/` holds a bare Laravel 12 conventions scaffold (2026-09-12-002) — no domain code; the pnpm workspace is scaffolded (2026-09-13-004 Phase 3: student browser + mobile shells, five package skeletons) but carries no features yet. Rows in the routing table below point only at things that actually exist; sections marked **TBD** are honest gaps, not oversights. Fill them in as the work lands, and delete this banner when §1 describes a real product.
 
 ---
 
@@ -29,10 +29,12 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 | **what the product is, business rules, who the client is** | [documents/2026-09-12-001-Project-Details/concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md) — the finalized concept (every claim traces to a D-ID). Raw brief: [about.md](documents/2026-09-12-001-Project-Details/about.md) (**never edit it** — Lead Developer's own words). Deep rationale: [2026-09-13-003-Concept-Validation/](documents/2026-09-13-003-Concept-Validation/) |
 | **backend conventions, controllers, routes, envelope, auth** | §5 below (Laravel 12) + the Rosterlink-EMR reference project named there. Do NOT improvise a different shape |
 | **frontend conventions, apps, shared packages, aliases** | §3–4 below. The Exploria monorepo (`D:\Software-Dev-Projects\Jazer\Monorepo-Exploria-Restart`) is the working example of this exact layout |
+| **brand colors, palette, theme, "what hex is…", appearance** | [documents/2026-09-13-006-Brand-Colors/README.md](documents/2026-09-13-006-Brand-Colors/README.md) — palette locked (D-032, boss + client); code truth is `packages/ui/brand/tailwind-preset.cjs`. Never hardcode a hex in a view |
 | **money math, pricing, commission, tax** | Rules are locked (tiers/prices in [concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md); D-008, D-022, D-023 in `decisions.md`) but **no code exists yet**. When implementing: ONE canonical entitlements module, then update this row to point at that file. Never improvise beyond the locked rules |
 | **deploy, GitHub Actions, VPS, subdomain, SSL, red pipeline** | §9 below (**not yet wired**). Org-wide runbooks: `D:\Software-Dev-Projects\Foxcity-4-Project-Notes\Claude-AI-Guide\VPS-Management\`. For failures fire `/diagnose-deploy` |
 | **"is the site up", "what's deployed"** | `/whats-live` skill — it will report "nothing deployed yet" until §9 is filled in |
 | **branching, "where do I open the PR", release** | §8 below — **PRs target `staging`, never `main`** |
+| **"what do I implement next", M1 build order, junior-developer onboarding to the build** | [documents/2026-09-13-005-Implementation-Plan/README.md](documents/2026-09-13-005-Implementation-Plan/README.md) — the phase-by-phase M1 plan (Phase-001…012); execute in order, one PR per phase |
 | **starting a new piece of work, where do docs go** | §7 below — `documents/<YYYY-MM-DD>-<NNN>-<Kebab-Title>/` |
 | **how this repo's AI setup works, adding a skill** | [.claude/README.md](.claude/README.md) + the org guide `D:\Software-Dev-Projects\Foxcity-4-Project-Notes\Claude-AI-Guide\Project-Scaffold\agentic-repository.md` |
 
@@ -40,11 +42,11 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 ## 1. What this project is
 
-**Notebook** — a client project built by **W Labs**. Lead Developer: Jason Lipreso.
+**Notebook** — an outsourced client project; the source code ships to the client with the product, so keep the repo free of contractor branding (D-031). Lead Developer: Jason Lipreso.
 
 - **Product:** a Philippine-market, mobile-first app that replaces the stack of 8–12 paper notebooks a student buys every school year with digital notebooks they own forever (faithful paper-template pages, typed Tiptap-JSON blocks, offline-first via on-device SQLite), plus a lightweight classroom layer (teacher-authored lessons, quizzes, scores) on top. Serves preschool through college. Full spec: [concept-final.md](documents/2026-09-12-001-Project-Details/concept-final.md); raw brief: [about.md](documents/2026-09-12-001-Project-Details/about.md).
 - **Business model:** B2C subscriptions (Student ₱69/₱129 · Teacher ₱89/₱169 monthly, Admin-editable), teacher-led growth (a paying teacher's students get course access — D-022), permanent limited free tier after the 14-day trial (D-023), GCash QR + manual verification first, PayMongo/Maya later. Entitlement details are locked decisions (D-007…D-023 in [decisions.md](.claude/memory/decisions.md)), not implementation choices.
-- **Current status:** concept locked, zero domain code — Laravel 12 conventions skeleton only ([2026-09-12-002](documents/2026-09-12-002-Backend-Scaffold/)); frontend workspace not yet created. Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
+- **Current status:** concept locked, zero domain code — Laravel 12 conventions skeleton ([2026-09-12-002](documents/2026-09-12-002-Backend-Scaffold/)) + the pnpm workspace scaffold (2026-09-13-004 Phase 3). Platforms are locked decisions: per-form-factor apps (D-027), one bundled store listing per role (D-028), Android-first with M1 = browser + mobile (D-026/D-029). Live detail: [.claude/memory/current-status.md](.claude/memory/current-status.md).
 
 **Keep this section decision-backed.** Every claim above traces to `about.md` or a D-ID; extend it the same way, never from guesses.
 
@@ -52,14 +54,14 @@ Shared work logs and locked decisions live in [.claude/](.claude/README.md) — 
 
 ## 2. Repo shape
 
-Target shape (locked as D-001, mirroring the Exploria monorepo). The backend skeleton exists; the pnpm workspace does not yet:
+Locked shape: D-001 (Exploria-mirror stack) reshaped by D-027 (per-form-factor apps). Backend skeleton and workspace scaffold both exist:
 
-pnpm workspace (`pnpm-workspace.yaml` → `apps/*`, `packages/*`). Node ≥18, pnpm ≥8. Always `pnpm install` from the root.
+pnpm workspace (`pnpm-workspace.yaml` → `apps/*/*`, `packages/*` — role folders under `apps/` hold no `package.json`). Node ≥18, pnpm ≥8. Always `pnpm install` from the root.
 
 | Path | What goes here | Status |
 |---|---|---|
-| [apps/](apps/) | Vue 3.5 + Vite 6 + TS 5.7 + Pinia + Vue Router 4 + Tailwind 3.4 + Reka UI. One folder per deployable front end, each its own workspace package with its own dev port and production subdomain | empty |
-| `packages/` | Shared, platform-agnostic TypeScript: `types/` (the API contract), `services/` (one per domain + an axios singleton + the single mock↔API switch point), `utility/` (canonical business math). **Zero Vue, ships raw TS** | not created |
+| [apps/](apps/) | Vue 3.5 + Vite 6 + TS 5.7 + Pinia + Vue Router 4 + Tailwind 3.4 + Reka UI. Per role (`student/`, `teacher/`, `admin/`), one THIN app per form factor (D-027): `browser/` (desktop web), `mobile/` (locked portrait), `tablet/` (locked landscape — deferred, D-029), `desktop/` (Electron wrapping `browser/dist` — post-Android, D-026), `native/` (THE Capacitor project bundling form-factor builds → one store listing, D-028). Form-factor apps hold ONLY layout/composition — domain components live in `@notebook/ui` | student `browser/` + `mobile/` + `native/` scaffolded (2026-09-13-004 Phase 3); teacher M2, admin M3 |
+| `packages/` | Shared, platform-agnostic TypeScript: `types/` (the API contract), `services/` (one per domain + an axios singleton + the single mock↔API switch point), `utility/` (canonical business math), `ui/` (shared Vue components: editor, paper templates, the ONE brand Tailwind preset — the only package with Vue), `sync/` (offline engine: UUIDv7 ids, storage adapters, outbox) | five skeletons scaffolded (2026-09-13-004 Phase 3) |
 | [backend/](backend/) | Laravel 12 + PHP 8.2. **Not a pnpm workspace member** — a sibling directory reached by `cd backend`. See §5 | scaffolded — Laravel 12.69 + §5 conventions, no domain code ([2026-09-12-002](documents/2026-09-12-002-Backend-Scaffold/README.md)) |
 | [documents/](documents/) | All project documentation. See §7 | seeded |
 | [scripts/](scripts/) | Repo tooling. Today: `refresh-docs.mjs` (§6) | seeded |

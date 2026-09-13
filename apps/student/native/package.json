@@ -1,0 +1,17 @@
+{
+  "name": "@notebook/student-native",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "THE Capacitor project for the student role (D-028) — its www/ bundles the form-factor builds behind a startup bootstrap, shipping as ONE store listing",
+  "scripts": {
+    "assemble": "node assemble-www.mjs",
+    "sync": "pnpm assemble && cap sync"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}

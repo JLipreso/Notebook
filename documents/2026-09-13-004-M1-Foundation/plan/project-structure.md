@@ -1,8 +1,8 @@
 # Notebook — Project Structure Plan
 
-_Task 2026-09-13-004, Phase 1. Development reference — the source of truth for the workspace scaffold (Phase 3) and the structure half of the "Project Structure with ER Diagram" client document. Derives from D-001 (stack), D-005 (types contract), D-014…D-018 and CLAUDE.md §2–§5._
+_Task 2026-09-13-004, Phase 1. Development reference — the source of truth for the workspace scaffold (Phase 3) and the structure half of the "Project Structure with ER Diagram" client document. Derives from D-001 (stack), D-005 (types contract), D-014…D-018, D-025/D-026 (platform matrix + sequencing) and CLAUDE.md §2–§5._
 
-Status: **LOCKED — approved by the Lead Developer 2026-09-13** (including the two additional packages `@notebook/ui` and `@notebook/sync`). Changes from here require a new decision, not a drive-by edit.
+Status: **LOCKED — approved by the Lead Developer 2026-09-13** (including the two additional packages `@notebook/ui` and `@notebook/sync`). Boss review 2026-09-13: approved; platform reach recorded as **D-025/D-026**, a structural request reshaped `apps/` into per-form-factor apps (**D-027**, §1/§2/§2a below), and the Lead Developer closed O-5 → **D-028** (one Capacitor app per role) and O-6 → **D-029** (M1 = browser + mobile; tablet later). Changes from here require a new decision, not a drive-by edit.
 
 ---
 
@@ -13,14 +13,18 @@ Monorepo-Notebook/
 ├── pnpm-workspace.yaml            # apps/* + packages/*
 ├── package.json                   # root scripts: dev, build, typecheck (all workspaces)
 ├── apps/
-│   ├── student/                   # THE product app — web + Capacitor mobile/tablet (D-017)
-│   │   ├── src/
-│   │   ├── android/  ios/         # Capacitor native projects (committed)
-│   │   ├── capacitor.config.ts
-│   │   ├── vite.config.ts  tsconfig.app.json   # aliases declared in BOTH (§4 rule)
-│   │   └── .env.example
-│   ├── teacher/                   # web portal (M2); Capacitor added later if needed
-│   └── admin/                     # web only (M3)
+│   ├── student/                   # role folder — one THIN app per form factor (D-027)
+│   │   ├── browser/               # responsive web for laptop/desktop → app.<domain>; its dist also feeds desktop/
+│   │   ├── desktop/               # Electron wrapper consuming ../browser/dist — NO UI code of its own (D-025/D-027)
+│   │   ├── mobile/                # phone UI, locked PORTRAIT (M1)
+│   │   ├── tablet/                # tablet UI, locked LANDSCAPE (deferred — D-029)
+│   │   └── native/                # THE Capacitor project (D-028): webDir bundles mobile (+ tablet later)
+│   │                              #   builds behind a startup form-factor bootstrap → ONE Play listing
+│   ├── teacher/                   # same five form-factor folders (M2 — D-025/D-027)
+│   └── admin/                     # web only (M3); nests as admin/browser/ for glob uniformity
+│                                  # each form-factor app = own workspace package with vite.config.ts +
+│                                  # tsconfig.app.json (aliases in BOTH, §4 rule) + its own .env.example;
+│                                  # workspace globs are apps/*/* (role folders hold no package.json)
 ├── packages/
 │   ├── types/                     # @notebook/types — THE API contract (D-005)
 │   ├── services/                  # @notebook/services — API layer + datasource switch
@@ -37,11 +41,36 @@ Deltas vs CLAUDE.md §2's three-package table: **`packages/ui`** and **`packages
 
 | App | Package name | Dev port | Prod target (Q-004 pending) | Milestone |
 |---|---|---|---|---|
-| `apps/student` | `@notebook/student` | **5171** | `app.<domain>` + Play Store/App Store via Capacitor | M1 |
-| `apps/teacher` | `@notebook/teacher` | **5172** | `teach.<domain>` | M2 |
-| `apps/admin` | `@notebook/admin` | **5173** | `admin.<domain>` | M3 |
+| `apps/student/browser` | `@notebook/student-browser` | **5171** | `app.<domain>` | M1 |
+| `apps/student/mobile` | `@notebook/student-mobile` | **5174** | ships inside `native/` — portrait phone UI | M1 |
+| `apps/student/tablet` | `@notebook/student-tablet` | **5176** | joins the `native/` bundle — landscape tablet UI | after M1 core (D-029) |
+| `apps/student/native` | — (Capacitor project, not a Vite app) | — | Play Store / App Store — ONE listing bundling the form-factor builds (D-028) | M1 |
+| `apps/student/desktop` | `@notebook/student-desktop` | — (wraps `browser/dist`) | Windows/macOS installers — after Android is feature-complete (D-026) | post-Android |
+| `apps/teacher/browser` | `@notebook/teacher-browser` | **5172** | `teach.<domain>` | M2 |
+| `apps/teacher/mobile` | `@notebook/teacher-mobile` | **5175** | ships inside teacher `native/` — portrait | M2 |
+| `apps/teacher/tablet` | `@notebook/teacher-tablet` | **5177** | joins teacher `native/` — landscape | after M2 core (D-029) |
+| `apps/teacher/desktop` | `@notebook/teacher-desktop` | — (wraps `browser/dist`) | installers — after Android (D-026) | post-Android |
+| `apps/admin/browser` | `@notebook/admin` | **5173** | `admin.<domain>` (web only) | M3 |
 
-(Ports = plan README O-2; confirm against Exploria habits.)
+(Ports: browser apps keep O-2's 5171–5173; mobile 5174/5175, tablet 5176/5177. `desktop/` has no dev port — during development you use the browser app; Electron is exercised only when packaging.)
+
+### 2a. Platform matrix, form factors & release sequencing (D-025 / D-026 / D-027)
+
+Both **student** and **teacher** reach every platform. Per D-027 each form factor gets its own THIN app — a deliberate design decision (portrait phone UI vs landscape tablet spread vs desktop web), NOT three products:
+
+| Form factor | Folder | Shell | Orientation | Offline story | Ships |
+|---|---|---|---|---|---|
+| Laptop/desktop browser | `browser/` | none — web build at its subdomain | free | API-direct (no local DB in MVP) | first, each milestone |
+| Phone | `mobile/` | Capacitor (D-017) | locked **portrait** (screen-orientation plugin + Android manifest) | full RW offline via `@capacitor-community/sqlite` | first, each milestone |
+| Tablet | `tablet/` | Capacitor (D-017) | locked **landscape** | same as phone | deferred past the M-core (D-029) |
+| Desktop app | `desktop/` | Electron consuming `../browser/dist` — no UI code of its own | free | inherits browser build (SQLite adapter possible later via the `@notebook/sync` seam) | **after Android is feature-complete** |
+
+- **Sequencing (D-026):** web + Android first → Electron → iOS last, per form factor.
+- **The anti-fork guardrail (D-027):** domain components and ALL business logic live in `packages/*` — `@notebook/ui` owns every component used by two or more form factors (editor, paper renderer, notebook cards, quiz widgets…). Form-factor apps contain ONLY layout, navigation and screen composition. In review: a PR adding a domain component under `apps/` is wrong by definition.
+- **No view ever calls a native/desktop API raw** — everything goes through `@notebook/sync` adapters / `platform.ts`.
+- **Android packaging (D-028, closed O-5):** ONE Capacitor project per role at `apps/<role>/native/` — Google Play allows one binary per listing, so `native/`'s webDir is a combined dist: a tiny startup bootstrap that picks the mobile or tablet build by screen size. One listing, one install, the right UI on every device. While tablet is deferred (D-029) the bootstrap simply always loads the mobile build.
+- **M1 form-factor order (D-029, closed O-6):** M1 = `browser/` + `mobile/` (+ `native/` shipping the mobile build). The tablet design follows after the M1 core; teacher follows the same browser-and-mobile-first order in M2.
+- Electron scaffolding stays out of the workspace scaffold phase; it gets its own task folder when Android reaches feature-complete.
 
 Each app: Vue 3.5 + Vite 6 + TS 5.7 + Pinia (auth store ONLY, per §3 golden rule) + Vue Router 4 + Tailwind 3.4 + Reka UI. Per-view state in composables. Every app consumes the shared packages via workspace aliases; `vue-tsc -b` includes the packages so a shared type error fails every app build (§4).
 
@@ -61,8 +90,8 @@ One file per domain mirroring the schema tables exactly (snake_case fields): `us
 ### `@notebook/utility` — canonical logic
 `school-year.ts` (derive/format `2026-2027`), `page-search.ts` (Tiptap JSON → plain text, shared by client search + server parity), `entitlement-keys.ts` (feature-key constants shared with backend seeds), date/format helpers. **When money math appears (M3) its canonical module lives here** and gets a CLAUDE.md routing row.
 
-### `@notebook/ui` — shared Vue components (proposed addition)
-The reason this package must exist: the **notebook editor and paper templates (D-010/D-012/D-018) are needed by BOTH student (write) and teacher (lesson authoring + viewing shared pages)** — duplicating them per app would fork the product's core.
+### `@notebook/ui` — shared Vue components (proposed addition; role widened by D-027)
+The reason this package must exist: the **notebook editor and paper templates (D-010/D-012/D-018) are needed by BOTH student (write) and teacher (lesson authoring + viewing shared pages)** — duplicating them per app would fork the product's core. Under D-027 its role widens: it owns **every domain component used by two or more form-factor apps** (notebook cards, page lists, quiz widgets, …) — the form-factor apps compose these into portrait/landscape/desktop layouts but never reimplement them.
 - `editor/` — Tiptap 2 wrapper (`NotebookEditor.vue`, `LessonEditor.vue`), custom extensions, node whitelist (shared with `types`).
 - `paper/` — `PaperPage.vue` rendering a `notebook_types.page_template` JSON: ruling patterns (`single_ruled`, `penmanship_blue_red`, `blank`, `grid`), margin lines, header/footer fields (`Date:`, signatures). CSS-drawn (repeating gradients/SVG), print-faithful for D-009.
 - `brand/` — the ONE shared Tailwind preset + tokens (§4: brand tokens live in one preset, not per app).
@@ -109,7 +138,8 @@ backend/app/Http/Controllers/Api/
 
 ## 6. Conventions checklist for Phase 3–4 implementers
 
-1. Aliases in BOTH `tsconfig.app.json` and `vite.config.ts` — change both or neither (§4).
+1. Aliases in BOTH `tsconfig.app.json` and `vite.config.ts` — change both or neither (§4). Workspace globs are `apps/*/*`; role folders (`apps/student/`) hold no `package.json`.
+1a. **D-027 guardrail:** form-factor apps contain ONLY layout/navigation/composition. Any domain component needed by a second form factor moves to `@notebook/ui` in the same PR.
 2. `pnpm typecheck` + `pnpm build` from root before pushing (§4).
 3. Any `routes/api.php` or `.env.example` change ⇒ `/refresh-docs` in the same commit (§6).
 4. CLAUDE.md §2 table updated in the scaffold commit (convention rule 4/5) — including the two new packages.

@@ -159,11 +159,25 @@ function envSources() {
     sources.push(['backend/.env.example', 'Backend — development defaults']);
   }
   if (existsSync(abs('apps'))) {
-    for (const app of readdirSync(abs('apps'), { withFileTypes: true })) {
-      if (!app.isDirectory()) continue;
-      const rel = `apps/${app.name}/.env.example`;
-      if (existsSync(abs('apps', app.name, '.env.example'))) {
-        sources.push([rel, `Frontend — ${app.name} (⚠ these values ship to the browser — never put a secret in a \`VITE_*\` var)`]);
+    // D-027 layout: apps/<role>/<form-factor>/.env.example (role folders hold no
+    // app themselves); a flat apps/<name>/.env.example is still honored.
+    for (const role of readdirSync(abs('apps'), { withFileTypes: true })) {
+      if (!role.isDirectory()) continue;
+      if (existsSync(abs('apps', role.name, '.env.example'))) {
+        sources.push([
+          `apps/${role.name}/.env.example`,
+          `Frontend — ${role.name} (⚠ these values ship to the browser — never put a secret in a \`VITE_*\` var)`,
+        ]);
+        continue;
+      }
+      for (const form of readdirSync(abs('apps', role.name), { withFileTypes: true })) {
+        if (!form.isDirectory()) continue;
+        if (existsSync(abs('apps', role.name, form.name, '.env.example'))) {
+          sources.push([
+            `apps/${role.name}/${form.name}/.env.example`,
+            `Frontend — ${role.name}/${form.name} (⚠ these values ship to the browser — never put a secret in a \`VITE_*\` var)`,
+          ]);
+        }
       }
     }
   }

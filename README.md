@@ -1,6 +1,6 @@
 # Notebook
 
-A W Labs client project. Monorepo: Laravel 12 API in `backend/`, Vue 3 + Vite apps in a pnpm workspace under `apps/` and `packages/`.
+A client project. Monorepo: Laravel 12 API in `backend/`, Vue 3 + Vite apps in a pnpm workspace under `apps/` and `packages/`.
 
 > **Status: day zero.** The repository is bootstrapped with its documentation and AI scaffold; no application code exists yet.
 
