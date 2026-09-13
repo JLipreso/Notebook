@@ -34,8 +34,10 @@ Client-facing color exploration and the locked selection (**D-032**). Requested 
 
 Screen design happens in **Claude Design** on this palette; briefs and exports live in this folder. Options B and C are archived above for the record — they are NOT fallbacks; a palette change now requires a new decision.
 
+**Current canonical design reference: [Notebook-Mobile-22-screens.html](Notebook-Mobile-22-screens.html)** (cumulative canvas — all M1 mobile screens). UI implementation matches against this file.
+
 | Pass | Brief | Deliverable | Status |
 |---|---|---|---|
-| 1 — M1 mobile core (12 screens) | [claude-design-brief.md](claude-design-brief.md) | [Notebook-Mobile-12-screens.html](Notebook-Mobile-12-screens.html) | **done** — [completion note](design-pass-1-complete.md) |
-| 2 — M1 mobile flows & states | [claude-design-brief-2.md](claude-design-brief-2.md) | — | brief ready |
-| 3 — M1 browser (desktop web) | — | — | after pass 2 |
+| 1 — M1 mobile core (12 screens) | [claude-design-brief.md](claude-design-brief.md) | [Notebook-Mobile-12-screens.html](Notebook-Mobile-12-screens.html) (superseded — history only) | **done** — [note](design-pass-1-complete.md) |
+| 2 — M1 mobile flows & states (+10) | [claude-design-brief-2.md](claude-design-brief-2.md) | [Notebook-Mobile-22-screens.html](Notebook-Mobile-22-screens.html) | **done** — [note](design-pass-2-complete.md) |
+| 3 — M1 browser (desktop web) | — | — | next |
