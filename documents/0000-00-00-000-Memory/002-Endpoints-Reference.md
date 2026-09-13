@@ -14,6 +14,14 @@
 | POST | `/api/auth/firebase` | Api\AuthController@firebase | throttle:auth |
 | POST | `/api/auth/logout` | Api\AuthController@logout | auth:sanctum |
 | GET | `/api/health` | Closure |  |
+| GET | `/api/notebook-types` | Api\NotebookController@types | auth:sanctum |
+| GET | `/api/notebooks` | Api\NotebookController@index | auth:sanctum |
+| POST | `/api/notebooks` | Api\NotebookController@store | auth:sanctum |
+| GET | `/api/notebooks/{id}` | Api\NotebookController@show | auth:sanctum |
+| PUT | `/api/notebooks/{id}` | Api\NotebookController@update | auth:sanctum |
+| DELETE | `/api/notebooks/{id}` | Api\NotebookController@destroy | auth:sanctum |
+| POST | `/api/notebooks/{id}/archive` | Api\NotebookController@archive | auth:sanctum |
+| POST | `/api/notebooks/{id}/unarchive` | Api\NotebookController@unarchive | auth:sanctum |
 | GET | `/api/profile` | Api\ProfileController@show | auth:sanctum |
 | PUT | `/api/profile` | Api\ProfileController@update | auth:sanctum |
 | GET | `/api/user` | Api\AuthController@me | auth:sanctum |

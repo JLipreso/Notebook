@@ -192,9 +192,15 @@ importers:
       '@notebook/services':
         specifier: workspace:*
         version: link:../services
+      '@notebook/sync':
+        specifier: workspace:*
+        version: link:../sync
       '@notebook/types':
         specifier: workspace:*
         version: link:../types
+      '@notebook/utility':
+        specifier: workspace:*
+        version: link:../utility
       vue:
         specifier: ^3.5.13
         version: 3.5.42(typescript@5.7.3)

@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@notebook/services": "workspace:*",
+    "@notebook/sync": "workspace:*",
     "@notebook/types": "workspace:*",
+    "@notebook/utility": "workspace:*",
     "vue": "^3.5.13"
   },
   "devDependencies": {
