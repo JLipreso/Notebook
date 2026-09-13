@@ -1,6 +1,6 @@
 # Current Status
 
-_Last updated: 2026-09-13 (release zero on `main`, repo HANDED OVER to the junior developer — session 005 close)_
+_Last updated: 2026-09-13 (Phase-001 environment verified on the laptop; M1 execution STARTED — session 006 close)_
 
 > **👋 Junior developer starting here:** everything you need is in [documents/2026-09-13-005-Implementation-Plan/README.md](../../documents/2026-09-13-005-Implementation-Plan/README.md) — read its ground rules, then execute [Phase-001](../../documents/2026-09-13-005-Implementation-Plan/Phase-001.md). Branch off `staging`, one PR per phase back to `staging`, never `main`. Every product question is already decided (D-001…D-032) — if something seems undecided, check `decisions.md`, then ask the Lead Developer; never improvise.
 
@@ -16,6 +16,19 @@ _Last updated: 2026-09-13 (release zero on `main`, repo HANDED OVER to the junio
 - ~~⚠ CLAUDE.md §1 TBD~~ **DONE 2026-09-13** — §1 rewritten decision-backed; product + money routing rows updated. The pre-product banner stays until code exists.
 - Remote: `https://github.com/JLipreso/Notebook.git`. **Release zero (the M1 foundation) is on `main`** — PRs #3–#8 all merged 2026-09-13; `main` = `staging` = `Workstation-PC`.
 - **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
+- **`Workstation-Laptop` added 2026-09-13** — second machine branch, off `staging` at `bd6ddb8`. **M1 execution runs from here**; PRs to `staging` as usual.
+
+## ▶ M1 EXECUTION STARTED (2026-09-13)
+
+**Phase-001 complete on the laptop** — environment verified end to end, no PR (nothing changed), per the phase file. Toolchain: Node 24.14.1 · pnpm 10.28.0 · PHP 8.2.30 · Composer 2.9.7. `pnpm typecheck` (8 projects) + `pnpm build:all` green; `composer install` + `migrate` clean; `/api/health` 200; apps live on :5171 / :5174. Full detail: [worklog 006](../worklog/2026-09-13-006-phase-001-laptop-onboarding.md). Tracker `phases/phase-001` flipped to **in_progress**.
+
+**Next: Phase-002** (database — migrations, models, PSGC + notebook_types seeders), one PR to `staging`.
+
+Two carry-over items, neither blocking Phase-002:
+1. **Firebase credentials not yet handed over** — empty `VITE_FIREBASE_*` in both app `.env` files, no `FIREBASE_CREDENTIALS` in `backend/.env`. Mock mode covers Phases 001–003; **hard-blocks Phase-004**. Requested from the Lead Developer.
+2. **GitHub default branch still `main`** — until switched, every PR must pass `--base staging` explicitly.
+
+Doc nit found in Phase-001 §5: it claims `/api/health` returns the success envelope; it returns `{ok, app, env, time}` by design (platform probe, distinct from `/up`). The code is right, the phase doc is loose — do not "fix" the endpoint.
 
 ## What's next (in order)
 

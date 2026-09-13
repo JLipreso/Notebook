@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
+            // UUID owner ids (D-013): users.id is CHAR(36), so the default morphs()
+            // BIGINT tokenable_id cannot store it. (2026-09-13-005 Phase 002)
+            $table->uuidMorphs('tokenable');
             $table->text('name');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();

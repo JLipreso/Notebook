@@ -2,24 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * Reference-data seeders only (2026-09-13-005 Phase 002).
+ *
+ * No demo/test users here — `migrate:fresh --seed` runs against real databases,
+ * and a seeded account with a known identity is an auth hole. The M1 demo
+ * account gets its own dedicated seeder in Phase 012.
+ */
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            PsgcSeeder::class,
+            NotebookTypeSeeder::class,
         ]);
     }
 }
