@@ -30,9 +30,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        // real families chosen in the Claude Design pass; keep the token names
-        display: ['ui-serif', 'Georgia', 'serif'],
-        body: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+        // Confirmed from the approved design canvases (2026-09-13-006, with D-032).
+        // Loaded via @fontsource imports in each app's main.ts — bundled, offline-safe.
+        display: ['Fraunces Variable', 'Fraunces', 'Georgia', 'ui-serif', 'serif'],
+        body: ['Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

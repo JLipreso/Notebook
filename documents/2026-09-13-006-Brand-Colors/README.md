@@ -44,4 +44,4 @@ Screen design happens in **Claude Design** on this palette; briefs and exports l
 | 2 — M1 mobile flows & states (+10) | [claude-design-brief-2.md](claude-design-brief-2.md) | [Notebook-Mobile-22-screens.html](Notebook-Mobile-22-screens.html) | **done** — [note](design-pass-2-complete.md) |
 | 3 — M1 browser, desktop web (12 screens) | [claude-design-brief-3.md](claude-design-brief-3.md) | [Notebook-Browser-12-screens.html](Notebook-Browser-12-screens.html) | **done** — [note](design-pass-3-complete.md) |
 
-Still pending on this thread: the **typeface fold-back** into `packages/ui/brand/tailwind-preset.cjs` (`fontFamily` tokens) once the final families are confirmed from the canvases. Tablet / teacher / admin passes are parked by decision (D-029, M2, M3).
+**Typefaces (confirmed from the approved canvases, folded back 2026-09-13): display = Fraunces · UI/body = Figtree.** Set in the preset's `fontFamily` tokens and loaded via `@fontsource` imports in each app's `main.ts` — bundled with the build (offline-safe), never from a CDN. This closes the design thread for M1; tablet / teacher / admin passes are parked by decision (D-029, M2, M3).
