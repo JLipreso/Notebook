@@ -62,4 +62,37 @@ return [
     /** Depth guard: a pathological nesting would blow the stack while walking. */
     'max_content_depth' => 50,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Uploads (2026-09-13-005 Phase 008)
+    |--------------------------------------------------------------------------
+    |
+    | MIME types are matched against the file's CONTENT, never its extension or
+    | the client-supplied Content-Type — renaming evil.exe to photo.jpg must be
+    | rejected (validation lesson, phase file §3).
+    */
+
+    'upload_mimes' => [
+        'image' => ['image/jpeg', 'image/png', 'image/webp'],
+        // Covers are images; kept separate so the size cap can differ.
+        'cover' => ['image/jpeg', 'image/png', 'image/webp'],
+        'pdf' => ['application/pdf'],
+        'document' => ['application/pdf'],
+    ],
+
+    /** Per-kind size caps, in bytes. */
+    'upload_max_bytes' => [
+        'image' => 10 * 1024 * 1024,
+        'cover' => 5 * 1024 * 1024,
+        'pdf' => 25 * 1024 * 1024,
+        'document' => 25 * 1024 * 1024,
+    ],
+
+    /*
+    | Per-user storage quota. A flat constant for M1; D-022/D-023 make this a
+    | per-plan lever in M3, at which point this value becomes the free-tier
+    | floor rather than the only number.
+    */
+    'quota_mb' => 500,
+
 ];

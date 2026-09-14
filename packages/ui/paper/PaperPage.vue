@@ -206,6 +206,23 @@ const marginOffset = computed(() => props.template.margin?.offset_mm ?? 0)
   text-align: left;
 }
 
+/*
+ * Images sit INSIDE the document (Phase 008). Capped so a phone photo cannot
+ * blow out the column, and the block margin is a whole number of ruled lines so
+ * the text after an image lands back ON the grid.
+ */
+.paper-page .paper-surface img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: var(--paper-line-height) 0;
+  border-radius: 2px;
+}
+
+.paper-page .paper-surface img.ProseMirror-selectednode {
+  outline: 2px solid #1e3a5f;
+}
+
 .paper-page .paper-surface .ProseMirror:focus {
   outline: none;
 }

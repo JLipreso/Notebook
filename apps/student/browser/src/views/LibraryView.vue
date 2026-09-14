@@ -31,6 +31,8 @@ const {
   create,
   setArchived,
   remove,
+  setCover,
+  coverUrls,
 } = useNotebooks()
 
 const tab = ref<'active' | 'archived'>('active')
@@ -59,7 +61,7 @@ async function onMenu(notebook: Notebook): Promise<void> {
   const choice = window.prompt(
     `“${notebook.title}”
 
-Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
+Type A to ${archive ? 'archive' : 'restore'}, C to set a cover photo, or D to delete.`,
     'A',
   )
 
@@ -68,9 +70,32 @@ Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
   const answer = choice.trim().toUpperCase()
 
   if (answer === 'A') await setArchived(notebook.id, archive)
+  else if (answer === 'C') pickCover(notebook.id)
   else if (answer === 'D' && window.confirm(`Delete “${notebook.title}”? It leaves your shelf.`)) {
     await remove(notebook.id)
   }
+}
+
+// Cover photo (Phase 008): pick a file, upload it as kind=cover, point the
+// notebook at it. A plain file input works inside the Capacitor WebView too.
+const coverInput = ref<HTMLInputElement | null>(null)
+const coverTarget = ref<string | null>(null)
+
+function pickCover(notebookId: string): void {
+  coverTarget.value = notebookId
+  coverInput.value?.click()
+}
+
+async function onCoverPicked(event: Event): Promise<void> {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  const id = coverTarget.value
+  coverTarget.value = null
+  if (!file || !id) return
+
+  await setCover(id, file)
 }
 </script>
 
@@ -153,6 +178,7 @@ Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
           v-if="tab === 'active'"
           :notebooks="active"
           :types="types"
+          :cover-urls="coverUrls"
           empty-message="No notebooks yet — create your first one."
           @open="open"
           @menu="onMenu"
@@ -169,6 +195,14 @@ Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
       :error-fields="errors.fields"
       @close="dialogOpen = false"
       @create="onCreate"
+    />
+
+    <input
+      ref="coverInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      class="hidden"
+      @change="onCoverPicked"
     />
   </main>
 </template>

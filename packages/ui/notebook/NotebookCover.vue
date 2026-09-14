@@ -11,6 +11,8 @@ const props = defineProps<{
   type?: NotebookType | null
   /** Card height in px — the canvas uses 152 on mobile. */
   height?: number
+  /** Uploaded cover photo (Phase 008). Replaces the drawn board when set. */
+  coverUrl?: string | null
 }>()
 
 /**
@@ -37,6 +39,12 @@ const tint = computed(() => {
     class="relative overflow-hidden rounded-lg shadow-md"
     :style="{ height: `${height ?? 152}px`, background: tint.board }"
   >
+    <!-- A cover photo replaces the drawn board, but keeps the title legible
+         over it with a scrim (Phase 008). -->
+    <template v-if="coverUrl">
+      <img :src="coverUrl" alt="" class="absolute inset-0 h-full w-full object-cover" />
+      <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
+    </template>
     <div class="absolute bottom-0 left-0 top-0 w-[18px]" :style="{ background: tint.spine }" />
     <div class="absolute left-7 right-3 top-4 h-px bg-paper/30" />
     <div class="absolute bottom-4 left-7 right-3 font-display text-lg font-semibold leading-tight text-paper">

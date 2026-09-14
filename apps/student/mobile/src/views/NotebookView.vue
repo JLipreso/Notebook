@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { EditorToolbar, FormErrors, NotebookEditor, PaperPage, usePages } from '@notebook/ui'
-import type { PageContent } from '@notebook/types'
+import {
+  AttachmentBar,
+  EditorToolbar,
+  FormErrors,
+  NotebookEditor,
+  PaperPage,
+  useAttachments,
+  usePages,
+} from '@notebook/ui'
+import type { PageAttachmentWithFile, PageContent } from '@notebook/types'
 
 // Mobile layout: one page, portrait, arrows between pages — per the approved
 // canvas (2026-09-13-006, board 07). Same shared PaperPage + NotebookEditor as
@@ -29,6 +37,52 @@ const {
 } = usePages(notebookId)
 
 const editorRef = ref<InstanceType<typeof NotebookEditor> | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const { attachments, uploading, errors: attachErrors, load: loadAttachments, attachFile, detach, kindFor } =
+  useAttachments()
+
+// Attachments belong to the PAGE, so reload them whenever the page changes.
+watch(
+  () => current.value?.id,
+  (id) => {
+    attachments.value = []
+    if (id) void loadAttachments(id)
+  },
+  { immediate: true },
+)
+
+function pickFile(): void {
+  fileInput.value?.click()
+}
+
+async function onFilePicked(event: Event): Promise<void> {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  // Reset immediately so picking the same file twice still fires a change.
+  input.value = ''
+
+  const page = current.value
+  if (!file || !page) return
+
+  const kind = kindFor(file)
+  if (!kind) {
+    window.alert('Only images and PDFs can be attached.')
+    return
+  }
+
+  const url = await attachFile(page.id, file, kind)
+
+  // An image goes INTO the document; a PDF stays a page-level chip.
+  if (url && kind === 'image') {
+    editorRef.value?.editor.chain().focus().setImage({ src: url }).run()
+  }
+}
+
+function openAttachment(attachment: PageAttachmentWithFile): void {
+  const url = attachment.file_upload?.url
+  if (url) window.open(url, '_blank', 'noopener')
+}
 
 onMounted(load)
 onBeforeUnmount(() => void flush())
@@ -76,10 +130,15 @@ async function onDeletePage(): Promise<void> {
     </header>
 
     <div class="flex-none overflow-x-auto border-y border-paper-shade px-3 py-1.5">
-      <EditorToolbar :editor="editorRef?.editor ?? null" />
+      <EditorToolbar
+        :editor="editorRef?.editor ?? null"
+        can-attach
+        :uploading="uploading"
+        @attach="pickFile"
+      />
     </div>
 
-    <FormErrors :message="errors.message" :errors="errors.fields" class="mx-3 mt-2" />
+    <FormErrors :message="errors.message ?? attachErrors.message" :errors="errors.fields ?? attachErrors.fields" class="mx-3 mt-2" />
 
     <div v-if="loading" class="p-6 text-sm text-ink-faint">Opening notebook…</div>
 
@@ -89,6 +148,14 @@ async function onDeletePage(): Promise<void> {
           <NotebookEditor ref="editorRef" :content="current.content" @update:content="onUpdate" />
         </PaperPage>
       </div>
+
+      <AttachmentBar
+        :attachments="attachments"
+        :uploading="uploading"
+        class="flex-none pt-2"
+        @open="openAttachment"
+        @remove="detach"
+      />
 
       <footer class="flex flex-none items-center justify-between py-2 text-sm text-ink-soft">
         <button
@@ -121,5 +188,15 @@ async function onDeletePage(): Promise<void> {
         </button>
       </footer>
     </section>
+
+    <!-- Hidden picker: a plain file input works inside the Capacitor WebView,
+         so the mobile shell needs no Camera plugin for MVP (phase file §2). -->
+    <input
+      ref="fileInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp,application/pdf"
+      class="hidden"
+      @change="onFilePicked"
+    />
   </main>
 </template>

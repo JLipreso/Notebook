@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-> **AUTO-GENERATED 2026-09-13** by `scripts/refresh-docs.mjs` from the committed `.env.example` files — do not edit by hand, rerun the script (or the `/refresh-docs` skill) instead.
+> **AUTO-GENERATED 2026-09-14** by `scripts/refresh-docs.mjs` from the committed `.env.example` files — do not edit by hand, rerun the script (or the `/refresh-docs` skill) instead.
 
 Machine-local `.env` / `.env.prod` files are deliberately never parsed — this doc must be identical on every machine. Production values live in GitHub secrets; see [CLAUDE.md](../../CLAUDE.md) §9.
 

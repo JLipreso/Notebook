@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\NotebookController;
 use App\Http\Controllers\Api\NotebookPageController;
+use App\Http\Controllers\Api\PageAttachmentController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -91,3 +93,17 @@ Route::post('/notebooks/{notebook}/pages', [NotebookPageController::class, 'stor
 Route::get('/pages/{id}', [NotebookPageController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
 Route::put('/pages/{id}', [NotebookPageController::class, 'update'])->whereUuid('id')->middleware('auth:sanctum');
 Route::delete('/pages/{id}', [NotebookPageController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// FILES (2026-09-13-005 Phase 008)
+// ================================================================
+
+// throttle:upload is keyed by USER, not IP — a school's shared connection must
+// not throttle every student at once (see AppServiceProvider).
+Route::post('/files', [FileUploadController::class, 'store'])->middleware(['auth:sanctum', 'throttle:upload']);
+Route::get('/files/usage', [FileUploadController::class, 'usage'])->middleware('auth:sanctum');
+Route::get('/files/{id}', [FileUploadController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
+
+Route::get('/pages/{page}/attachments', [PageAttachmentController::class, 'index'])->whereUuid('page')->middleware('auth:sanctum');
+Route::post('/pages/{page}/attachments', [PageAttachmentController::class, 'store'])->whereUuid('page')->middleware('auth:sanctum');
+Route::delete('/attachments/{id}', [PageAttachmentController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');

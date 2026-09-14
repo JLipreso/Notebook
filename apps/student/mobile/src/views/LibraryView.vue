@@ -18,8 +18,21 @@ import { useAuthStore } from '@/stores/auth'
 const auth = useAuthStore()
 const router = useRouter()
 
-const { types, active, archived, schoolYears, loading, saving, errors, load, create, setArchived, remove } =
-  useNotebooks()
+const {
+  types,
+  active,
+  archived,
+  schoolYears,
+  loading,
+  saving,
+  errors,
+  load,
+  create,
+  setArchived,
+  remove,
+  setCover,
+  coverUrls,
+} = useNotebooks()
 
 const tab = ref<'active' | 'archived'>('active')
 const dialogOpen = ref(false)
@@ -43,7 +56,7 @@ async function onMenu(notebook: Notebook): Promise<void> {
   const archive = notebook.status === 'active'
 
   const choice = window.prompt(
-    `“${notebook.title}”\n\nType A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
+    `“${notebook.title}”\n\nType A to ${archive ? 'archive' : 'restore'}, C to set a cover photo, or D to delete.`,
     'A',
   )
 
@@ -52,9 +65,32 @@ async function onMenu(notebook: Notebook): Promise<void> {
   const answer = choice.trim().toUpperCase()
 
   if (answer === 'A') await setArchived(notebook.id, archive)
+  else if (answer === 'C') pickCover(notebook.id)
   else if (answer === 'D' && window.confirm(`Delete “${notebook.title}”? It leaves your shelf.`)) {
     await remove(notebook.id)
   }
+}
+
+// Cover photo (Phase 008): pick a file, upload it as kind=cover, point the
+// notebook at it. A plain file input works inside the Capacitor WebView too.
+const coverInput = ref<HTMLInputElement | null>(null)
+const coverTarget = ref<string | null>(null)
+
+function pickCover(notebookId: string): void {
+  coverTarget.value = notebookId
+  coverInput.value?.click()
+}
+
+async function onCoverPicked(event: Event): Promise<void> {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  const id = coverTarget.value
+  coverTarget.value = null
+  if (!file || !id) return
+
+  await setCover(id, file)
 }
 </script>
 
@@ -107,6 +143,7 @@ async function onMenu(notebook: Notebook): Promise<void> {
         v-if="tab === 'active'"
         :notebooks="active"
         :types="types"
+        :cover-urls="coverUrls"
         empty-message="No notebooks yet — tap + to create your first."
         @open="open"
         @menu="onMenu"
@@ -132,6 +169,14 @@ async function onMenu(notebook: Notebook): Promise<void> {
       fullscreen
       @close="dialogOpen = false"
       @create="onCreate"
+    />
+
+    <input
+      ref="coverInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      class="hidden"
+      @change="onCoverPicked"
     />
   </main>
 </template>
