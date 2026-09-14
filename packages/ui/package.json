@@ -10,7 +10,18 @@
   },
   "dependencies": {
     "@notebook/services": "workspace:*",
+    "@notebook/sync": "workspace:*",
     "@notebook/types": "workspace:*",
+    "@notebook/utility": "workspace:*",
+    "@tiptap/core": "^3.31.3",
+    "@tiptap/extension-image": "^3.31.3",
+    "@tiptap/extension-placeholder": "^3.31.3",
+    "@tiptap/extension-table": "^3.31.3",
+    "@tiptap/extension-table-cell": "^3.31.3",
+    "@tiptap/extension-table-header": "^3.31.3",
+    "@tiptap/extension-table-row": "^3.31.3",
+    "@tiptap/starter-kit": "^3.31.3",
+    "@tiptap/vue-3": "^3.31.3",
     "vue": "^3.5.13"
   },
   "devDependencies": {

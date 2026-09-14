@@ -22,17 +22,27 @@
       ],
       "@notebook/services": [
         "../services/index.ts"
+      ],
+      "@notebook/sync": [
+        "../sync/index.ts"
+      ],
+      "@notebook/utility": [
+        "../utility/index.ts"
       ]
     }
   },
   "include": [
     "**/*.ts",
     "../types/**/*.ts",
-    "../services/**/*.ts"
+    "../services/**/*.ts",
+    "../sync/**/*.ts",
+    "../utility/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     "../types/node_modules",
-    "../services/node_modules"
+    "../services/node_modules",
+    "../sync/node_modules",
+    "../utility/node_modules"
   ]
 }

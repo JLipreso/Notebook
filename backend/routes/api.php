@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\NotebookController;
+use App\Http\Controllers\Api\NotebookPageController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,3 +66,28 @@ Route::get('/address/barangays/{code}/chain', [AddressController::class, 'chain'
 
 Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth:sanctum');
 Route::put('/profile', [ProfileController::class, 'update'])->middleware('auth:sanctum');
+
+// ================================================================
+// NOTEBOOKS (2026-09-13-005 Phase 006)
+// ================================================================
+
+// Literal routes BEFORE the {id} wildcards, and ids guarded with whereUuid()
+// so a non-UUID can never reach a query (CLAUDE.md §5).
+Route::get('/notebook-types', [NotebookController::class, 'types'])->middleware('auth:sanctum');
+Route::get('/notebooks', [NotebookController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/notebooks', [NotebookController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/notebooks/{id}/archive', [NotebookController::class, 'archive'])->whereUuid('id')->middleware('auth:sanctum');
+Route::post('/notebooks/{id}/unarchive', [NotebookController::class, 'unarchive'])->whereUuid('id')->middleware('auth:sanctum');
+Route::get('/notebooks/{id}', [NotebookController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
+Route::put('/notebooks/{id}', [NotebookController::class, 'update'])->whereUuid('id')->middleware('auth:sanctum');
+Route::delete('/notebooks/{id}', [NotebookController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// NOTEBOOK PAGES (2026-09-13-005 Phase 007)
+// ================================================================
+
+Route::get('/notebooks/{notebook}/pages', [NotebookPageController::class, 'index'])->whereUuid('notebook')->middleware('auth:sanctum');
+Route::post('/notebooks/{notebook}/pages', [NotebookPageController::class, 'store'])->whereUuid('notebook')->middleware('auth:sanctum');
+Route::get('/pages/{id}', [NotebookPageController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
+Route::put('/pages/{id}', [NotebookPageController::class, 'update'])->whereUuid('id')->middleware('auth:sanctum');
+Route::delete('/pages/{id}', [NotebookPageController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');
