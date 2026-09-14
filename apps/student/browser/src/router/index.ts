@@ -4,6 +4,7 @@ import SignInView from '@/views/SignInView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import NotebookView from '@/views/NotebookView.vue'
+import SharedNotebookView from '@/views/SharedNotebookView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 export const router = createRouter({
@@ -12,6 +13,9 @@ export const router = createRouter({
     { path: '/', name: 'home', component: LibraryView, meta: { requiresAuth: true } },
     { path: '/notebooks/:id', name: 'notebook', component: NotebookView, meta: { requiresAuth: true } },
     { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
+    // The public share viewer (Phase 010). meta.public keeps it OUT of the
+    // auth guard — someone receiving a link has no session.
+    { path: '/shared/:token', name: 'shared', component: SharedNotebookView, meta: { public: true } },
     { path: '/sign-in', name: 'sign-in', component: SignInView, meta: { public: true } },
     { path: '/sign-up', name: 'sign-up', component: SignUpView, meta: { public: true } },
   ],

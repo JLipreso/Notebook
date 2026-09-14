@@ -7,6 +7,7 @@ import {
   NewNotebookDialog,
   NotebookGrid,
   useNotebooks,
+  useNotifications,
 } from '@notebook/ui'
 import { formatSchoolYear } from '@notebook/utility'
 import type { Notebook } from '@notebook/types'
@@ -33,6 +34,10 @@ const {
   setCover,
   coverUrls,
 } = useNotebooks()
+
+// Just the badge here — the list lives on its own screen (Phase 010).
+const { unread, refreshCount } = useNotifications()
+onMounted(refreshCount)
 
 const tab = ref<'active' | 'archived'>('active')
 const dialogOpen = ref(false)
@@ -103,7 +108,18 @@ async function onCoverPicked(event: Event): Promise<void> {
         </h1>
         <p class="text-sm text-ink-soft">{{ formatSchoolYear(schoolYears[0] ?? '') || 'Your notebooks' }}</p>
       </div>
-      <RouterLink to="/profile" class="shrink-0 text-sm text-ink-soft underline">Profile</RouterLink>
+      <div class="flex shrink-0 items-center gap-3">
+        <RouterLink to="/notifications" class="relative text-xl" aria-label="Notifications">
+          🔔
+          <span
+            v-if="unread > 0"
+            class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-margin px-1 text-[10px] font-bold text-paper"
+          >
+            {{ unread > 9 ? '9+' : unread }}
+          </span>
+        </RouterLink>
+        <RouterLink to="/profile" class="text-sm text-ink-soft underline">Profile</RouterLink>
+      </div>
     </header>
 
     <div class="mb-5 flex rounded-lg bg-paper-shade p-1">

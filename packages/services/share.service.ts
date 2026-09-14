@@ -1,4 +1,9 @@
-import type { ApiResponse, NotebookShare, SharedNotebookView } from '@notebook/types'
+import type {
+  ApiResponse,
+  NotebookShare,
+  NotebookShareWithStatus,
+  SharedNotebookView,
+} from '@notebook/types'
 
 import { datasource } from './datasource'
 import { http } from './http'
@@ -36,23 +41,23 @@ export function create(payload: CreateSharePayload): Promise<ApiResponse<Noteboo
   )
 }
 
-export function list(notebookId: string): Promise<ApiResponse<NotebookShare[]>> {
+export function list(notebookId?: string): Promise<ApiResponse<NotebookShareWithStatus[]>> {
   return datasource(
-    () => mockOk([] as NotebookShare[]),
+    () => mockOk([] as NotebookShareWithStatus[]),
     async () => {
-      const { data } = await http.get<ApiResponse<NotebookShare[]>>('/shares', {
-        params: { notebook_id: notebookId },
+      const { data } = await http.get<ApiResponse<NotebookShareWithStatus[]>>('/shares', {
+        params: notebookId ? { notebook_id: notebookId } : {},
       })
       return data
     },
   )
 }
 
-export function revoke(id: string): Promise<ApiResponse<null>> {
+export function revoke(id: string): Promise<ApiResponse<NotebookShareWithStatus | null>> {
   return datasource(
-    () => mockOk(null, 'Link revoked'),
+    () => mockOk(null as NotebookShareWithStatus | null, 'Link revoked'),
     async () => {
-      const { data } = await http.post<ApiResponse<null>>(`/shares/${id}/revoke`)
+      const { data } = await http.post<ApiResponse<NotebookShareWithStatus>>(`/shares/${id}/revoke`)
       return data
     },
   )

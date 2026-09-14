@@ -6,10 +6,12 @@ import {
   FormErrors,
   NewNotebookDialog,
   NotebookGrid,
+  NotificationList,
   useNotebooks,
+  useNotifications,
 } from '@notebook/ui'
 import { formatSchoolYear } from '@notebook/utility'
-import type { Notebook } from '@notebook/types'
+import type { AppNotification, Notebook } from '@notebook/types'
 import { useAuthStore } from '@/stores/auth'
 
 // Browser layout: shelf + sidebar filters, per the approved canvas
@@ -34,6 +36,38 @@ const {
   setCover,
   coverUrls,
 } = useNotebooks()
+
+// Notifications (Phase 010): a bell with an unread badge.
+const {
+  notifications,
+  unread,
+  loading: notificationsLoading,
+  hasMore: moreNotifications,
+  load: loadNotifications,
+  loadMore: loadMoreNotifications,
+  markRead,
+  markAllRead,
+  destinationFor,
+} = useNotifications()
+
+const bellOpen = ref(false)
+
+async function openBell(): Promise<void> {
+  bellOpen.value = !bellOpen.value
+  if (bellOpen.value) await loadNotifications(1)
+}
+
+async function onNotification(notification: AppNotification): Promise<void> {
+  await markRead(notification.id)
+
+  const destination = destinationFor(notification)
+  bellOpen.value = false
+
+  // 'library' IS this screen — following it would be a no-op reload.
+  if (destination && destination.name !== 'library') {
+    router.push({ name: destination.name, params: destination.params as never }).catch(() => {})
+  }
+}
 
 const tab = ref<'active' | 'archived'>('active')
 const dialogOpen = ref(false)
@@ -160,13 +194,46 @@ async function onCoverPicked(event: Event): Promise<void> {
           <p class="text-sm text-ink-soft">{{ formatSchoolYear(schoolYears[0] ?? '') || 'Your notebooks' }}</p>
         </div>
 
-        <button
-          type="button"
-          class="rounded bg-margin px-4 py-2 font-medium text-paper"
-          @click="dialogOpen = true"
-        >
-          New notebook
-        </button>
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <button
+              type="button"
+              class="relative flex h-10 w-10 items-center justify-center rounded-full text-xl text-ink hover:bg-paper-shade"
+              aria-label="Notifications"
+              @click="openBell"
+            >
+              🔔
+              <span
+                v-if="unread > 0"
+                class="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-margin px-1 text-[10px] font-bold text-paper"
+              >
+                {{ unread > 9 ? '9+' : unread }}
+              </span>
+            </button>
+
+            <div
+              v-if="bellOpen"
+              class="absolute right-0 z-40 mt-1 w-80 overflow-hidden rounded-lg border border-paper-shade bg-paper shadow-xl"
+            >
+              <NotificationList
+                :notifications="notifications"
+                :loading="notificationsLoading"
+                :has-more="moreNotifications"
+                @open="onNotification"
+                @mark-all="markAllRead"
+                @load-more="loadMoreNotifications"
+              />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="rounded bg-margin px-4 py-2 font-medium text-paper"
+            @click="dialogOpen = true"
+          >
+            New notebook
+          </button>
+        </div>
       </header>
 
       <FormErrors :message="errors.message" :errors="errors.fields" class="mb-4" />

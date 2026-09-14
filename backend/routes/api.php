@@ -5,8 +5,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\NotebookController;
 use App\Http\Controllers\Api\NotebookPageController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PageAttachmentController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ShareController;
 use App\Http\Controllers\Api\SyncController;
 use Illuminate\Support\Facades\Route;
 
@@ -118,3 +120,26 @@ Route::delete('/attachments/{id}', [PageAttachmentController::class, 'destroy'])
 // table-name injection. The alpha_dash guard is a first gate, not the gate.
 Route::get('/sync/{table}', [SyncController::class, 'pull'])->where('table', '[a-z_]+')->middleware('auth:sanctum');
 Route::post('/sync/{table}', [SyncController::class, 'push'])->where('table', '[a-z_]+')->middleware('auth:sanctum');
+
+// ================================================================
+// SHARES (2026-09-13-005 Phase 010)
+// ================================================================
+
+// PUBLIC resolve — the only unauthenticated route returning user content. The
+// token is 64 hex chars (256 bits from random_bytes) and every failure answers
+// with the same 404, so the endpoint cannot confirm a token ever existed.
+Route::get('/shared/{token}', [ShareController::class, 'resolve'])->where('token', '[0-9a-f]{64}')->middleware('throttle:public');
+
+Route::get('/shares', [ShareController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/shares', [ShareController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/shares/{id}/revoke', [ShareController::class, 'revoke'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// NOTIFICATIONS (2026-09-13-005 Phase 010)
+// ================================================================
+
+// Literal routes BEFORE the {id} wildcard.
+Route::get('/notifications', [NotificationController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->middleware('auth:sanctum');
+Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->middleware('auth:sanctum');
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead'])->whereUuid('id')->middleware('auth:sanctum');

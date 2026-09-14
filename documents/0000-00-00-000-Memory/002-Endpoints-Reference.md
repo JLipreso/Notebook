@@ -28,6 +28,10 @@
 | POST | `/api/notebooks/{id}/unarchive` | Api\NotebookController@unarchive | auth:sanctum |
 | GET | `/api/notebooks/{notebook}/pages` | Api\NotebookPageController@index | auth:sanctum |
 | POST | `/api/notebooks/{notebook}/pages` | Api\NotebookPageController@store | auth:sanctum |
+| GET | `/api/notifications` | Api\NotificationController@index | auth:sanctum |
+| POST | `/api/notifications/read-all` | Api\NotificationController@markAllRead | auth:sanctum |
+| GET | `/api/notifications/unread-count` | Api\NotificationController@unreadCount | auth:sanctum |
+| POST | `/api/notifications/{id}/read` | Api\NotificationController@markRead | auth:sanctum |
 | GET | `/api/pages/{id}` | Api\NotebookPageController@show | auth:sanctum |
 | PUT | `/api/pages/{id}` | Api\NotebookPageController@update | auth:sanctum |
 | DELETE | `/api/pages/{id}` | Api\NotebookPageController@destroy | auth:sanctum |
@@ -35,6 +39,10 @@
 | POST | `/api/pages/{page}/attachments` | Api\PageAttachmentController@store | auth:sanctum |
 | GET | `/api/profile` | Api\ProfileController@show | auth:sanctum |
 | PUT | `/api/profile` | Api\ProfileController@update | auth:sanctum |
+| GET | `/api/shared/{token}` | Api\ShareController@resolve | throttle:public |
+| GET | `/api/shares` | Api\ShareController@index | auth:sanctum |
+| POST | `/api/shares` | Api\ShareController@store | auth:sanctum |
+| POST | `/api/shares/{id}/revoke` | Api\ShareController@revoke | auth:sanctum |
 | GET | `/api/sync/{table}` | Api\SyncController@pull | auth:sanctum |
 | POST | `/api/sync/{table}` | Api\SyncController@push | auth:sanctum |
 | GET | `/api/user` | Api\AuthController@me | auth:sanctum |

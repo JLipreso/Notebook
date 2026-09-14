@@ -7,6 +7,7 @@ import {
   FormErrors,
   NotebookEditor,
   PaperPage,
+  ShareDialog,
   useAttachments,
   usePages,
 } from '@notebook/ui'
@@ -80,6 +81,9 @@ async function onFilePicked(event: Event): Promise<void> {
   }
 }
 
+// Share entry point (Phase 010). ONLINE-ONLY (D-016).
+const shareOpen = ref(false)
+
 function openAttachment(attachment: PageAttachmentWithFile): void {
   const url = attachment.file_upload?.url
   if (url) window.open(url, '_blank', 'noopener')
@@ -128,6 +132,14 @@ async function onDeletePage(): Promise<void> {
         :uploading="uploading"
         @attach="pickFile"
       />
+
+      <button
+        type="button"
+        class="flex-none rounded border border-paper-shade px-3 py-1.5 text-sm font-medium text-ink"
+        @click="shareOpen = true"
+      >
+        Share
+      </button>
     </header>
 
     <FormErrors :message="errors.message ?? attachErrors.message" :errors="errors.fields ?? attachErrors.fields" class="mx-6 mt-3" />
@@ -212,6 +224,15 @@ async function onDeletePage(): Promise<void> {
       accept="image/jpeg,image/png,image/webp,application/pdf"
       class="hidden"
       @change="onFilePicked"
+    />
+
+    <ShareDialog
+      :open="shareOpen"
+      :notebook-id="notebookId"
+      :notebook-title="notebook?.title ?? ''"
+      :current-page-id="current?.id ?? null"
+      :current-page-number="currentIndex + 1"
+      @close="shareOpen = false"
     />
   </main>
 </template>
