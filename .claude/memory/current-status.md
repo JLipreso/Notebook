@@ -1,8 +1,8 @@
 # Current Status
 
-_Last updated: 2026-09-13 (M1 Phases 001–006 built on `Workstation-Laptop`; **PAUSED** after Phase 006 at the Lead Developer's request — session 007 close)_
+_Last updated: 2026-09-14 (M1 Phases 001–010 built on `Workstation-Laptop`; **PAUSED** after Phase 010 — Phase 011 resumes next day — session 008 close)_
 
-> **👋 Picking this up?** Phases 001–006 are DONE. Start at [Phase-007](../../documents/2026-09-13-005-Implementation-Plan/Phase-007.md) (paper templates & page editor — the largest phase), after reading the ▶ section below. Ground rules: [the plan README](../../documents/2026-09-13-005-Implementation-Plan/README.md). Branch off `staging`, one PR per phase back to `staging`, never `main`. Every product question is already decided (D-001…D-032) — if something seems undecided, check `decisions.md`, then ask the Lead Developer; never improvise.
+> **👋 Picking this up?** Phases 001–010 are DONE — M1 is feature-complete. Start at [Phase-011](../../documents/2026-09-13-005-Implementation-Plan/Phase-011.md) (Android packaging — **the first phase needing a real device**), after reading the ▶ section below. Ground rules: [the plan README](../../documents/2026-09-13-005-Implementation-Plan/README.md). Branch off `staging`, one PR per phase back to `staging`, never `main`. Every product question is already decided (D-001…D-032) — if something seems undecided, check `decisions.md`, then ask the Lead Developer; never improvise.
 
 ## Where we are
 
@@ -18,39 +18,53 @@ _Last updated: 2026-09-13 (M1 Phases 001–006 built on `Workstation-Laptop`; **
 - **Work happens on `Workstation-PC`** — the desktop work branch, checked out by default. PRs from it go to `staging`.
 - **`Workstation-Laptop` added 2026-09-13** — second machine branch, off `staging` at `bd6ddb8`. **M1 execution runs from here**; PRs to `staging` as usual.
 
-## ▶ M1 EXECUTION — PHASES 001–006 DONE, **PAUSED** (2026-09-13)
+## ▶ M1 EXECUTION — PHASES 001–010 DONE, **PAUSED** (2026-09-14)
 
-Built on `Workstation-Laptop`. Full detail: [worklog 007](../worklog/2026-09-13-007-m1-phases-002-006.md) (and [worklog 006](../worklog/2026-09-13-006-phase-001-laptop-onboarding.md) for the environment).
+Built on `Workstation-Laptop`. Detail: [worklog 008](../worklog/2026-09-14-008-m1-phases-007-010.md) (Phases 007–010) · [worklog 007](../worklog/2026-09-13-007-m1-phases-002-006.md) (002–006) · [worklog 006](../worklog/2026-09-13-006-phase-001-laptop-onboarding.md) (environment).
 
 | Phase | What landed | State |
 |---|---|---|
 | 001 onboarding | environment verified, no PR | done |
-| 002 database | 13 tables, 13 models, 2 seeders | merged (PR #13) |
-| 003 types & services | the contract + 9 services + mock fixtures | merged (PR #13) |
-| — PSGC data | real PSA 2Q-2026 data + a dependency-free converter | merged (PR #15) |
-| 004 auth | Firebase → Sanctum, both apps | merged (PR #15) |
-| 005 profile & address | the four-level PSGC chain | **PR #18 open** |
-| 006 notebook library | the shelf, now the post-signin home | **PR #18 open** |
+| 002 database | 13 tables, 13 models, 2 seeders | merged |
+| 003 types & services | the contract + 9 services + mock fixtures | merged |
+| — PSGC data | real PSA 2Q-2026 data + a dependency-free converter | merged |
+| 004 auth | Firebase → Sanctum, both apps | merged |
+| 005 profile & address | the four-level PSGC chain | merged |
+| 006 notebook library | the shelf, the post-signin home | merged |
+| 007 paper & editor | rulings, Tiptap, autosave | merged (PR #21) |
+| 008 attachments | images, PDFs, covers | **PR #22 open** |
+| 009 offline sync | schema §2 verbatim + `packages/sync` | **PR #22 open** |
+| 010 sharing & notifications | public read-only links, the bell | **PR #22 open** |
 
-**Totals:** 56 backend tests (177 assertions) · 22 API routes · `pnpm typecheck` + `pnpm build:all` green. Working tree clean, branch pushed.
+**Totals:** 140 backend tests (400 assertions) · 19 sync-engine tests · 43 API routes · `pnpm typecheck` + `pnpm build:all` green. Working tree clean, branch pushed.
 
-### ⚠ Read before touching the address data
+**M1 is feature-complete.** Only Phase 011 (Android) and Phase 012 (acceptance) remain.
 
-**The province-prefix fix in Phase 005 changes what seeds.** Anyone who ran the seeder before commit `6c43ad9` has ~1,350 cities with a null province — every region looks like NCR. Fix: `php artisan migrate:fresh --seed`.
+### ⚠ THREE visual passes are queued — none can be done without a human
 
-### Open items
+These are the only outstanding acceptance items from three phases. ~10 minutes each; sensible as one session before Phase 012.
 
-1. **PR #18 awaits review** (Phases 005–006). #13 and #15 are merged.
-2. **Phase 004's live browser flow is unverified** — the Google popup and a real end-to-end sign-up need a browser with a human; no headless driver is installed. Steps in [Phase-004-complete.md](../../documents/2026-09-13-005-Implementation-Plan/completion/Phase-004-complete.md). Firebase Console also needs Email/Password + Google enabled.
-3. **Two interim pieces in Phase 006, for Phase 007 to replace:** the notebook card's `⋯` menu is a `prompt()`, and opening a notebook routes to `?notebook=<id>` with no destination. Both deliberate and commented.
-4. **GitHub default branch is still `main`** — every PR needs `--base staging` explicitly.
-5. A design question was raised and answered mid-phase: [questions/001-independent-cities.md](../../documents/2026-09-13-005-Implementation-Plan/questions/001-independent-cities.md) — the address chain treats the province as optional everywhere, because 17 Highly Urbanized Cities sit outside any province.
+1. **Phase 007** — each ruling against a real notebook photo at 100% zoom, both apps. *Does the text sit on the lines?*
+2. **Phase 008** — an image on the paper at a sane width, a PDF chip opening, a cover on the shelf card.
+3. **Phase 010** — a share link on a signed-out desktop browser. *Does it read well to a stranger?*
 
-### Next: Phase 007 — paper templates & page editor
+### Other open items
 
-The plan's largest phase and the product's soul. `page_template` is now consumed in three places (the Phase-002 seeder, `@notebook/types`, and Phase-006's `PaperPreview` swatch); `PaperPage.vue` is the fourth and the real one — the swatch is **not** a starting point for it.
+1. **PR #22 awaits review** (Phases 008–010). #13, #15, #18, #21 are merged.
+2. **Phase 004's live browser auth is unverified** — the Google popup and a real end-to-end sign-up. Firebase Console needs Email/Password + Google enabled.
+3. **`SqliteAdapter` has never executed** — it typechecks and the engine is tested against `MemoryAdapter`, but no driver exists outside the native shell. Phase 011 is its first run.
+4. **The `⋯` card menu is still a `prompt()`** (A/C/D). Sharing is reachable from the notebook view because of it.
+5. **GitHub default branch is still `main`** — every PR needs `--base staging`.
 
-**[001-Learnings.md](../../documents/0000-00-00-000-Memory/001-Learnings.md) went from empty to five entries this session.** Read it before debugging anything in the seeders, `.env` on Windows, the API envelope, or a shared-package build.
+### Next: Phase 011 — Android packaging
+
+**The first phase that genuinely needs hardware.** Generation and configuration can be done on this machine; the device verification cannot. Android Studio + JDK 21 are already installed; `ANDROID_HOME` is unset.
+
+The five-step airplane-mode round trip in [Phase-011.md](../../documents/2026-09-13-005-Implementation-Plan/Phase-011.md) §4 **is the real acceptance for Phase 009's sync engine.**
+
+The shell's boot sequence is spelled out at the end of [Phase-009-complete.md](../../documents/2026-09-13-005-Implementation-Plan/completion/Phase-009-complete.md): open SQLite → `new SqliteAdapter(driver)` → `registerLocalStore(adapter)` → wire `runSync()` to app-foreground and network-regain. Nothing else in the app changes.
+
+**Read [001-Learnings.md](../../documents/0000-00-00-000-Memory/001-Learnings.md) (6 entries) before debugging** anything in seeders, `.env` on Windows, the API envelope, shared-package builds, or upload tests.
 
 ## What's next (in order)
 
