@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\NotebookController;
 use App\Http\Controllers\Api\NotebookPageController;
 use App\Http\Controllers\Api\PageAttachmentController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\SyncController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -107,3 +108,13 @@ Route::get('/files/{id}', [FileUploadController::class, 'show'])->whereUuid('id'
 Route::get('/pages/{page}/attachments', [PageAttachmentController::class, 'index'])->whereUuid('page')->middleware('auth:sanctum');
 Route::post('/pages/{page}/attachments', [PageAttachmentController::class, 'store'])->whereUuid('page')->middleware('auth:sanctum');
 Route::delete('/attachments/{id}', [PageAttachmentController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// SYNC (2026-09-13-005 Phase 009)
+// ================================================================
+
+// {table} is checked against config('notebook.sync_tables') inside the
+// controller and NEVER interpolated into a query — a free string here would be
+// table-name injection. The alpha_dash guard is a first gate, not the gate.
+Route::get('/sync/{table}', [SyncController::class, 'pull'])->where('table', '[a-z_]+')->middleware('auth:sanctum');
+Route::post('/sync/{table}', [SyncController::class, 'push'])->where('table', '[a-z_]+')->middleware('auth:sanctum');

@@ -3,7 +3,10 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "lib": ["ES2022", "DOM"],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
     "strict": true,
     "noEmit": true,
     "noUnusedLocals": true,
@@ -11,10 +14,26 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "paths": {
-      "@notebook/types": ["../types/index.ts"],
-      "@notebook/types/*": ["../types/*"]
-    }
+      "@notebook/types": [
+        "../types/index.ts"
+      ],
+      "@notebook/types/*": [
+        "../types/*"
+      ],
+      "@notebook/services": [
+        "../services/index.ts"
+      ]
+    },
+    "types": []
   },
-  "include": ["**/*.ts", "../types/**/*.ts"],
-  "exclude": ["node_modules", "../types/node_modules"]
+  "include": [
+    "**/*.ts",
+    "../types/**/*.ts",
+    "../services/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "../types/node_modules",
+    "../services/node_modules"
+  ]
 }

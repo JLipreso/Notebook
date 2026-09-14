@@ -35,5 +35,7 @@
 | POST | `/api/pages/{page}/attachments` | Api\PageAttachmentController@store | auth:sanctum |
 | GET | `/api/profile` | Api\ProfileController@show | auth:sanctum |
 | PUT | `/api/profile` | Api\ProfileController@update | auth:sanctum |
+| GET | `/api/sync/{table}` | Api\SyncController@pull | auth:sanctum |
+| POST | `/api/sync/{table}` | Api\SyncController@push | auth:sanctum |
 | GET | `/api/user` | Api\AuthController@me | auth:sanctum |
 | GET | `/up` | Closure |  |

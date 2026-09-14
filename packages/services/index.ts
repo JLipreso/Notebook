@@ -5,6 +5,10 @@
 export { http, setBearerToken, getBearerToken, setUnauthorizedHandler } from './http'
 export { useMock, datasource } from './datasource'
 
+// The local-store seam (Phase 009) — the native shell registers its adapter
+// here at boot; web leaves it null and stays API-direct.
+export { registerLocalStore, clearLocalStore, resolveStore, hasLocalStore, type LocalStore } from './store'
+
 // The ONE Firebase seam (D-015) — apps never import `firebase` directly.
 export * as firebaseAuth from './firebase'
 export { isFirebaseConfigured } from './firebase'

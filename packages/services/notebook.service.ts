@@ -2,6 +2,7 @@ import type { ApiResponse, Notebook, NotebookType } from '@notebook/types'
 
 import { datasource } from './datasource'
 import { http } from './http'
+import { resolveStore } from './store'
 import { db, isLive, mockNotebookTypes, mockOk, mockUser, nowIso, softDelete } from './mock'
 
 // The library (Phase 006). Ids are CLIENT-MINTED (D-013) — callers pass one in
@@ -38,14 +39,30 @@ export function types(): Promise<ApiResponse<NotebookType[]>> {
 }
 
 export function list(filters: NotebookFilters = {}): Promise<ApiResponse<Notebook[]>> {
+  // Phase 009: on a platform with local storage, read the device copy. Views
+  // and composables are unchanged — see store.ts.
+  const store = resolveStore()
+
+  if (store) {
+    return store.list<Notebook>('notebooks').then((rows: Notebook[]) => ({
+      success: true,
+      message: 'Success',
+      data: rows
+        .filter((n: Notebook) => n.deleted_at === null)
+        .filter((n: Notebook) => (filters.status ? n.status === filters.status : true))
+        .filter((n: Notebook) => (filters.school_year ? n.school_year === filters.school_year : true))
+        .sort((a: Notebook, b: Notebook) => a.position - b.position),
+    }))
+  }
+
   return datasource(
     () =>
       mockOk(
         db.notebooks
           .filter(isLive)
-          .filter((n) => (filters.status ? n.status === filters.status : true))
-          .filter((n) => (filters.school_year ? n.school_year === filters.school_year : true))
-          .sort((a, b) => a.position - b.position),
+          .filter((n: Notebook) => (filters.status ? n.status === filters.status : true))
+          .filter((n: Notebook) => (filters.school_year ? n.school_year === filters.school_year : true))
+          .sort((a: Notebook, b: Notebook) => a.position - b.position),
       ),
     async () => {
       const { data } = await http.get<ApiResponse<Notebook[]>>('/notebooks', { params: filters })
@@ -55,6 +72,34 @@ export function list(filters: NotebookFilters = {}): Promise<ApiResponse<Noteboo
 }
 
 export function create(payload: CreateNotebookPayload): Promise<ApiResponse<Notebook>> {
+  const store = resolveStore()
+
+  if (store) {
+    const now = new Date().toISOString()
+    const notebook: Notebook = {
+      id: payload.id,
+      user_id: '',
+      notebook_type_id: payload.notebook_type_id,
+      title: payload.title,
+      school_year: payload.school_year,
+      cover_upload_id: null,
+      font_family: payload.font_family ?? null,
+      status: 'active',
+      archived_at: null,
+      position: payload.position ?? 0,
+      // The device clock — what the server's LWW compares (schema §2.1).
+      client_updated_at: now,
+      created_at: now,
+      updated_at: now,
+      deleted_at: null,
+    }
+
+    // put() marks the row dirty, so the outbox carries it on the next sync.
+    return store
+      .put('notebooks', notebook)
+      .then(() => ({ success: true, message: 'Notebook created', data: notebook }))
+  }
+
   return datasource(
     () => {
       const now = nowIso()
@@ -128,6 +173,21 @@ function setArchived(id: string, archived: boolean): Promise<ApiResponse<Noteboo
 
 /** DELETE — SOFT delete. The row survives as a tombstone (schema §2.4). */
 export function remove(id: string): Promise<ApiResponse<null>> {
+  const store = resolveStore()
+
+  if (store) {
+    // A local delete sets deleted_at and pushes as an ordinary update — it must
+    // NOT drop the row, or the delete never reaches the server (§2.4).
+    return store.get<Notebook>('notebooks', id).then((row: Notebook | null) => {
+      if (!row) return { success: true, message: 'Notebook deleted', data: null }
+
+      const now = new Date().toISOString()
+      return store
+        .put('notebooks', { ...row, deleted_at: now, client_updated_at: now })
+        .then(() => ({ success: true, message: 'Notebook deleted', data: null }))
+    })
+  }
+
   return datasource(
     () => {
       const notebook = db.notebooks.find((n) => n.id === id)

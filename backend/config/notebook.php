@@ -95,4 +95,30 @@ return [
     */
     'quota_mb' => 500,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Offline sync (2026-09-13-005 Phase 009, schema §2)
+    |--------------------------------------------------------------------------
+    |
+    | A FIXED map — {table} from the URL is checked against these keys and never
+    | interpolated into a query. A free string here would be a table-name
+    | injection straight into the query builder.
+    |
+    | rw = pulled AND pushed. ro = pulled only; a push to one is refused.
+    |
+    | PSGC is deliberately absent: 42k rows that change quarterly ship with the
+    | app, not down a sync pipe (phase file §1).
+    */
+
+    'sync_tables' => [
+        'rw' => ['notebooks', 'notebook_pages', 'page_attachments'],
+        'ro' => ['notebook_types', 'users'],
+    ],
+
+    /** Max rows per pull page (schema §2.2). */
+    'sync_pull_limit' => 500,
+
+    /** Max rows the client may push in one batch (schema §2.3). */
+    'sync_push_limit' => 100,
+
 ];
