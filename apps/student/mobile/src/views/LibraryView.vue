@@ -7,6 +7,7 @@ import {
   NewNotebookDialog,
   NotebookGrid,
   useNotebooks,
+  useNotifications,
 } from '@notebook/ui'
 import { formatSchoolYear } from '@notebook/utility'
 import type { Notebook } from '@notebook/types'
@@ -18,8 +19,25 @@ import { useAuthStore } from '@/stores/auth'
 const auth = useAuthStore()
 const router = useRouter()
 
-const { types, active, archived, schoolYears, loading, saving, errors, load, create, setArchived, remove } =
-  useNotebooks()
+const {
+  types,
+  active,
+  archived,
+  schoolYears,
+  loading,
+  saving,
+  errors,
+  load,
+  create,
+  setArchived,
+  remove,
+  setCover,
+  coverUrls,
+} = useNotebooks()
+
+// Just the badge here — the list lives on its own screen (Phase 010).
+const { unread, refreshCount } = useNotifications()
+onMounted(refreshCount)
 
 const tab = ref<'active' | 'archived'>('active')
 const dialogOpen = ref(false)
@@ -43,7 +61,7 @@ async function onMenu(notebook: Notebook): Promise<void> {
   const archive = notebook.status === 'active'
 
   const choice = window.prompt(
-    `“${notebook.title}”\n\nType A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
+    `“${notebook.title}”\n\nType A to ${archive ? 'archive' : 'restore'}, C to set a cover photo, or D to delete.`,
     'A',
   )
 
@@ -52,9 +70,32 @@ async function onMenu(notebook: Notebook): Promise<void> {
   const answer = choice.trim().toUpperCase()
 
   if (answer === 'A') await setArchived(notebook.id, archive)
+  else if (answer === 'C') pickCover(notebook.id)
   else if (answer === 'D' && window.confirm(`Delete “${notebook.title}”? It leaves your shelf.`)) {
     await remove(notebook.id)
   }
+}
+
+// Cover photo (Phase 008): pick a file, upload it as kind=cover, point the
+// notebook at it. A plain file input works inside the Capacitor WebView too.
+const coverInput = ref<HTMLInputElement | null>(null)
+const coverTarget = ref<string | null>(null)
+
+function pickCover(notebookId: string): void {
+  coverTarget.value = notebookId
+  coverInput.value?.click()
+}
+
+async function onCoverPicked(event: Event): Promise<void> {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  const id = coverTarget.value
+  coverTarget.value = null
+  if (!file || !id) return
+
+  await setCover(id, file)
 }
 </script>
 
@@ -67,7 +108,18 @@ async function onMenu(notebook: Notebook): Promise<void> {
         </h1>
         <p class="text-sm text-ink-soft">{{ formatSchoolYear(schoolYears[0] ?? '') || 'Your notebooks' }}</p>
       </div>
-      <RouterLink to="/profile" class="shrink-0 text-sm text-ink-soft underline">Profile</RouterLink>
+      <div class="flex shrink-0 items-center gap-3">
+        <RouterLink to="/notifications" class="relative text-xl" aria-label="Notifications">
+          🔔
+          <span
+            v-if="unread > 0"
+            class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-margin px-1 text-[10px] font-bold text-paper"
+          >
+            {{ unread > 9 ? '9+' : unread }}
+          </span>
+        </RouterLink>
+        <RouterLink to="/profile" class="text-sm text-ink-soft underline">Profile</RouterLink>
+      </div>
     </header>
 
     <div class="mb-5 flex rounded-lg bg-paper-shade p-1">
@@ -107,6 +159,7 @@ async function onMenu(notebook: Notebook): Promise<void> {
         v-if="tab === 'active'"
         :notebooks="active"
         :types="types"
+        :cover-urls="coverUrls"
         empty-message="No notebooks yet — tap + to create your first."
         @open="open"
         @menu="onMenu"
@@ -132,6 +185,14 @@ async function onMenu(notebook: Notebook): Promise<void> {
       fullscreen
       @close="dialogOpen = false"
       @create="onCreate"
+    />
+
+    <input
+      ref="coverInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      class="hidden"
+      @change="onCoverPicked"
     />
   </main>
 </template>

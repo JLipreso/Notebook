@@ -3,7 +3,17 @@ import type { Editor } from '@tiptap/vue-3'
 
 // Formatting controls for the whitelist — and ONLY the whitelist. A button here
 // for a node the server strips would be a lie to the student.
-const props = defineProps<{ editor: Editor | null }>()
+const props = withDefaults(
+  defineProps<{
+    editor: Editor | null
+    /** Phase 008: show the attach button. Hidden where uploads make no sense. */
+    canAttach?: boolean
+    uploading?: boolean
+  }>(),
+  { canAttach: false, uploading: false },
+)
+
+const emit = defineEmits<{ attach: [] }>()
 
 type Action = { key: string; label: string; title: string; run: () => void; active: () => boolean }
 
@@ -97,6 +107,18 @@ const actions: Action[] = [
       @click="action.run()"
     >
       {{ action.label }}
+    </button>
+
+    <button
+      v-if="canAttach"
+      type="button"
+      title="Attach image or PDF"
+      aria-label="Attach image or PDF"
+      :disabled="!editor || uploading"
+      class="min-w-[32px] rounded px-2 py-1 text-sm font-semibold text-ink transition hover:bg-paper-shade disabled:opacity-40"
+      @click="emit('attach')"
+    >
+      {{ uploading ? '…' : '📎' }}
     </button>
   </div>
 </template>

@@ -6,13 +6,16 @@
   "main": "index.ts",
   "types": "index.ts",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@notebook/services": "workspace:*",
     "@notebook/types": "workspace:*",
     "uuid": "^11.0.0"
   },
   "devDependencies": {
-    "typescript": "~5.7.0"
+    "typescript": "~5.7.0",
+    "vitest": "^5.0.0"
   }
 }

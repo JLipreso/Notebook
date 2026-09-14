@@ -2,9 +2,14 @@
 
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\NotebookController;
 use App\Http\Controllers\Api\NotebookPageController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PageAttachmentController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ShareController;
+use App\Http\Controllers\Api\SyncController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -91,3 +96,50 @@ Route::post('/notebooks/{notebook}/pages', [NotebookPageController::class, 'stor
 Route::get('/pages/{id}', [NotebookPageController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
 Route::put('/pages/{id}', [NotebookPageController::class, 'update'])->whereUuid('id')->middleware('auth:sanctum');
 Route::delete('/pages/{id}', [NotebookPageController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// FILES (2026-09-13-005 Phase 008)
+// ================================================================
+
+// throttle:upload is keyed by USER, not IP — a school's shared connection must
+// not throttle every student at once (see AppServiceProvider).
+Route::post('/files', [FileUploadController::class, 'store'])->middleware(['auth:sanctum', 'throttle:upload']);
+Route::get('/files/usage', [FileUploadController::class, 'usage'])->middleware('auth:sanctum');
+Route::get('/files/{id}', [FileUploadController::class, 'show'])->whereUuid('id')->middleware('auth:sanctum');
+
+Route::get('/pages/{page}/attachments', [PageAttachmentController::class, 'index'])->whereUuid('page')->middleware('auth:sanctum');
+Route::post('/pages/{page}/attachments', [PageAttachmentController::class, 'store'])->whereUuid('page')->middleware('auth:sanctum');
+Route::delete('/attachments/{id}', [PageAttachmentController::class, 'destroy'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// SYNC (2026-09-13-005 Phase 009)
+// ================================================================
+
+// {table} is checked against config('notebook.sync_tables') inside the
+// controller and NEVER interpolated into a query — a free string here would be
+// table-name injection. The alpha_dash guard is a first gate, not the gate.
+Route::get('/sync/{table}', [SyncController::class, 'pull'])->where('table', '[a-z_]+')->middleware('auth:sanctum');
+Route::post('/sync/{table}', [SyncController::class, 'push'])->where('table', '[a-z_]+')->middleware('auth:sanctum');
+
+// ================================================================
+// SHARES (2026-09-13-005 Phase 010)
+// ================================================================
+
+// PUBLIC resolve — the only unauthenticated route returning user content. The
+// token is 64 hex chars (256 bits from random_bytes) and every failure answers
+// with the same 404, so the endpoint cannot confirm a token ever existed.
+Route::get('/shared/{token}', [ShareController::class, 'resolve'])->where('token', '[0-9a-f]{64}')->middleware('throttle:public');
+
+Route::get('/shares', [ShareController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/shares', [ShareController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/shares/{id}/revoke', [ShareController::class, 'revoke'])->whereUuid('id')->middleware('auth:sanctum');
+
+// ================================================================
+// NOTIFICATIONS (2026-09-13-005 Phase 010)
+// ================================================================
+
+// Literal routes BEFORE the {id} wildcard.
+Route::get('/notifications', [NotificationController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->middleware('auth:sanctum');
+Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->middleware('auth:sanctum');
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead'])->whereUuid('id')->middleware('auth:sanctum');

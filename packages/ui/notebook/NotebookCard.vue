@@ -8,6 +8,8 @@ const props = defineProps<{
   notebook: Notebook
   type?: NotebookType | null
   coverHeight?: number
+  /** Served URL for notebook.cover_upload_id, resolved by the caller. */
+  coverUrl?: string | null
 }>()
 
 defineEmits<{ open: [notebook: Notebook]; menu: [notebook: Notebook] }>()
@@ -21,7 +23,12 @@ const subtitle = computed(() => {
 <template>
   <div class="flex flex-col text-left">
     <button type="button" class="text-left" @click="$emit('open', notebook)">
-      <NotebookCover :title="notebook.title" :type="type" :height="coverHeight" />
+      <NotebookCover
+        :title="notebook.title"
+        :type="type"
+        :height="coverHeight"
+        :cover-url="coverUrl"
+      />
     </button>
 
     <div class="mt-2 flex items-start justify-between gap-2">

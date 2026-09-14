@@ -35,5 +35,11 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('public', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
         RateLimiter::for('public-write', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
         RateLimiter::for('auth', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
+
+        // Uploads are authenticated, so key by USER id — an IP key would make
+        // one school's shared connection throttle every student at once
+        // (2026-09-13-005 Phase 008). Falls back to IP if somehow unauthenticated.
+        RateLimiter::for('upload', fn (Request $request) => Limit::perMinute(30)
+            ->by($request->user()?->id ?? $request->ip()));
     }
 }

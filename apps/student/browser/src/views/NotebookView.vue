@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { EditorToolbar, FormErrors, NotebookEditor, PaperPage, usePages } from '@notebook/ui'
-import type { PageContent } from '@notebook/types'
+import {
+  AttachmentBar,
+  EditorToolbar,
+  FormErrors,
+  NotebookEditor,
+  PaperPage,
+  ShareDialog,
+  useAttachments,
+  usePages,
+} from '@notebook/ui'
+import type { PageAttachmentWithFile, PageContent } from '@notebook/types'
 
 // Browser layout: page rail on the left, one paper page centred. The mobile app
 // composes the SAME PaperPage + NotebookEditor into a single-page portrait flow
@@ -30,6 +39,55 @@ const {
 } = usePages(notebookId)
 
 const editorRef = ref<InstanceType<typeof NotebookEditor> | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const { attachments, uploading, errors: attachErrors, load: loadAttachments, attachFile, detach, kindFor } =
+  useAttachments()
+
+// Attachments belong to the PAGE, so reload them whenever the page changes.
+watch(
+  () => current.value?.id,
+  (id) => {
+    attachments.value = []
+    if (id) void loadAttachments(id)
+  },
+  { immediate: true },
+)
+
+function pickFile(): void {
+  fileInput.value?.click()
+}
+
+async function onFilePicked(event: Event): Promise<void> {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  // Reset immediately so picking the same file twice still fires a change.
+  input.value = ''
+
+  const page = current.value
+  if (!file || !page) return
+
+  const kind = kindFor(file)
+  if (!kind) {
+    window.alert('Only images and PDFs can be attached.')
+    return
+  }
+
+  const url = await attachFile(page.id, file, kind)
+
+  // An image goes INTO the document; a PDF stays a page-level chip.
+  if (url && kind === 'image') {
+    editorRef.value?.editor.chain().focus().setImage({ src: url }).run()
+  }
+}
+
+// Share entry point (Phase 010). ONLINE-ONLY (D-016).
+const shareOpen = ref(false)
+
+function openAttachment(attachment: PageAttachmentWithFile): void {
+  const url = attachment.file_upload?.url
+  if (url) window.open(url, '_blank', 'noopener')
+}
 
 onMounted(load)
 
@@ -68,10 +126,23 @@ async function onDeletePage(): Promise<void> {
         <p class="text-xs text-ink-soft">{{ saveLabel }}</p>
       </div>
 
-      <EditorToolbar :editor="editorRef?.editor ?? null" />
+      <EditorToolbar
+        :editor="editorRef?.editor ?? null"
+        can-attach
+        :uploading="uploading"
+        @attach="pickFile"
+      />
+
+      <button
+        type="button"
+        class="flex-none rounded border border-paper-shade px-3 py-1.5 text-sm font-medium text-ink"
+        @click="shareOpen = true"
+      >
+        Share
+      </button>
     </header>
 
-    <FormErrors :message="errors.message" :errors="errors.fields" class="mx-6 mt-3" />
+    <FormErrors :message="errors.message ?? attachErrors.message" :errors="errors.fields ?? attachErrors.fields" class="mx-6 mt-3" />
 
     <div v-if="loading" class="p-8 text-sm text-ink-faint">Opening notebook…</div>
 
@@ -115,6 +186,14 @@ async function onDeletePage(): Promise<void> {
           </PaperPage>
         </div>
 
+        <AttachmentBar
+          :attachments="attachments"
+          :uploading="uploading"
+          class="mt-3 w-full max-w-3xl"
+          @open="openAttachment"
+          @remove="detach"
+        />
+
         <footer class="mt-4 flex w-full max-w-3xl items-center justify-between text-sm text-ink-soft">
           <button type="button" class="underline disabled:opacity-40" :disabled="currentIndex === 0" @click="goTo(currentIndex - 1)">
             ‹ Previous
@@ -136,5 +215,24 @@ async function onDeletePage(): Promise<void> {
         </footer>
       </section>
     </div>
+
+    <!-- Hidden picker: a plain file input works inside the Capacitor WebView,
+         so the mobile shell needs no Camera plugin for MVP (phase file §2). -->
+    <input
+      ref="fileInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp,application/pdf"
+      class="hidden"
+      @change="onFilePicked"
+    />
+
+    <ShareDialog
+      :open="shareOpen"
+      :notebook-id="notebookId"
+      :notebook-title="notebook?.title ?? ''"
+      :current-page-id="current?.id ?? null"
+      :current-page-number="currentIndex + 1"
+      @close="shareOpen = false"
+    />
   </main>
 </template>

@@ -6,10 +6,12 @@ import {
   FormErrors,
   NewNotebookDialog,
   NotebookGrid,
+  NotificationList,
   useNotebooks,
+  useNotifications,
 } from '@notebook/ui'
 import { formatSchoolYear } from '@notebook/utility'
-import type { Notebook } from '@notebook/types'
+import type { AppNotification, Notebook } from '@notebook/types'
 import { useAuthStore } from '@/stores/auth'
 
 // Browser layout: shelf + sidebar filters, per the approved canvas
@@ -31,7 +33,41 @@ const {
   create,
   setArchived,
   remove,
+  setCover,
+  coverUrls,
 } = useNotebooks()
+
+// Notifications (Phase 010): a bell with an unread badge.
+const {
+  notifications,
+  unread,
+  loading: notificationsLoading,
+  hasMore: moreNotifications,
+  load: loadNotifications,
+  loadMore: loadMoreNotifications,
+  markRead,
+  markAllRead,
+  destinationFor,
+} = useNotifications()
+
+const bellOpen = ref(false)
+
+async function openBell(): Promise<void> {
+  bellOpen.value = !bellOpen.value
+  if (bellOpen.value) await loadNotifications(1)
+}
+
+async function onNotification(notification: AppNotification): Promise<void> {
+  await markRead(notification.id)
+
+  const destination = destinationFor(notification)
+  bellOpen.value = false
+
+  // 'library' IS this screen — following it would be a no-op reload.
+  if (destination && destination.name !== 'library') {
+    router.push({ name: destination.name, params: destination.params as never }).catch(() => {})
+  }
+}
 
 const tab = ref<'active' | 'archived'>('active')
 const dialogOpen = ref(false)
@@ -59,7 +95,7 @@ async function onMenu(notebook: Notebook): Promise<void> {
   const choice = window.prompt(
     `“${notebook.title}”
 
-Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
+Type A to ${archive ? 'archive' : 'restore'}, C to set a cover photo, or D to delete.`,
     'A',
   )
 
@@ -68,9 +104,32 @@ Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
   const answer = choice.trim().toUpperCase()
 
   if (answer === 'A') await setArchived(notebook.id, archive)
+  else if (answer === 'C') pickCover(notebook.id)
   else if (answer === 'D' && window.confirm(`Delete “${notebook.title}”? It leaves your shelf.`)) {
     await remove(notebook.id)
   }
+}
+
+// Cover photo (Phase 008): pick a file, upload it as kind=cover, point the
+// notebook at it. A plain file input works inside the Capacitor WebView too.
+const coverInput = ref<HTMLInputElement | null>(null)
+const coverTarget = ref<string | null>(null)
+
+function pickCover(notebookId: string): void {
+  coverTarget.value = notebookId
+  coverInput.value?.click()
+}
+
+async function onCoverPicked(event: Event): Promise<void> {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  const id = coverTarget.value
+  coverTarget.value = null
+  if (!file || !id) return
+
+  await setCover(id, file)
 }
 </script>
 
@@ -135,13 +194,46 @@ Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
           <p class="text-sm text-ink-soft">{{ formatSchoolYear(schoolYears[0] ?? '') || 'Your notebooks' }}</p>
         </div>
 
-        <button
-          type="button"
-          class="rounded bg-margin px-4 py-2 font-medium text-paper"
-          @click="dialogOpen = true"
-        >
-          New notebook
-        </button>
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <button
+              type="button"
+              class="relative flex h-10 w-10 items-center justify-center rounded-full text-xl text-ink hover:bg-paper-shade"
+              aria-label="Notifications"
+              @click="openBell"
+            >
+              🔔
+              <span
+                v-if="unread > 0"
+                class="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-margin px-1 text-[10px] font-bold text-paper"
+              >
+                {{ unread > 9 ? '9+' : unread }}
+              </span>
+            </button>
+
+            <div
+              v-if="bellOpen"
+              class="absolute right-0 z-40 mt-1 w-80 overflow-hidden rounded-lg border border-paper-shade bg-paper shadow-xl"
+            >
+              <NotificationList
+                :notifications="notifications"
+                :loading="notificationsLoading"
+                :has-more="moreNotifications"
+                @open="onNotification"
+                @mark-all="markAllRead"
+                @load-more="loadMoreNotifications"
+              />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="rounded bg-margin px-4 py-2 font-medium text-paper"
+            @click="dialogOpen = true"
+          >
+            New notebook
+          </button>
+        </div>
       </header>
 
       <FormErrors :message="errors.message" :errors="errors.fields" class="mb-4" />
@@ -153,6 +245,7 @@ Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
           v-if="tab === 'active'"
           :notebooks="active"
           :types="types"
+          :cover-urls="coverUrls"
           empty-message="No notebooks yet — create your first one."
           @open="open"
           @menu="onMenu"
@@ -169,6 +262,14 @@ Type A to ${archive ? 'archive' : 'restore'}, or D to delete.`,
       :error-fields="errors.fields"
       @close="dialogOpen = false"
       @create="onCreate"
+    />
+
+    <input
+      ref="coverInput"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      class="hidden"
+      @change="onCoverPicked"
     />
   </main>
 </template>

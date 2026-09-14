@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\UserDevice;
+use App\Support\Notify;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -110,6 +111,10 @@ class AuthController extends ApiController
                 'email_verified_at' => now(),
                 'status' => 'active',
             ])->save();
+
+            // The one notification M1 fires (2026-09-13-005 Phase 010) — inside
+            // the transaction, so a user never exists without their welcome.
+            Notify::welcome($user->id);
 
             return $user;
         });

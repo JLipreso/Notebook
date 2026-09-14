@@ -1,6 +1,6 @@
 # Endpoints Reference
 
-> **AUTO-GENERATED 2026-09-13** by `scripts/refresh-docs.mjs` from `php artisan route:list --json` — do not edit by hand, rerun the script (or the `/refresh-docs` skill) instead.
+> **AUTO-GENERATED 2026-09-14** by `scripts/refresh-docs.mjs` from `php artisan route:list --json` — do not edit by hand, rerun the script (or the `/refresh-docs` skill) instead.
 
 | Method | URI | Action | Middleware |
 |---|---|---|---|
@@ -10,9 +10,13 @@
 | GET | `/api/address/regions` | Api\AddressController@regions | throttle:public |
 | GET | `/api/address/regions/{code}/cities` | Api\AddressController@citiesByRegion | throttle:public |
 | GET | `/api/address/regions/{code}/provinces` | Api\AddressController@provinces | throttle:public |
+| DELETE | `/api/attachments/{id}` | Api\PageAttachmentController@destroy | auth:sanctum |
 | POST | `/api/auth/device` | Api\AuthController@device | auth:sanctum |
 | POST | `/api/auth/firebase` | Api\AuthController@firebase | throttle:auth |
 | POST | `/api/auth/logout` | Api\AuthController@logout | auth:sanctum |
+| POST | `/api/files` | Api\FileUploadController@store | auth:sanctum, throttle:upload |
+| GET | `/api/files/usage` | Api\FileUploadController@usage | auth:sanctum |
+| GET | `/api/files/{id}` | Api\FileUploadController@show | auth:sanctum |
 | GET | `/api/health` | Closure |  |
 | GET | `/api/notebook-types` | Api\NotebookController@types | auth:sanctum |
 | GET | `/api/notebooks` | Api\NotebookController@index | auth:sanctum |
@@ -24,10 +28,22 @@
 | POST | `/api/notebooks/{id}/unarchive` | Api\NotebookController@unarchive | auth:sanctum |
 | GET | `/api/notebooks/{notebook}/pages` | Api\NotebookPageController@index | auth:sanctum |
 | POST | `/api/notebooks/{notebook}/pages` | Api\NotebookPageController@store | auth:sanctum |
+| GET | `/api/notifications` | Api\NotificationController@index | auth:sanctum |
+| POST | `/api/notifications/read-all` | Api\NotificationController@markAllRead | auth:sanctum |
+| GET | `/api/notifications/unread-count` | Api\NotificationController@unreadCount | auth:sanctum |
+| POST | `/api/notifications/{id}/read` | Api\NotificationController@markRead | auth:sanctum |
 | GET | `/api/pages/{id}` | Api\NotebookPageController@show | auth:sanctum |
 | PUT | `/api/pages/{id}` | Api\NotebookPageController@update | auth:sanctum |
 | DELETE | `/api/pages/{id}` | Api\NotebookPageController@destroy | auth:sanctum |
+| GET | `/api/pages/{page}/attachments` | Api\PageAttachmentController@index | auth:sanctum |
+| POST | `/api/pages/{page}/attachments` | Api\PageAttachmentController@store | auth:sanctum |
 | GET | `/api/profile` | Api\ProfileController@show | auth:sanctum |
 | PUT | `/api/profile` | Api\ProfileController@update | auth:sanctum |
+| GET | `/api/shared/{token}` | Api\ShareController@resolve | throttle:public |
+| GET | `/api/shares` | Api\ShareController@index | auth:sanctum |
+| POST | `/api/shares` | Api\ShareController@store | auth:sanctum |
+| POST | `/api/shares/{id}/revoke` | Api\ShareController@revoke | auth:sanctum |
+| GET | `/api/sync/{table}` | Api\SyncController@pull | auth:sanctum |
+| POST | `/api/sync/{table}` | Api\SyncController@push | auth:sanctum |
 | GET | `/api/user` | Api\AuthController@me | auth:sanctum |
 | GET | `/up` | Closure |  |

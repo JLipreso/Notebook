@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { notebookService } from '@notebook/services'
+import { attachmentService, notebookService } from '@notebook/services'
 import { mintId } from '@notebook/sync'
 import type { Notebook, NotebookType } from '@notebook/types'
 import { extractErrors, type AuthFormErrors } from '../auth/useAuthForm'
@@ -17,6 +17,9 @@ export function useNotebooks() {
   const errors = ref<AuthFormErrors>({ message: null, fields: null })
 
   const schoolYearFilter = ref<string | null>(null)
+
+  /** cover_upload_id -> served URL, filled as covers are set (Phase 008). */
+  const coverUrls = ref<Record<string, string>>({})
 
   const active = computed(() =>
     notebooks.value
@@ -82,6 +85,33 @@ export function useNotebooks() {
     if (index !== -1) notebooks.value[index] = updated
   }
 
+  /**
+   * Upload a cover photo and point the notebook at it.
+   *
+   * Two calls on purpose: the upload is a file, the cover is a notebook field.
+   * Keeping them apart means a cover can later be re-used or swapped without
+   * re-uploading.
+   */
+  async function setCover(id: string, file: File): Promise<void> {
+    saving.value = true
+    errors.value = { message: null, fields: null }
+
+    try {
+      const uploaded = await attachmentService.upload(file, 'cover')
+      const upload = uploaded.data
+      if (!upload) return
+
+      if (upload.url) coverUrls.value[upload.id] = upload.url
+
+      const { data } = await notebookService.update(id, { cover_upload_id: upload.id })
+      if (data) replace(data)
+    } catch (error) {
+      errors.value = extractErrors(error)
+    } finally {
+      saving.value = false
+    }
+  }
+
   async function rename(id: string, title: string): Promise<void> {
     try {
       const { data } = await notebookService.update(id, { title })
@@ -122,9 +152,11 @@ export function useNotebooks() {
     loading,
     saving,
     errors,
+    coverUrls,
     typeFor,
     load,
     create,
+    setCover,
     rename,
     setArchived,
     remove,

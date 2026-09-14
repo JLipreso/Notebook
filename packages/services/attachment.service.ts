@@ -1,4 +1,9 @@
-import type { ApiResponse, AttachmentKind, FileUpload, PageAttachment } from '@notebook/types'
+import type {
+  ApiResponse,
+  AttachmentKind,
+  FileUploadWithUrl,
+  PageAttachmentWithFile,
+} from '@notebook/types'
 
 import { datasource } from './datasource'
 import { http } from './http'
@@ -16,7 +21,10 @@ export interface AttachPayload {
 }
 
 /** POST /api/files — multipart. Quota + content-based MIME check server-side. */
-export function upload(file: File, kind: AttachmentKind | 'cover'): Promise<ApiResponse<FileUpload>> {
+export function upload(
+  file: File,
+  kind: AttachmentKind | 'cover',
+): Promise<ApiResponse<FileUploadWithUrl>> {
   return datasource(
     () =>
       mockOk({
@@ -30,12 +38,13 @@ export function upload(file: File, kind: AttachmentKind | 'cover'): Promise<ApiR
         sha256: null,
         created_at: nowIso(),
         updated_at: nowIso(),
-      } satisfies FileUpload),
+        url: URL.createObjectURL(file),
+      } satisfies FileUploadWithUrl),
     async () => {
       const form = new FormData()
       form.append('file', file)
       form.append('kind', kind)
-      const { data } = await http.post<ApiResponse<FileUpload>>('/files', form, {
+      const { data } = await http.post<ApiResponse<FileUploadWithUrl>>('/files', form, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       return data
@@ -43,7 +52,10 @@ export function upload(file: File, kind: AttachmentKind | 'cover'): Promise<ApiR
   )
 }
 
-export function attach(pageId: string, payload: AttachPayload): Promise<ApiResponse<PageAttachment>> {
+export function attach(
+  pageId: string,
+  payload: AttachPayload,
+): Promise<ApiResponse<PageAttachmentWithFile>> {
   return datasource(
     () =>
       mockOk({
@@ -57,9 +69,13 @@ export function attach(pageId: string, payload: AttachPayload): Promise<ApiRespo
         created_at: nowIso(),
         updated_at: nowIso(),
         deleted_at: null,
-      } satisfies PageAttachment),
+        file_upload: null,
+      } satisfies PageAttachmentWithFile),
     async () => {
-      const { data } = await http.post<ApiResponse<PageAttachment>>(`/pages/${pageId}/attachments`, payload)
+      const { data } = await http.post<ApiResponse<PageAttachmentWithFile>>(
+        `/pages/${pageId}/attachments`,
+        payload,
+      )
       return data
     },
   )
@@ -71,6 +87,32 @@ export function detach(id: string): Promise<ApiResponse<null>> {
     () => mockOk(null, 'Attachment removed'),
     async () => {
       const { data } = await http.delete<ApiResponse<null>>(`/attachments/${id}`)
+      return data
+    },
+  )
+}
+
+/** GET /api/pages/{page}/attachments — rows with their served file URLs. */
+export function listByPage(pageId: string): Promise<ApiResponse<PageAttachmentWithFile[]>> {
+  return datasource(
+    () => mockOk([] as PageAttachmentWithFile[]),
+    async () => {
+      const { data } = await http.get<ApiResponse<PageAttachmentWithFile[]>>(
+        `/pages/${pageId}/attachments`,
+      )
+      return data
+    },
+  )
+}
+
+/** GET /api/files/usage — what the quota indicator needs. */
+export function usage(): Promise<ApiResponse<{ used_bytes: number; quota_bytes: number; quota_mb: number }>> {
+  return datasource(
+    () => mockOk({ used_bytes: 0, quota_bytes: 500 * 1024 * 1024, quota_mb: 500 }),
+    async () => {
+      const { data } = await http.get<ApiResponse<{ used_bytes: number; quota_bytes: number; quota_mb: number }>>(
+        '/files/usage',
+      )
       return data
     },
   )
